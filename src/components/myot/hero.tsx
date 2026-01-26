@@ -17,7 +17,7 @@ export default function Hero() {
           priority
         />
       )}
-      <div className="absolute inset-0 bg-black/80" />
+      <div className="absolute inset-0 bg-black/70" />
       <div className="relative z-10 container mx-auto px-4">
         <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-widest mb-10 uppercase">
           Designed by you, crafted by us.
@@ -25,7 +25,7 @@ export default function Hero() {
         <Button
           size="lg"
           variant="outline"
-          className="border-white text-white hover:bg-white hover:text-black rounded-sm px-10 py-7 text-lg uppercase"
+          className="bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-10 py-7 text-lg uppercase"
         >
           Start Crafting
         </Button>
