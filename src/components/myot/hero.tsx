@@ -5,9 +5,6 @@ export default function Hero() {
         <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4">
           Designed by you, crafted by us.
         </h2>
-        <h1 className="font-brand text-6xl md:text-8xl tracking-widest mb-10 uppercase animate-tracking-in">
-          Make my tee
-        </h1>
         <a href="#" className="btn-primary uppercase">
           Start Crafting
         </a>
