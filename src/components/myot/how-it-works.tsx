@@ -20,7 +20,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
       style={{ opacity, pointerEvents }}
     >
       <div className="container mx-auto px-4">
-        <h2 className="font-tagline text-xl md:text-2xl font-bold mb-12 text-center">
+        <h2 className="font-tagline text-xl md:text-2xl font-bold mb-12">
           Step 1 : Choose your tee
         </h2>
         
