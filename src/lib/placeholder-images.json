@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "tshirt_front",
+      "description": "Front of a black t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxibGFjayUyMHQtc2hpcnR8ZW58MHx8fHwxNzY5MzU4NDczfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black t-shirt"
+    },
+    {
+      "id": "tshirt_back",
+      "description": "Back of a black t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1657364890927-5dd04b231a6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxibGFjayUyMHQtc2hpcnR8ZW58MHx8fHwxNzY5MzU4NDczfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black t-shirt"
+    },
+    {
+      "id": "tshirt_front_oversized",
+      "description": "Front of an oversized black t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1608542698200-3988a7df9114?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvdmVyc2l6ZWQlMjBibGFjayUyMHQtc2hpcnR8ZW58MHx8fHwxNzY5NDM1MzYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oversized black t-shirt"
+    },
+    {
+      "id": "tshirt_back_oversized",
+      "description": "Back of an oversized black t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1656587175111-4610404fedd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvdmVyc2l6ZWQlMjBibGFjayUyMHQtc2hpcnR8ZW58MHx8fHwxNzY5NDM1MzYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oversized black t-shirt"
+    },
+    {
+      "id": "zodiac_aries",
+      "description": "Aries zodiac sign design",
+      "imageUrl": "https://images.unsplash.com/photo-1545320222-9b9bbf26430b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx6b2RpYWMlMjBhcmllc3xlbnwwfHx8fDE3Njk0MzUzNjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zodiac aries"
+    },
+    {
+      "id": "zodiac_taurus",
+      "description": "Taurus zodiac sign design",
+      "imageUrl": "https://picsum.photos/seed/zodiactaurus/200/200",
+      "imageHint": "zodiac taurus"
+    },
+    {
+      "id": "zodiac_gemini",
+      "description": "Gemini zodiac sign design",
+      "imageUrl": "https://images.unsplash.com/photo-1681476171332-3c912548fd92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6b2RpYWMlMjBnZW1pbml8ZW58MHx8fHwxNzY5NDM1MzYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zodiac gemini"
+    },
+    {
+      "id": "zodiac_cancer",
+      "description": "Cancer zodiac sign design",
+      "imageUrl": "https://images.unsplash.com/photo-1586296526967-8011941e6853?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6b2RpYWMlMjBjYW5jZXJ8ZW58MHx8fHwxNzY5NDM1MzYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zodiac cancer"
+    },
+    {
+      "id": "thrissur_pooram",
+      "description": "Thrissur pooram festival design",
+      "imageUrl": "https://images.unsplash.com/photo-1641666016494-0fb450533f13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZXN0aXZhbCUyMGVsZXBoYW50fGVufDB8fHx8MTc2OTQzNTM2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "festival elephant"
+    },
+    {
+      "id": "thrissur_vadakkumnathan",
+      "description": "Vadakkumnathan temple design",
+      "imageUrl": "https://images.unsplash.com/photo-1720052473937-858c68dd0783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0ZW1wbGUlMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzY5NDM1MzYzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "temple architecture"
+    },
+    {
+      "id": "abstract_geometric",
+      "description": "Abstract geometric pattern",
+      "imageUrl": "https://images.unsplash.com/photo-1557411732-1797a9171fcf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxnZW9tZXRyaWMlMjBwYXR0ZXJufGVufDB8fHx8MTc2OTQxNjIzNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "geometric pattern"
+    },
+    {
+      "id": "abstract_lines",
+      "description": "Abstract lines pattern",
+      "imageUrl": "https://images.unsplash.com/photo-1708862549682-8a9ca243adcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhYnN0cmFjdCUyMGxpbmVzfGVufDB8fHx8MTc2OTQyMzc0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract lines"
+    }
+  ]
 }
