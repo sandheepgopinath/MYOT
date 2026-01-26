@@ -17,12 +17,6 @@ export default function Header() {
           >
             How it works
           </Link>
-          <a
-            href="#"
-            className="btn-outline uppercase hidden md:inline-block"
-          >
-            Start Crafting
-          </a>
           <ThemeSwitcher />
         </nav>
       </div>
