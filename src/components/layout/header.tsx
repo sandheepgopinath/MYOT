@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export default function Header() {
   return (
@@ -9,16 +10,20 @@ export default function Header() {
             MAKE MY TEE.
           </h1>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="flex items-center gap-2 md:gap-6">
           <Link
             href="#"
-            className="text-sm uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors"
+            className="text-sm uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors nav-link-desktop"
           >
             How it works
           </Link>
-          <a href="#" className="btn-outline uppercase">
+          <a
+            href="#"
+            className="btn-outline uppercase hidden md:inline-block"
+          >
             Start Crafting
           </a>
+          <ThemeSwitcher />
         </nav>
       </div>
     </header>

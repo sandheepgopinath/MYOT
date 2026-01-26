@@ -5,7 +5,7 @@ export default function Hero() {
         <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4">
           Designed by you, crafted by us.
         </h2>
-        <a href="#" className="btn-primary uppercase">
+        <a href="#" className="btn-outline glass-card uppercase">
           Start Crafting
         </a>
       </div>
