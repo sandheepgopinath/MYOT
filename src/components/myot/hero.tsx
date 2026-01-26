@@ -17,14 +17,6 @@ export default function Hero({ scrollY }: { scrollY: number }) {
           Start Crafting
         </a>
       </div>
-      <div 
-        className="scroll-indicator" 
-        style={{ opacity: Math.max(0, 1 - scrollY / 100) }}
-      >
-        <div className="mouse">
-          <div className="scroll-wheel"></div>
-        </div>
-      </div>
     </section>
   );
 }

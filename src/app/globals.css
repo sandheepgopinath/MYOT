@@ -187,49 +187,6 @@
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Scroll Indicator Animation */
-  .scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .mouse {
-    width: 24px;
-    height: 40px;
-    border: 2px solid var(--text-secondary);
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    padding-top: 8px;
-    opacity: 0.6;
-  }
-
-  .scroll-wheel {
-    width: 4px;
-    height: 8px;
-    background-color: var(--accent-gold);
-    border-radius: 2px;
-    animation: scroll-wheel 2s infinite ease-out;
-  }
-
-  @keyframes scroll-wheel {
-    0% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    100% {
-      transform: translateY(12px);
-      opacity: 0;
-    }
-  }
-
   @keyframes tracking-in-expand {
     0% {
       letter-spacing: -0.5em;
