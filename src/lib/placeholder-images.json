@@ -1,10 +1,10 @@
 {
   "placeholderImages": [
     {
-      "id": "hero_tshirt_folded",
-      "description": "Person wearing a black t-shirt",
-      "imageUrl": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1964&auto=format&fit=crop",
-      "imageHint": "person t-shirt"
+      "id": "hero_spotlight_floor",
+      "description": "A dark, empty room with a spotlight shining on the floor.",
+      "imageUrl": "https://images.unsplash.com/photo-1584384688243-cce292a42094?q=80&w=1974&auto=format&fit=crop",
+      "imageHint": "spotlight floor"
     },
     {
       "id": "tshirt_front",
