@@ -16,7 +16,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section 
       id="how-it-works" 
-      className="absolute inset-0 text-text-primary py-20 flex"
+      className="absolute inset-0 text-text-primary pt-28 pb-20"
       style={{ opacity, pointerEvents }}
     >
       <div className="container mx-auto px-4">
