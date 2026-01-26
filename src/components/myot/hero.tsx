@@ -1,47 +1,46 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown } from "lucide-react";
+import { ArrowRight, ChevronsDown } from "lucide-react";
+import Image from "next/image";
+import { getImageById } from "@/lib/placeholder-images";
+import Link from "next/link";
 
 export default function Hero() {
+  const heroImage = getImageById("hero_tshirt_folded");
+
   return (
-    <section className="text-center py-16 md:py-24 container mx-auto">
-      <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tight mb-4 text-primary">
-        Make Your Own Tee
-      </h1>
-      <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto mb-10">
-        Unleash your creativity. Select your fit, choose from our curated
-        designs or upload your own, and create a T-shirt that is uniquely
-        yours. Three simple steps to a masterpiece.
-      </p>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-12">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl font-headline shadow-lg">
-            1
-          </div>
-          <span className="font-semibold font-headline text-lg">Choose Tee</span>
-        </div>
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl font-headline shadow-lg">
-            2
-          </div>
-          <span className="font-semibold font-headline text-lg">Add Design</span>
-        </div>
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl font-headline shadow-lg">
-            3
-          </div>
-          <span className="font-semibold font-headline text-lg">Review & Order</span>
-        </div>
+    <section className="relative h-screen flex items-center justify-center text-center text-white">
+      {heroImage && (
+        <Image
+          src={heroImage.imageUrl}
+          alt={heroImage.description}
+          data-ai-hint={heroImage.imageHint}
+          fill
+          className="object-cover"
+          priority
+        />
+      )}
+      <div className="absolute inset-0 bg-black/60" />
+      <div className="relative z-10 container mx-auto px-4">
+        <h1 className="font-headline text-6xl md:text-8xl font-bold tracking-tight mb-4">
+          MAKE MY TEE.
+        </h1>
+        <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-10">
+          Designed by you, crafted by us.
+        </p>
+        <Button
+          size="lg"
+          className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 text-lg"
+          asChild
+        >
+          <a href="#customizer">
+            Start crafting
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </a>
+        </Button>
       </div>
-      <Button
-        size="lg"
-        className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-10 py-6 text-lg font-bold"
-        asChild
-      >
-        <a href="#customizer">
-          Start Designing
-          <ArrowDown className="ml-2 h-5 w-5 animate-bounce" />
-        </a>
-      </Button>
+      <a href="#customizer" className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/70 hover:text-white animate-bounce">
+          <ChevronsDown className="w-6 h-6" />
+      </a>
     </section>
   );
 }
