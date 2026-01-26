@@ -5,7 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
   // Start fading in after 400px of scroll, fully visible by 900px
-  const opacity = Math.max(0, Math.min(1, (scrollY - 400) / 500));
+  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 400) / 500));
+  // Start fading out after 1400px, fully gone by 1900px
+  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 1400) / 500);
+  const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   
   // To prevent interaction when invisible
   const pointerEvents = opacity > 0 ? 'auto' : 'none';
@@ -16,7 +19,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section 
       id="how-it-works" 
-      className="absolute inset-0 text-text-primary pt-28 pb-20"
+      className="fixed inset-0 text-text-primary pt-28 pb-20"
       style={{ opacity, pointerEvents }}
     >
       <div className="container mx-auto px-4">
