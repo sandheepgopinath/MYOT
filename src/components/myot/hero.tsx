@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronsDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
-import Link from "next/link";
 
 export default function Hero() {
   const heroImage = getImageById("hero_tshirt_folded");
@@ -30,17 +29,11 @@ export default function Hero() {
         <Button
           size="lg"
           className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 text-lg uppercase"
-          asChild
         >
-          <a href="#customizer">
-            Start
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </a>
+          Start
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>
-      <a href="#customizer" className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/70 hover:text-white animate-bounce">
-          <ChevronsDown className="w-6 h-6" />
-      </a>
     </section>
   );
 }

@@ -11,12 +11,8 @@ export default function Header() {
           </h1>
         </Link>
         <nav className="flex items-center gap-6">
-          <Link href="#" className="text-sm font-medium hover:underline hidden md:block">
-            MENU
-          </Link>
-          <div className="w-px h-6 bg-white/50 hidden md:block"></div>
-          <Button variant="outline" asChild className="border-white text-white hover:bg-white hover:text-black rounded-sm uppercase">
-            <a href="#customizer">Start</a>
+          <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black rounded-sm uppercase">
+            Start
           </Button>
         </nav>
       </div>
