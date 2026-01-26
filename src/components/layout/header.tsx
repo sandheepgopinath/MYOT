@@ -3,7 +3,7 @@ import { ThemeSwitcher } from "./theme-switcher";
 
 export default function Header() {
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 absolute top-0 w-full z-20">
+    <header className="py-4 px-4 sm:px-6 lg:px-8 sticky top-0 w-full z-20">
       <div className="flex items-center justify-between text-text-primary glass-card p-4">
         {/* Left placeholder to balance the nav items on the right */}
         <div className="flex-1"></div>
@@ -20,7 +20,7 @@ export default function Header() {
         {/* Right-aligned Navigation */}
         <nav className="flex-1 flex items-center justify-end gap-2 md:gap-6">
           <Link
-            href="#"
+            href="#how-it-works"
             className="btn-outline uppercase nav-link-desktop !py-2 !px-4 text-xs"
           >
             How it works
