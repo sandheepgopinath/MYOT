@@ -6,9 +6,11 @@ import Image from 'next/image';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-  // Start fading in after 300px of scroll, fully visible by 700px
-  const opacity = Math.max(0, Math.min(1, (scrollY - 300) / 400));
-  const transform = `translateY(${30 * (1 - opacity)}px)`;
+  // Start fading in after 400px of scroll, fully visible by 900px
+  const opacity = Math.max(0, Math.min(1, (scrollY - 400) / 500));
+  
+  // To prevent interaction when invisible
+  const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
   const normalFitTees = TSHIRTS.filter((t) => t.fit === 'normal').slice(0, 2);
   const oversizedTees = TSHIRTS.filter((t) => t.fit === 'oversized').slice(0, 2);
@@ -16,11 +18,11 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section 
       id="how-it-works" 
-      className="relative min-h-screen text-text-primary py-20"
-      style={{ opacity, transform }}
+      className="absolute inset-0 text-text-primary py-20 flex items-center"
+      style={{ opacity, pointerEvents }}
     >
       <div className="container mx-auto px-4">
-        <h2 className="font-tagline text-2xl md:text-3xl font-bold mb-12">
+        <h2 className="font-tagline text-2xl md:text-3xl font-bold mb-12 text-center">
           Step 1 : Choose your tee
         </h2>
         

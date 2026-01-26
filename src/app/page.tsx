@@ -20,12 +20,16 @@ export default function Home() {
   }, []);
   
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <Header />
-      <main>
-        <Hero scrollY={scrollY} />
-        <HowItWorks scrollY={scrollY} />
-      </main>
+      {/* This outer div creates the scrollable height */}
+      <div className="relative h-[200vh] w-full">
+        {/* This main tag will stick to the top */}
+        <main className="sticky top-0 h-screen w-full overflow-hidden">
+          <Hero scrollY={scrollY} />
+          <HowItWorks scrollY={scrollY} />
+        </main>
+      </div>
       <Footer />
     </div>
   );
