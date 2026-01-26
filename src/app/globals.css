@@ -6,7 +6,7 @@
   :root {
     /* Light Theme */
     --bg-color: #ffffff;
-    --bg-gradient: url('https://firebasestorage.googleapis.com/v0/b/studio-3143701674-93ada.firebasestorage.app/o/light%20background.png?alt=media&token=5566f108-660f-4a94-80f5-03babea32a73');
+    --bg-gradient: url('https://images.unsplash.com/photo-1554189097-7e472491b8f4?q=80&w=1974&auto=format&fit=crop');
     --bg-secondary: #f5f5f5;
     --text-primary: #050505;
     --text-secondary: #666666;
@@ -27,7 +27,7 @@
   .dark {
     /* Default Dark Theme - Refined Gray Gradient */
     --bg-color: #1a1a1a;
-    --bg-gradient: radial-gradient(circle at center, #1a1a1a 0%, #080808 100%);
+    --bg-gradient: url('https://images.unsplash.com/photo-1533134486753-c833f0ed4866?q=80&w=2070&auto=format&fit=crop');
     --bg-secondary: #222222;
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
