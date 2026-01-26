@@ -22,18 +22,18 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 container mx-auto px-4">
         <h1 className="font-headline text-6xl md:text-8xl font-bold tracking-tight mb-4">
-          MAKE MY TEE.
+          MAKE YOUR OWN TEE.
         </h1>
-        <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-10">
-          Designed by you, crafted by us.
+        <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-10 uppercase tracking-widest">
+          Designed by you, made by us.
         </p>
         <Button
           size="lg"
-          className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 text-lg"
+          className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 text-lg uppercase"
           asChild
         >
           <a href="#customizer">
-            Start crafting
+            Start
             <ArrowRight className="ml-2 h-5 w-5" />
           </a>
         </Button>

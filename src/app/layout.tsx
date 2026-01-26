@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "MAKE MY TEE.",
+  title: "MAKE YOUR OWN TEE.",
   description: "Designed by you, crafted by us.",
 };
 

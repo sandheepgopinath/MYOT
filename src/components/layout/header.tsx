@@ -7,7 +7,7 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between text-white">
         <Link href="/">
           <h1 className="text-xl font-bold tracking-widest uppercase">
-            MAKE MY TEE.
+            MAKE YOUR OWN TEE.
           </h1>
         </Link>
         <nav className="flex items-center gap-6">
@@ -15,8 +15,8 @@ export default function Header() {
             MENU
           </Link>
           <div className="w-px h-6 bg-white/50 hidden md:block"></div>
-          <Button variant="outline" asChild className="border-white text-white hover:bg-white hover:text-black rounded-sm">
-            <a href="#customizer">Start crafting</a>
+          <Button variant="outline" asChild className="border-white text-white hover:bg-white hover:text-black rounded-sm uppercase">
+            <a href="#customizer">Start</a>
           </Button>
         </nav>
       </div>

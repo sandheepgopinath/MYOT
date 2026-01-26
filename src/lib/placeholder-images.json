@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero_tshirt_folded",
-      "description": "A folded black t-shirt on a dark textured background",
-      "imageUrl": "https://images.unsplash.com/photo-1622470433403-3c999c3b8da6?q=80&w=2938&auto=format&fit=crop",
-      "imageHint": "folded t-shirt"
+      "description": "Person wearing a black t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1964&auto=format&fit=crop",
+      "imageHint": "person t-shirt"
     },
     {
       "id": "tshirt_front",
