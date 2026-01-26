@@ -2,8 +2,6 @@
 
 import { TSHIRTS } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Image from 'next/image';
-import { getImageById } from '@/lib/placeholder-images';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
   // Start fading in after 400px of scroll, fully visible by 900px
@@ -12,8 +10,8 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   // To prevent interaction when invisible
   const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
-  const normalFitTees = TSHIRTS.filter((t) => t.fit === 'normal').slice(0, 2);
-  const oversizedTees = TSHIRTS.filter((t) => t.fit === 'oversized').slice(0, 2);
+  const normalFitTees = TSHIRTS.filter((t) => t.fit === 'normal');
+  const oversizedTees = TSHIRTS.filter((t) => t.fit === 'oversized');
 
   return (
     <section 
@@ -26,66 +24,36 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
           Step 1 : Choose your tee
         </h2>
         
-        <div className="space-y-16">
-          <div>
-            <h3 className="text-2xl font-heading mb-6">Normal Fit</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {normalFitTees.map((tee) => {
-                const teeImage = getImageById(tee.imageFront);
-                return (
-                  <Card key={tee.id} className="glass-card overflow-hidden">
-                    <CardHeader>
-                      <CardTitle>{tee.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {teeImage && (
-                        <Image
-                          src={teeImage.imageUrl}
-                          alt={tee.name}
-                          width={400}
-                          height={400}
-                          className="w-full h-auto object-cover rounded-md"
-                          data-ai-hint={teeImage.imageHint}
-                        />
-                      )}
-                      <p className="mt-4 text-text-secondary">{tee.gsm} GSM</p>
-                      <p className="text-lg font-bold mt-2">${tee.price}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Card className="glass-card p-6 text-center">
+            <CardHeader>
+              <CardTitle className="text-2xl font-heading">Normal Fit</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3 text-text-secondary">
+                {normalFitTees.map((tee) => (
+                  <li key={tee.id} className="text-lg">
+                    {tee.gsm} GSM - <span className="font-bold text-text-primary">${tee.price}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
 
-          <div>
-            <h3 className="text-2xl font-heading mb-6">Oversized Fit</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {oversizedTees.map((tee) => {
-                const teeImage = getImageById(tee.imageFront);
-                return (
-                  <Card key={tee.id} className="glass-card overflow-hidden">
-                    <CardHeader>
-                      <CardTitle>{tee.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {teeImage && (
-                        <Image
-                          src={teeImage.imageUrl}
-                          alt={tee.name}
-                          width={400}
-                          height={400}
-                          className="w-full h-auto object-cover rounded-md"
-                          data-ai-hint={teeImage.imageHint}
-                        />
-                      )}
-                      <p className="mt-4 text-text-secondary">{tee.gsm} GSM</p>
-                      <p className="text-lg font-bold mt-2">${tee.price}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
+          <Card className="glass-card p-6 text-center">
+            <CardHeader>
+              <CardTitle className="text-2xl font-heading">Oversized Fit</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3 text-text-secondary">
+                {oversizedTees.map((tee) => (
+                  <li key={tee.id} className="text-lg">
+                    {tee.gsm} GSM - <span className="font-bold text-text-primary">${tee.price}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
