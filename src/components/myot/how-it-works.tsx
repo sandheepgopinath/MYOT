@@ -3,10 +3,11 @@
 import { Shirt } from 'lucide-react';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-  // Start fading in after 600px of scroll, fully visible by 1600px (1000px duration)
-  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 600) / 1000));
-  // Start fading out after 2200px, fully gone by 3200px (1000px duration)
-  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 2200) / 1000);
+  // Start fading in after 800px of scroll, fully visible by 2800px (2000px duration)
+  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 800) / 2000));
+  // Start fading out after 3800px, fully gone by 5800px (2000px duration)
+  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 3800) / 2000);
+
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   
   // To prevent interaction when invisible
@@ -26,7 +27,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
       style={{ opacity, pointerEvents }}
     >
       <div className="container mx-auto px-4 text-center">
-        <h2 className="font-tagline text-xl md:text-2xl font-bold mb-4">
+        <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4">
           Step 1: Choose your tee
         </h2>
         <p className="text-text-secondary mb-12">
@@ -42,7 +43,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
               >
                 <tee.icon className="w-12 h-12 text-accent-gold" />
               </div>
-              <p className="font-heading text-base font-semibold">{tee.name}</p>
+              <p className="font-heading text-base">{tee.name}</p>
             </div>
           ))}
         </div>
