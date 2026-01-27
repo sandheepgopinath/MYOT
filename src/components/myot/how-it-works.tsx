@@ -23,20 +23,22 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section 
       id="how-it-works" 
-      className="fixed inset-0 text-text-primary pt-28 pb-20"
+      className="fixed inset-0 text-text-primary"
       style={{ opacity, pointerEvents }}
     >
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4">
-          Step 1: Choose your tee
-        </h2>
-        <p className="text-text-secondary mb-12">
-          Choose the T-shirt type and quality for your needs.
-        </p>
+      <div className="container mx-auto px-4 h-full flex flex-col justify-end items-center pb-20">
+        <div className="text-center">
+            <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4">
+              Step 1: Choose your tee
+            </h2>
+            <p className="text-text-secondary mb-12">
+              Choose the T-shirt type and quality for your needs.
+            </p>
+        </div>
         
         <div className="flex justify-center items-start gap-8 md:gap-16 flex-wrap">
           {teeTypes.map((tee) => (
-            <div key={tee.name} className="flex flex-col items-center gap-4">
+            <div key={tee.name} className="flex flex-col-reverse items-center gap-4">
               <div 
                 className="glass-card p-6 rounded-full animate-float"
                 style={{ animationDelay: tee.delay }}
