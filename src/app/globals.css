@@ -100,6 +100,22 @@
     box-shadow: 0 0 40px rgba(212, 175, 55, 0.05);
   }
 
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
   @keyframes fadeInScale {
     from {
       opacity: 0;
@@ -175,7 +191,6 @@
   }
 
   .btn-outline:hover {
-    border-color: var(--text-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
