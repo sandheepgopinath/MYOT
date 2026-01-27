@@ -1,8 +1,8 @@
 'use client';
 
 export default function Hero({ scrollY }: { scrollY: number }) {
-  // Fade out over the first 500px of scrolling
-  const opacity = Math.max(0, 1 - scrollY / 500);
+  // Fade out over the first 800px of scrolling for a more gradual effect
+  const opacity = Math.max(0, 1 - scrollY / 800);
   const pointerEvents = opacity <= 0 ? 'none' : 'auto';
 
   return (

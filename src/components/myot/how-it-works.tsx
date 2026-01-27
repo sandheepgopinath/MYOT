@@ -3,10 +3,10 @@
 import { Shirt } from 'lucide-react';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-  // Start fading in after 400px of scroll, fully visible by 1200px
-  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 400) / 800));
-  // Start fading out after 1600px, fully gone by 2100px
-  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 1600) / 500);
+  // Start fading in after 600px of scroll, fully visible by 1600px (1000px duration)
+  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 600) / 1000));
+  // Start fading out after 2200px, fully gone by 3200px (1000px duration)
+  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 2200) / 1000);
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   
   // To prevent interaction when invisible
