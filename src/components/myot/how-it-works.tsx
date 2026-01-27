@@ -4,10 +4,10 @@ import { TSHIRTS } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-  // Start fading in after 400px of scroll, fully visible by 900px
-  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 400) / 500));
-  // Start fading out after 1400px, fully gone by 1900px
-  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 1400) / 500);
+  // Start fading in after 400px of scroll, fully visible by 1200px
+  const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 400) / 800));
+  // Start fading out after 1600px, fully gone by 2100px
+  const fadeOutOpacity = Math.max(0, 1 - (scrollY - 1600) / 500);
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   
   // To prevent interaction when invisible
