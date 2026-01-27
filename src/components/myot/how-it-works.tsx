@@ -1,6 +1,7 @@
 'use client';
 
 import { Shirt } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
   // Start fading in after 800px of scroll, fully visible by 2800px (2000px duration)
@@ -13,10 +14,15 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   // To prevent interaction when invisible
   const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
-  const teeTypes = [
+  const teeTypes: {
+    name: string;
+    icon?: React.ComponentType<{ className?: string }>;
+    image?: string;
+    delay: string;
+  }[] = [
     { name: 'Normal Fit', icon: Shirt, delay: '0s' },
-    { name: 'Oversized', icon: Shirt, delay: '0.3s' },
-    { name: 'Full Sleeves', icon: Shirt, delay: '0.6s' },
+    { name: 'Oversized', image: '/Oversized.png', delay: '0.3s' },
+    { name: 'Full Sleeves', image: '/Full sleeves.png', delay: '0.6s' },
     { name: 'Jersey', icon: Shirt, delay: '0.9s' },
   ];
 
@@ -40,10 +46,19 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
           {teeTypes.map((tee) => (
             <div key={tee.name} className="flex flex-col-reverse items-center gap-4">
               <div 
-                className="glass-card p-6 rounded-full animate-float"
+                className="glass-card rounded-full animate-float w-24 h-24 flex items-center justify-center relative overflow-hidden"
                 style={{ animationDelay: tee.delay }}
               >
-                <tee.icon className="w-12 h-12 text-accent-gold" />
+                {tee.image ? (
+                  <Image
+                    src={tee.image}
+                    alt={tee.name}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  tee.icon && <tee.icon className="w-12 h-12 text-accent-gold" />
+                )}
               </div>
               <p className="font-heading text-base">{tee.name}</p>
             </div>
