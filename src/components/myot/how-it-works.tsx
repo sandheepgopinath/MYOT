@@ -13,7 +13,7 @@ const NormalFitIcon = ({ className }: { className?: string }) => (
 );
   
 const OversizedIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
-    <Image src="/Oversized makemytee.png" alt="Oversized" width={80} height={80} className={cn(className, 'object-contain')} />
+    <Image src="/Oversized makemytee.png" alt="Oversized" width={200} height={200} className={cn(className, 'w-full h-full object-cover')} />
 );
 
 const FullSleevesIcon = ({ className }: { className?: string }) => (
