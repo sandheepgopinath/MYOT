@@ -24,7 +24,7 @@ export default function Home() {
     <div className="flex flex-col">
       <Header />
       {/* This outer div creates the scrollable height */}
-      <div className="relative h-[1000vh] w-full">
+      <div className="relative h-[1300vh] w-full">
         {/* This main tag will stick to the top */}
         <main className="sticky top-0 h-screen w-full overflow-hidden">
           <Hero scrollY={scrollY} />

@@ -2,7 +2,6 @@
 
 import { useMemo } from 'react';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
   
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
     const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 800) / 2000));
@@ -45,7 +44,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                     className="animate-float relative z-10 object-contain max-h-[250px]"
                                 />
                             </div>
-                            <p className="uppercase tracking-widest text-xs text-text-primary font-medium">
+                            <p className="font-tagline text-lg text-text-primary">
                                 {tee.id}
                             </p>
                         </div>
@@ -55,7 +54,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
 
             <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 {qualityOptions.map((quality) => (
-                    <button key={quality} className="btn-outline !py-2 !px-4 text-xs">
+                    <button key={quality} className="btn-outline !py-2 !px-4 text-sm font-tagline">
                         {quality}
                     </button>
                 ))}
