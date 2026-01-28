@@ -8,14 +8,12 @@ import { getImageById } from '@/lib/placeholder-images';
 
 const NormalFitIcon = ({ className }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.38 3.46 16 2a4 4 0 0 0-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+      <path d="M20.38 3.46 16 2a4 4 0 0 0-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
     </svg>
 );
   
-const OversizedIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21.54 3.46 18 2a4 4 0 0 0-8 0l-3.54 1.46a2 2 0 0 0-1.21 2.23l1 5.47a1 1 0 0 0 .98.84H9v10c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V12h2.77a1 1 0 0 0 .98-.84l1-5.47a2 2 0 0 0-1.21-2.23z" />
-    </svg>
+const OversizedIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
+    <Image src="/Oversized makemytee.png" alt="Oversized" width={80} height={80} className={cn(className, 'object-contain')} />
 );
 
 const FullSleevesIcon = ({ className }: { className?: string }) => (
