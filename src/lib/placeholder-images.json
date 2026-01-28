@@ -31,6 +31,12 @@
       "imageHint": "oversized black t-shirt"
     },
     {
+      "id": "jersey_mockup",
+      "description": "Floating black sports jersey t-shirt mockup",
+      "imageUrl": "https://storage.googleapis.com/monogram-dev-assets/jersey_mockup.png",
+      "imageHint": "jersey mockup"
+    },
+    {
       "id": "zodiac_aries",
       "description": "Aries zodiac sign design",
       "imageUrl": "https://images.unsplash.com/photo-1545320222-9b9bbf26430b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx6b2RpYWMlMjBhcmllc3xlbnwwfHx8fDE3Njk0MzUzNjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
