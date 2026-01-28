@@ -2,26 +2,22 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { Shirt } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getImageById } from '@/lib/placeholder-images';
 
-const NormalFitIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.38 3.46 16 2a4 4 0 0 0-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-    </svg>
+const NormalFitIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
+    <Image src="/normal_tee-removebg-preview.png" alt="Normal Fit" width={200} height={200} className={cn(className, 'w-full h-full object-contain')} {...props} />
 );
   
 const OversizedIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
-    <Image src="/Oversized makemytee.png" alt="Oversized" width={200} height={200} className={cn(className, 'w-full h-full object-cover')} />
+    <Image src="/Oversized makemytee.png" alt="Oversized" width={200} height={200} className={cn(className, 'w-full h-full object-cover')} {...props} />
 );
 
-const FullSleevesIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 2.29a4 4 0 0 0-8 0L4 4.29V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4.29L16 2.29z" />
-        <path d="M4 9.29 1 11v7a2 2 0 0 0 2 2h1" />
-        <path d="M20 9.29 23 11v7a2 2 0 0 1-2 2h-1" />
-    </svg>
+const FullSleevesIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
+    <Image src="/Full sleeve makemytee.png" alt="Full Sleeves" width={200} height={200} className={cn(className, 'w-full h-full object-contain')} {...props} />
+);
+
+const JerseyIcon = ({ className, ...props }: { className?: string; [key:string]: any; }) => (
+    <Image src="/jercy makemytee.png" alt="Jersey" width={200} height={200} className={cn(className, 'w-full h-full object-contain')} {...props} />
 );
   
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
@@ -30,18 +26,14 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
-    const [selectedTee, setSelectedTee] = useState('Jersey');
+    const [selectedTee, setSelectedTee] = useState('Normal Fit');
     
-    const normalFitImage = useMemo(() => getImageById('tshirt_front'), []);
-    const oversizedImage = useMemo(() => getImageById('tshirt_front_oversized'), []);
-    const jerseyImage = useMemo(() => getImageById('jersey_mockup'), []);
-
     const teeOptions = useMemo(() => [
-        { id: 'Normal Fit', icon: NormalFitIcon, previewImage: normalFitImage?.imageUrl ?? '' },
-        { id: 'Oversized', icon: OversizedIcon, previewImage: oversizedImage?.imageUrl ?? '' },
-        { id: 'Full Sleeves', icon: FullSleevesIcon, previewImage: '/Full sleeves.png' },
-        { id: 'Jersey', icon: Shirt, previewImage: jerseyImage?.imageUrl ?? '' }
-    ], [normalFitImage, oversizedImage, jerseyImage]);
+        { id: 'Normal Fit', icon: NormalFitIcon, previewImage: '/normal_tee-removebg-preview.png' },
+        { id: 'Oversized', icon: OversizedIcon, previewImage: '/Oversized makemytee.png' },
+        { id: 'Full Sleeves', icon: FullSleevesIcon, previewImage: '/Full sleeve makemytee.png' },
+        { id: 'Jersey', icon: JerseyIcon, previewImage: '/jercy makemytee.png' }
+    ], []);
 
     const selectedTeeData = useMemo(() => {
         return teeOptions.find(t => t.id === selectedTee);
@@ -82,7 +74,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                 </div>
                             ) : (
                                 <button onClick={() => setSelectedTee(tee.id)} className="w-full h-full flex flex-col justify-end items-center gap-4 group">
-                                    <tee.icon strokeWidth={1} className="w-20 h-20 text-text-secondary transition-opacity duration-300 group-hover:opacity-100 opacity-60" />
+                                    <tee.icon className="w-20 h-20 text-text-secondary transition-opacity duration-300 group-hover:opacity-100 opacity-60 animate-float" />
                                 </button>
                             )}
                             <p className={cn(
