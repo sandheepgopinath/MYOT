@@ -3,10 +3,8 @@
 import { Palette, Upload, Type } from 'lucide-react';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
-    // Starts fading in as the previous section fades out
-    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 4800) / 3000));
-    // Starts fading out after being visible for a while
-    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 10000) / 2000);
+    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 6000) / 1000));
+    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 9000) / 1000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 

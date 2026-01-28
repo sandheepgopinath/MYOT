@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import Image from 'next/image';
   
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-    const fadeInOpacity = Math.max(0, 1 - (scrollY - 800) / 2000);
-    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 3800) / 2000);
+    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 2000) / 1000));
+    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 5000) / 1000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
