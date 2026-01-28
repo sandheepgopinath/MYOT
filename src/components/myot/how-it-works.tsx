@@ -26,10 +26,12 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <p className="text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">Step 01</p>
-                <h2 className="font-tagline text-3xl md:text-4xl uppercase premium-gradient mb-3">
-                    Choose Your Tee
-                </h2>
+                <div className="flex items-baseline justify-center gap-4 mb-3">
+                    <p className="font-tagline text-3xl md:text-4xl uppercase text-text-secondary">Step 01</p>
+                    <h2 className="font-tagline text-3xl md:text-4xl uppercase premium-gradient">
+                        Choose Your Tee
+                    </h2>
+                </div>
                 <div className="flex justify-center gap-4 animate-fade-in mb-6" style={{ animationDelay: '0.3s' }}>
                     {qualityOptions.map((quality) => (
                         <button key={quality} className="btn-outline !py-2 !px-4 text-xs">
