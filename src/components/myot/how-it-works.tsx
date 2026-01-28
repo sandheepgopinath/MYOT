@@ -20,10 +20,10 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
     return (
         <section 
             id="how-it-works" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-between"
+            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center"
             style={{ opacity, pointerEvents }}
         >
-            <div className="text-center pt-24 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 <p className="text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">Step 01</p>
                 <h2 className="font-tagline text-3xl md:text-4xl uppercase premium-gradient mb-3">
                     Choose Your Tee
@@ -33,8 +33,8 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                 </p>
             </div>
             
-            <div className="w-full h-[50vh] relative">
-                <div className="absolute bottom-0 w-full grid grid-cols-4 items-end text-center px-8">
+            <div className="w-full mt-8">
+                <div className="grid grid-cols-4 items-end text-center px-8">
                     {teeOptions.map((tee, index) => (
                         <div key={tee.id} className="flex flex-col justify-end items-center gap-4 h-[35vh] animate-fade-in" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
                             <div className="relative w-full h-full flex justify-center items-center">
