@@ -12,17 +12,17 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
 
     const options = [
         {
-            icon: <Palette className="w-8 h-8" />,
+            icon: <Palette className="w-12 h-12 text-text-primary relative z-10" />,
             title: "Add from our curated set of designs",
             delay: "0.4s",
         },
         {
-            icon: <Upload className="w-8 h-8" />,
+            icon: <Upload className="w-12 h-12 text-text-primary relative z-10" />,
             title: "Upload your designs",
             delay: "0.5s",
         },
         {
-            icon: <Type className="w-8 h-8" />,
+            icon: <Type className="w-12 h-12 text-text-primary relative z-10" />,
             title: "Add personalized texts",
             delay: "0.6s",
         },
@@ -36,20 +36,28 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient">
-                    Step 02 : Personalize your Tshirt
+                    Step 02: Personalize your tee
                 </h2>
             </div>
             
-            <div className="flex flex-col gap-4 w-full max-w-md px-8">
-                {options.map((option) => (
-                    <button
+            <div className="grid grid-cols-3 gap-8 w-full max-w-3xl px-8">
+                {options.map((option, index) => (
+                    <div
                         key={option.title}
-                        className="btn-outline flex items-center justify-start gap-4 w-full text-left animate-fade-in"
+                        className="flex flex-col items-center justify-start gap-4 text-center animate-fade-in"
                         style={{animationDelay: option.delay}}
                     >
-                        {option.icon}
-                        <span className="font-heading">{option.title}</span>
-                    </button>
+                        <div 
+                            className="w-32 h-32 relative flex items-center justify-center animate-float"
+                            style={{animationDelay: `${index * 0.2 + 0.4}s`}}
+                        >
+                            <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--glass-border)_0%,_transparent_70%)] opacity-70 rounded-full" />
+                            {option.icon}
+                        </div>
+                        <p className="font-tagline text-lg text-text-primary">
+                            {option.title}
+                        </p>
+                    </div>
                 ))}
             </div>
         </section>
