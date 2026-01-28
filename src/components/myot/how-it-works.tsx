@@ -22,26 +22,16 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
     return (
         <section 
             id="how-it-works" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center"
+            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-8"
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <div className="flex items-baseline justify-center gap-4 mb-3">
-                    <p className="font-tagline text-3xl md:text-4xl uppercase text-text-secondary">Step 01</p>
-                    <h2 className="font-tagline text-3xl md:text-4xl uppercase premium-gradient">
-                        Choose Your Tee
-                    </h2>
-                </div>
-                <div className="flex justify-center gap-4 animate-fade-in mb-6" style={{ animationDelay: '0.3s' }}>
-                    {qualityOptions.map((quality) => (
-                        <button key={quality} className="btn-outline !py-2 !px-4 text-xs">
-                            {quality}
-                        </button>
-                    ))}
-                </div>
+                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient">
+                    Step 01 : Choose your Tee
+                </h2>
             </div>
             
-            <div className="w-full mt-8">
+            <div className="w-full">
                 <div className="grid grid-cols-4 items-end text-center px-8">
                     {teeOptions.map((tee, index) => (
                         <div key={tee.id} className="flex flex-col justify-end items-center gap-4 h-[35vh] animate-fade-in" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
@@ -61,6 +51,14 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                         </div>
                     ))}
                 </div>
+            </div>
+
+            <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                {qualityOptions.map((quality) => (
+                    <button key={quality} className="btn-outline !py-2 !px-4 text-xs">
+                        {quality}
+                    </button>
+                ))}
             </div>
         </section>
     );
