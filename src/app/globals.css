@@ -6,7 +6,7 @@
   :root {
     /* Light Theme */
     --bg-color: transparent;
-    --bg-gradient: url('https://images.unsplash.com/photo-1564865878688-9a244444042a?q=80&w=2070&auto=format&fit=crop');
+    --bg-gradient: url('/light background.png');
     --bg-secondary: #f5f5f5;
     --text-primary: #050505;
     --text-secondary: #666666;
@@ -27,7 +27,7 @@
   .dark {
     /* Default Dark Theme - Refined Gray Gradient */
     --bg-color: transparent;
-    --bg-gradient: url('https://images.unsplash.com/photo-1564865878688-9a244444042a?q=80&w=2070&auto=format&fit=crop');
+    --bg-gradient: url('/Background.png');
     --bg-secondary: #222222;
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
