@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import Image from 'next/image';
   
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
-    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 800) / 2000));
+    const fadeInOpacity = Math.max(0, 1 - (scrollY - 800) / 2000);
     const fadeOutOpacity = Math.max(0, 1 - (scrollY - 3800) / 2000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
@@ -31,9 +31,9 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
             </div>
             
             <div className="w-full">
-                <div className="grid grid-cols-4 items-end text-center px-8">
+                <div className="grid grid-cols-2 md:grid-cols-4 items-end text-center px-4 md:px-8 gap-x-4">
                     {teeOptions.map((tee, index) => (
-                        <div key={tee.id} className="flex flex-col justify-end items-center gap-4 h-[35vh] animate-fade-in" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
+                        <div key={tee.id} className="flex flex-col justify-end items-center gap-2 md:gap-4 h-[30vh] md:h-[35vh] animate-fade-in" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
                             <div className="relative w-full h-full flex justify-center items-center">
                                 <div className="absolute bottom-8 w-[200%] h-32 bg-[radial-gradient(ellipse_at_bottom,_var(--glass-border)_0%,_transparent_70%)] opacity-70" />
                                 <Image 
@@ -41,10 +41,10 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                     alt={tee.id}
                                     width={250}
                                     height={250}
-                                    className="animate-float relative z-10 object-contain max-h-[250px]"
+                                    className="animate-float relative z-10 object-contain max-h-[150px] md:max-h-[250px]"
                                 />
                             </div>
-                            <p className="font-tagline text-lg text-text-primary">
+                            <p className="font-tagline text-sm md:text-lg text-text-primary">
                                 {tee.id}
                             </p>
                         </div>
@@ -54,7 +54,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
 
             <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 {qualityOptions.map((quality) => (
-                    <button key={quality} className="btn-outline !py-2 !px-4 text-sm font-tagline">
+                    <button key={quality} className="btn-outline py-2 px-3 md:px-4 text-xs md:text-sm font-tagline">
                         {quality}
                     </button>
                 ))}

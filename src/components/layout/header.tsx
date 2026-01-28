@@ -11,7 +11,7 @@ export default function Header() {
         {/* Centered Logo */}
         <div className="flex-1 text-center">
             <Link href="/">
-              <h1 className="text-2xl font-brand tracking-widest uppercase inline-block">
+              <h1 className="text-xl md:text-2xl font-brand tracking-widest uppercase inline-block">
                 MAKE MY <span className="gold-gradient">TEE</span>.
               </h1>
             </Link>
