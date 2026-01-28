@@ -17,6 +17,8 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
         { id: 'Jersey', imageSrc: '/jercy makemytee.png' }
     ], []);
 
+    const qualityOptions = ['180GSM', '200GSM', '220GSM', '300GSM'];
+
     return (
         <section 
             id="how-it-works" 
@@ -28,9 +30,16 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                 <h2 className="font-tagline text-3xl md:text-4xl uppercase premium-gradient mb-3">
                     Choose Your Tee
                 </h2>
-                <p className="text-text-secondary">
+                <p className="text-text-secondary mb-6">
                     Choose the T-shirt type and quality for your needs.
                 </p>
+                <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                    {qualityOptions.map((quality) => (
+                        <button key={quality} className="btn-outline !py-2 !px-4 text-xs">
+                            {quality}
+                        </button>
+                    ))}
+                </div>
             </div>
             
             <div className="w-full mt-8">
