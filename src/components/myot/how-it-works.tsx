@@ -21,7 +21,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
     return (
         <section 
             id="how-it-works" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-8"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center gap-8"
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>

@@ -29,11 +29,11 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     return (
         <section 
             id="personalize" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-8 md:gap-12 px-4"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center gap-8 px-4"
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="font-tagline text-lg md:text-2xl uppercase premium-gradient text-center">
+                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient text-center">
                     Step 02: Personalize your tee
                 </h2>
             </div>
