@@ -33,7 +33,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient text-center">
+                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient text-center font-bold">
                     Step 02: Personalize your tee
                 </h2>
             </div>
