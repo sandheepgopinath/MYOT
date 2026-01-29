@@ -25,7 +25,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
             style={{ opacity, pointerEvents }}
         >
             <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient">
+                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient font-bold">
                     Step 01 : Choose your Tee
                 </h2>
             </div>
