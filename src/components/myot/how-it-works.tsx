@@ -48,7 +48,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                     className="object-contain drop-shadow-2xl"
                                 />
                             </div>
-                            <p className="font-tagline text-base md:text-lg text-text-primary z-10 relative">
+                            <p className="text-base md:text-lg text-text-primary z-10 relative">
                                 {tee.id}
                             </p>
                         </div>
@@ -60,7 +60,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                 {qualityOptions.map((quality) => (
                     <div 
                         key={quality}
-                        className="btn-outline py-2 px-6 text-sm font-tagline text-text-secondary"
+                        className="btn-outline py-2 px-6 text-sm text-text-secondary"
                     >
                         {quality}
                     </div>
