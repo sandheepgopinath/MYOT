@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import Image from 'next/image';
 
 export default function HowItWorks({ scrollY }: { scrollY: number }) {
@@ -9,25 +8,22 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
-  const teeOptions = useMemo(
-    () => [
-      { id: 'Normal Fit', imageSrc: '/normal_tee-removebg-preview.png' },
-      { id: 'Oversized', imageSrc: '/Oversized makemytee.png' },
-      { id: 'Full Sleeves', imageSrc: '/Full sleeve makemytee.png' },
-      { id: 'Jersey', imageSrc: '/jercy makemytee.png' },
-    ],
-    []
-  );
+  const teeOptions = [
+    { id: 'Normal Fit', imageSrc: '/normal_tee-removebg-preview.png' },
+    { id: 'Oversized', imageSrc: '/Oversized makemytee.png' },
+    { id: 'Full Sleeves', imageSrc: '/Full sleeve makemytee.png' },
+    { id: 'Jersey', imageSrc: '/jercy makemytee.png' },
+  ];
 
   const qualityOptions = ['180GSM', '200GSM', '220GSM', '300GSM'];
 
   return (
     <section
       id="how-it-works"
-      className="fixed inset-0 text-text-primary flex flex-col justify-start pt-16 sm:pt-20 items-center gap-4 sm:gap-6"
+      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-4 px-4 pt-24 pb-4"
       style={{ opacity, pointerEvents }}
     >
-      <div className="text-center px-4">
+      <div className="text-center">
         <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
           Step 01
         </h3>
@@ -36,8 +32,8 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
         </h2>
       </div>
 
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 items-start text-center px-4 md:px-8 gap-2 sm:gap-4 md:gap-6">
+      <div className="w-full max-w-5xl">
+        <div className="grid grid-cols-2 md:grid-cols-4 items-start text-center gap-2 sm:gap-4 md:gap-6">
           {teeOptions.map((tee) => (
             <div
               key={tee.id}
@@ -59,11 +55,11 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
         </div>
       </div>
 
-      <div className="flex justify-center gap-2 sm:gap-4 mt-2 sm:mt-4">
+      <div className="flex justify-center gap-1 sm:gap-2 mt-2">
         {qualityOptions.map((quality) => (
           <div
             key={quality}
-            className="btn-outline py-2 px-3 sm:px-4 text-xs text-text-secondary"
+            className="btn-outline py-1 px-2 sm:py-2 sm:px-4 text-xs text-text-secondary"
           >
             {quality}
           </div>
