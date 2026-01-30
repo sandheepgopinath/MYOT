@@ -23,7 +23,7 @@ export default function Breadcrumbs() {
             )}
           </div>
           {index < steps.length - 1 && (
-            <div className="w-6 md:w-8 h-px bg-glass-border ml-4 md:ml-8"></div>
+            <div className="w-6 md:w-8 h-px bg-border ml-4 md:ml-8"></div>
           )}
         </div>
       ))}
