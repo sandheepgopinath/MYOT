@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 
 export default function Hero({ scrollY }: { scrollY: number }) {
   // Fade out over the first 2000px of scrolling.
@@ -22,13 +23,12 @@ export default function Hero({ scrollY }: { scrollY: number }) {
         <h2 className="font-tagline text-2xl md:text-3xl premium-gradient mb-4 uppercase font-normal">
           Designed by you, crafted by us.
         </h2>
-        <a
-          href="#how-it-works"
-          onClick={(e) => handleScrollTo(e, 2000)}
+        <Link
+          href="/craft"
           className="btn-outline font-normal text-sm"
         >
           Start Crafting
-        </a>
+        </Link>
       </div>
     </section>
   );
