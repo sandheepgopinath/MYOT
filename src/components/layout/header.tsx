@@ -8,12 +8,12 @@ export default function Header({ scrollY }: { scrollY: number }) {
   const howItWorksThreshold = 2000;
   const personalizeThreshold = 6000;
 
-  const showBreadcrumbs = scrollY > howItWorksThreshold;
+  const showBreadcrumbs = scrollY >= howItWorksThreshold;
 
   let activeStep = '';
-  if (scrollY > personalizeThreshold) {
+  if (scrollY >= personalizeThreshold) {
     activeStep = 'Personalize';
-  } else if (scrollY > howItWorksThreshold) {
+  } else if (scrollY >= howItWorksThreshold) {
     activeStep = 'Fabric';
   }
 
