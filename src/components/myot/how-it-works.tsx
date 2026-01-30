@@ -22,7 +22,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section
       id="how-it-works"
-      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-4 px-4 pt-24 sm:pt-32 pb-4"
+      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-28 sm:pt-32 pb-4"
       style={{ opacity, pointerEvents, transform: `scale(${scale})` }}
     >
       <div className="text-center">
@@ -39,9 +39,9 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
           {teeOptions.map((tee) => (
             <div
               key={tee.id}
-              className="glass-card p-2 sm:p-4 flex flex-col justify-end items-center relative overflow-hidden transition-all duration-300 aspect-[4/5] sm:aspect-[3/4]"
+              className="glass-card p-2 sm:p-4 flex flex-col items-center relative overflow-hidden transition-all duration-300 aspect-square sm:aspect-[4/5]"
             >
-              <div className="absolute inset-0 top-[-20%]">
+              <div className="relative flex-grow w-full -mt-[20%] -mb-[5%]">
                 <Image
                   src={tee.imageSrc}
                   alt={tee.id}
