@@ -5,21 +5,21 @@ export default function Breadcrumbs() {
   const activeStep = 'Personalize';
 
   return (
-    <nav className="flex items-center justify-center space-x-4 md:space-x-8 mb-12">
+    <nav className="flex items-center justify-center space-x-4 md:space-x-8">
       {steps.map((step, index) => (
         <div key={step} className="flex items-center">
           <div className="relative py-2">
             <span
-              className={`uppercase tracking-widest text-xs ${
+              className={`font-heading font-light text-sm transition-colors duration-300 ${
                 step === activeStep
-                  ? 'text-text-primary font-medium'
-                  : 'text-text-secondary/70'
+                  ? 'gold-gradient'
+                  : 'text-text-secondary/60 hover:text-text-secondary'
               }`}
             >
               {step}
             </span>
             {step === activeStep && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-0.5 gold-underline-glow rounded-full" />
             )}
           </div>
           {index < steps.length - 1 && (

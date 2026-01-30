@@ -16,7 +16,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="personalize"
-            className="fixed inset-0 text-text-primary flex flex-col items-center px-4 pt-28"
+            className="fixed inset-0 text-text-primary flex flex-col items-center px-4 pt-24"
             style={{ opacity, pointerEvents }}
         >
             <div className="w-full max-w-5xl mx-auto">
@@ -24,7 +24,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                   <Breadcrumbs />
                 </div>
                 
-                <div className="text-center mb-10 md:mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                <div className="text-center my-10 md:my-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                     <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
                         Step 02
                     </h3>

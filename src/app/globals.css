@@ -86,6 +86,11 @@
     -webkit-text-fill-color: transparent;
   }
 
+  .gold-underline-glow {
+    background: linear-gradient(90deg, #d4af37, #f7e08a, #d4af37);
+    box-shadow: 0 2px 12px 0 rgba(212, 175, 55, 0.6);
+  }
+
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
