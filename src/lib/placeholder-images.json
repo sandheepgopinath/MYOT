@@ -83,6 +83,12 @@
       "description": "Abstract lines pattern",
       "imageUrl": "https://images.unsplash.com/photo-1708862549682-8a9ca243adcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhYnN0cmFjdCUyMGxpbmVzfGVufDB8fHx8MTc2OTQyMzc0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "abstract lines"
+    },
+    {
+      "id": "curated_design_tee",
+      "description": "A light-colored T-shirt with a celestial sun and moon design.",
+      "imageUrl": "https://storage.googleapis.com/monogram-dev-assets/t-shirt-sun-moon-design.png",
+      "imageHint": "celestial design"
     }
   ]
 }

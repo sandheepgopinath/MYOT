@@ -1,6 +1,9 @@
 'use client';
 
-import { Palette, Upload, Type } from 'lucide-react';
+import Image from 'next/image';
+import { Upload, ChevronRight } from 'lucide-react';
+import Breadcrumbs from './breadcrumbs';
+import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
     const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 6000) / 1000));
@@ -8,55 +11,72 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
-    const options = [
-        {
-            icon: <Palette className="w-10 h-10 md:w-12 md:h-12 text-text-primary relative z-10" />,
-            title: "Add from our curated set of designs",
-            delay: "0.4s",
-        },
-        {
-            icon: <Upload className="w-10 h-10 md:w-12 md:h-12 text-text-primary relative z-10" />,
-            title: "Upload your designs",
-            delay: "0.5s",
-        },
-        {
-            icon: <Type className="w-10 h-10 md:w-12 md:h-12 text-text-primary relative z-10" />,
-            title: "Add personalized texts",
-            delay: "0.6s",
-        },
-    ];
+    const curatedDesignImage = getImageById('curated_design_tee');
 
     return (
-        <section 
-            id="personalize" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center gap-8 px-4"
+        <section
+            id="personalize"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-16 md:pt-20 items-center px-4"
             style={{ opacity, pointerEvents }}
         >
-            <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient text-center font-bold">
-                    Step 02: Personalize your tee
-                </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
-                {options.map((option, index) => (
-                    <div
-                        key={option.title}
-                        className="flex flex-col items-center justify-start gap-4 text-center animate-fade-in"
-                        style={{animationDelay: option.delay}}
-                    >
-                        <div 
-                            className="w-24 h-24 md:w-32 md:h-32 relative flex items-center justify-center animate-float"
-                            style={{animationDelay: `${index * 0.2 + 0.4}s`}}
-                        >
-                            <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--glass-border)_0%,_transparent_70%)] opacity-70 rounded-full" />
-                            {option.icon}
+            <div className="w-full max-w-5xl mx-auto">
+                <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                  <Breadcrumbs />
+                </div>
+                
+                <div className="text-center mb-10 md:mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <h3 className="text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
+                        Step 02
+                    </h3>
+                    <h2 className="font-tagline text-4xl md:text-5xl text-text-primary font-bold">
+                        Make It Yours
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Left Card */}
+                    <div className="glass-card p-8 flex flex-col justify-end min-h-[380px] relative overflow-hidden group cursor-pointer animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                        {curatedDesignImage && (
+                          <Image
+                              src={curatedDesignImage.imageUrl}
+                              alt={curatedDesignImage.description}
+                              fill
+                              className="object-cover object-center scale-125 group-hover:scale-110 transition-transform duration-700 ease-in-out opacity-30 group-hover:opacity-40"
+                              data-ai-hint={curatedDesignImage.imageHint}
+                          />
+                        )}
+                        <div className="relative z-10">
+                            <h4 className="font-tagline text-3xl mb-2">Curated Designs</h4>
+                            <p className="text-text-secondary text-sm max-w-xs">Explore original artwork crafted by our designers</p>
                         </div>
-                        <p className="font-tagline text-base md:text-lg text-text-primary">
-                            {option.title}
-                        </p>
+                         <ChevronRight className="w-6 h-6 absolute bottom-8 right-8 z-10 text-text-secondary group-hover:translate-x-1 transition-transform" />
                     </div>
-                ))}
+                    
+                    {/* Right Cards */}
+                    <div className="flex flex-col gap-6">
+                        <div className="glass-card p-6 flex items-center justify-between relative group cursor-pointer animate-fade-in h-full" style={{ animationDelay: '0.6s' }}>
+                            <div className="flex-1">
+                                <h4 className="font-tagline text-2xl mb-1">Upload Your Artwork</h4>
+                                <p className="text-text-secondary text-xs">Bring your vision — we’ll handle the rest.</p>
+                            </div>
+                            <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center backdrop-blur-sm border border-white/10">
+                                <Upload className="w-6 h-6 text-text-secondary" />
+                            </div>
+                            <ChevronRight className="w-5 h-5 absolute top-1/2 -translate-y-1/2 right-6 text-text-secondary opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        </div>
+
+                        <div className="glass-card p-6 flex items-center justify-between relative group cursor-pointer animate-fade-in h-full" style={{ animationDelay: '0.8s' }}>
+                            <div className="flex-1">
+                                <h4 className="font-tagline text-2xl mb-1">Personal Text</h4>
+                                <p className="text-text-secondary text-xs">Words that matter, placed with intent</p>
+                            </div>
+                            <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center font-tagline text-text-secondary text-lg italic backdrop-blur-sm border border-white/10">
+                                Your Text
+                            </div>
+                            <ChevronRight className="w-5 h-5 absolute top-1/2 -translate-y-1/2 right-6 text-text-secondary opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     );
