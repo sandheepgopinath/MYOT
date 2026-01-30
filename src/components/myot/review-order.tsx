@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Sparkles, ShoppingBag } from 'lucide-react';
+import { Sparkles, ShoppingBag } from 'lucide-react';
 
 export default function ReviewOrder({ scrollY }: { scrollY: number }) {
     // Fade in starts at 9000, fully visible at 10000
@@ -52,10 +52,6 @@ export default function ReviewOrder({ scrollY }: { scrollY: number }) {
                     <p className="text-sm text-text-secondary max-w-xs">
                         Finalize your custom tee and get it delivered to your doorstep.
                     </p>
-                    <button className="mt-auto btn-primary w-full sm:w-auto flex items-center justify-center gap-2 group">
-                        Place Order
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
                 </div>
             </div>
         </section>
