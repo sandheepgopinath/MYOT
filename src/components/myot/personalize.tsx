@@ -64,7 +64,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                   Bring your vision — we’ll handle the rest.
                 </p>
               </div>
-              <div className="ml-4 w-28 h-16 relative">
+              <div className="ml-4 w-36 h-20 relative">
                 <Image
                   src="/upload_icon.png"
                   alt="Upload your artwork"

@@ -21,14 +21,13 @@ export default function Header({ scrollY }: { scrollY: number }) {
     <header className="py-4 px-4 sm:px-6 lg:px-8 sticky top-0 w-full z-20">
       <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px]">
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
-        <div className="flex-1">
+        <div className="flex-none md:flex-1">
           <Link
             href="/"
-            className={`transition-opacity duration-500 ${
-              showBreadcrumbs
-                ? 'opacity-100'
-                : 'opacity-0 pointer-events-none'
-            }`}
+            className={`transition-opacity duration-500 hidden md:block ${showBreadcrumbs
+              ? 'opacity-100'
+              : 'opacity-0 pointer-events-none'
+              }`}
           >
             <h1 className="text-xl md:text-2xl font-brand tracking-widest uppercase inline-block">
               MAKE MY <span className="gold-gradient">TEE</span>.
@@ -41,11 +40,10 @@ export default function Header({ scrollY }: { scrollY: number }) {
           <div className="relative w-full h-full">
             {/* Logo when NOT in a section with breadcrumbs */}
             <div
-              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                !showBreadcrumbs
-                  ? 'opacity-100'
-                  : 'opacity-0 pointer-events-none'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${!showBreadcrumbs
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none'
+                }`}
             >
               <Link href="/">
                 <h1 className="text-xl md:text-2xl font-brand tracking-widest uppercase inline-block">
@@ -55,11 +53,10 @@ export default function Header({ scrollY }: { scrollY: number }) {
             </div>
             {/* Breadcrumbs when in a section with breadcrumbs */}
             <div
-              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                showBreadcrumbs
-                  ? 'opacity-100'
-                  : 'opacity-0 pointer-events-none'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${showBreadcrumbs
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none'
+                }`}
             >
               <Breadcrumbs activeStep={activeStep} />
             </div>
@@ -67,7 +64,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
         </div>
 
         {/* Right-aligned Navigation */}
-        <nav className="flex-1 flex items-center justify-end gap-2 md:gap-6">
+        <nav className="flex-none md:flex-1 flex items-center justify-end gap-2 md:gap-6">
           <Link
             href="#how-it-works"
             className="btn-outline uppercase nav-link-desktop !py-2 !px-4 text-xs"
