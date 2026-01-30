@@ -6,8 +6,8 @@ import Breadcrumbs from './breadcrumbs';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
-    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 6000) / 1000));
-    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 9000) / 1000);
+    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 9000) / 1000));
+    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 12000) / 1000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
@@ -16,7 +16,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="personalize"
-            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-16 md:pt-20 items-center px-4"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-24 md:pt-40 items-center px-4"
             style={{ opacity, pointerEvents }}
         >
             <div className="w-full max-w-5xl mx-auto">
@@ -29,7 +29,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                         Step 02
                     </h3>
                     <h2 className="font-tagline text-4xl md:text-5xl text-text-primary">
-                        Make It Yours
+                        Make it yours
                     </h2>
                 </div>
 
