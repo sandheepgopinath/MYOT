@@ -29,7 +29,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                         Step 02
                     </h3>
                     <h2 className="font-display text-4xl md:text-5xl text-text-primary font-normal">
-                        Make It Yours
+                        Make it yours
                     </h2>
                 </div>
 
@@ -37,13 +37,16 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                     {/* Left Card */}
                     <div className="glass-card p-8 flex flex-col justify-end min-h-[380px] relative overflow-hidden group cursor-pointer animate-fade-in" style={{ animationDelay: '0.4s' }}>
                         {curatedDesignImage && (
-                          <Image
-                              src={curatedDesignImage.imageUrl}
-                              alt={curatedDesignImage.description}
-                              fill
-                              className="object-cover object-center scale-125 group-hover:scale-110 transition-transform duration-700 ease-in-out opacity-30 group-hover:opacity-40"
-                              data-ai-hint={curatedDesignImage.imageHint}
-                          />
+                          <>
+                            <Image
+                                src={curatedDesignImage.imageUrl}
+                                alt={curatedDesignImage.description}
+                                fill
+                                className="object-cover object-center scale-125 group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                                data-ai-hint={curatedDesignImage.imageHint}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                          </>
                         )}
                         <div className="relative z-10">
                             <h4 className="font-display text-3xl mb-2 font-normal">Curated designs</h4>

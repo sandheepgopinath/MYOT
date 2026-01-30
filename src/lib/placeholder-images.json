@@ -86,9 +86,9 @@
     },
     {
       "id": "curated_design_tee",
-      "description": "A light-colored T-shirt with a celestial sun and moon design.",
-      "imageUrl": "https://storage.googleapis.com/monogram-dev-assets/t-shirt-sun-moon-design.png",
-      "imageHint": "celestial design"
+      "description": "A black t-shirt with a unique curated design.",
+      "imageUrl": "/curated.png",
+      "imageHint": "curated design"
     }
   ]
 }
