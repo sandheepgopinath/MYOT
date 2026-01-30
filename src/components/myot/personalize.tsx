@@ -28,7 +28,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                     <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
                         Step 02
                     </h3>
-                    <h2 className="font-display text-4xl md:text-5xl text-text-primary">
+                    <h2 className="font-display text-4xl md:text-5xl text-text-primary font-normal">
                         Make it yours
                     </h2>
                 </div>
