@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Upload, ChevronRight, Type } from 'lucide-react';
+import { Upload, Type } from 'lucide-react';
 import Breadcrumbs from './breadcrumbs';
 import { getImageById } from '@/lib/placeholder-images';
 
@@ -42,7 +42,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                                 src={curatedDesignImage.imageUrl}
                                 alt={curatedDesignImage.description}
                                 fill
-                                className="object-cover object-center scale-110"
+                                className="object-cover object-center"
                                 data-ai-hint={curatedDesignImage.imageHint}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -52,7 +52,6 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                             <h4 className="font-display text-3xl mb-2 font-normal">Curated designs</h4>
                             <p className="text-text-secondary text-sm max-w-xs">Explore original artwork crafted by our designers</p>
                         </div>
-                         <ChevronRight className="w-6 h-6 absolute bottom-8 right-8 z-10 text-text-secondary" />
                     </div>
                     
                     {/* Right Cards */}
@@ -65,7 +64,6 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                             <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center backdrop-blur-sm border border-white/10">
                                 <Upload className="w-6 h-6 text-text-secondary" />
                             </div>
-                            <ChevronRight className="w-5 h-5 absolute top-1/2 -translate-y-1/2 right-6 text-text-secondary opacity-50" />
                         </div>
 
                         <div className="glass-card p-6 flex items-center justify-between relative cursor-pointer h-full">
@@ -76,7 +74,6 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                             <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center font-tagline text-text-secondary text-lg italic backdrop-blur-sm border border-white/10">
                                 <Type className="w-6 h-6 text-text-secondary" />
                             </div>
-                            <ChevronRight className="w-5 h-5 absolute top-1/2 -translate-y-1/2 right-6 text-text-secondary opacity-50" />
                         </div>
                     </div>
                 </div>
