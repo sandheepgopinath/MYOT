@@ -24,7 +24,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
             className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center gap-8"
             style={{ opacity, pointerEvents }}
         >
-            <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="text-center">
                 <h2 className="font-tagline text-xl md:text-2xl uppercase premium-gradient font-bold">
                     Step 01 : Choose your Tee
                 </h2>
@@ -33,7 +33,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
             <div className="w-full">
                 <div className="grid grid-cols-2 md:grid-cols-4 items-end text-center px-4 md:px-8 gap-x-4">
                     {teeOptions.map((tee, index) => (
-                        <div key={tee.id} className="flex flex-col justify-end items-center gap-2 md:gap-4 h-[30vh] md:h-[35vh] animate-fade-in" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
+                        <div key={tee.id} className="flex flex-col justify-end items-center gap-2 md:gap-4 h-[30vh] md:h-[35vh]">
                             <div className="relative w-full h-full flex justify-center items-center">
                                 <div className="absolute bottom-8 w-[200%] h-32 bg-[radial-gradient(ellipse_at_bottom,_var(--glass-border)_0%,_transparent_70%)] opacity-70" />
                                 <Image 
@@ -41,7 +41,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                     alt={tee.id}
                                     width={250}
                                     height={250}
-                                    className="animate-float relative z-10 object-contain max-h-[150px] md:max-h-[250px]"
+                                    className="relative z-10 object-contain max-h-[150px] md:max-h-[250px]"
                                 />
                             </div>
                             <p className="font-tagline text-sm md:text-lg text-text-primary">
@@ -52,7 +52,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                 </div>
             </div>
 
-            <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <div className="flex justify-center gap-4">
                 {qualityOptions.map((quality) => (
                     <button key={quality} className="btn-outline py-2 px-3 md:px-4 text-xs md:text-sm font-tagline">
                         {quality}
