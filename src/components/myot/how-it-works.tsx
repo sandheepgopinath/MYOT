@@ -39,9 +39,9 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
           {teeOptions.map((tee) => (
             <div
               key={tee.id}
-              className="glass-card p-2 sm:p-4 flex flex-col items-center relative overflow-hidden transition-all duration-300 aspect-square sm:aspect-[4/5]"
+              className="glass-card p-2 sm:p-4 relative overflow-hidden transition-all duration-300 aspect-[4/5]"
             >
-              <div className="relative flex-grow w-full -mt-[20%] -mb-[5%]">
+              <div className="relative w-full h-full -mt-[20%]">
                 <Image
                   src={tee.imageSrc}
                   alt={tee.id}
@@ -49,7 +49,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                   className="object-contain drop-shadow-2xl"
                 />
               </div>
-              <p className="text-xs text-text-primary z-10 relative">
+              <p className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 text-xs text-text-primary z-10 w-full text-center">
                 {tee.id}
               </p>
             </div>
