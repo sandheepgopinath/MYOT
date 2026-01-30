@@ -1,8 +1,7 @@
 'use client';
 
-export default function Breadcrumbs() {
+export default function Breadcrumbs({ activeStep }: { activeStep: string }) {
   const steps = ['Fabric', 'Personalize', 'Fit', 'Checkout'];
-  const activeStep = 'Personalize';
 
   return (
     <nav className="flex items-center justify-center space-x-2 md:space-x-4">

@@ -1,22 +1,31 @@
+'use client';
+
 import Link from 'next/link';
 import { ThemeSwitcher } from './theme-switcher';
 import Breadcrumbs from '@/components/myot/breadcrumbs';
 
 export default function Header({ scrollY }: { scrollY: number }) {
-  // The "Personalize" section starts fading in at 6000px.
-  // We'll start the transition slightly before that for a smoother effect.
-  const scrollThreshold = 5800;
-  const isPersonalizeActive = scrollY > scrollThreshold;
+  const howItWorksThreshold = 2000;
+  const personalizeThreshold = 6000;
+
+  const showBreadcrumbs = scrollY > howItWorksThreshold;
+
+  let activeStep = '';
+  if (scrollY > personalizeThreshold) {
+    activeStep = 'Personalize';
+  } else if (scrollY > howItWorksThreshold) {
+    activeStep = 'Fabric';
+  }
 
   return (
     <header className="py-4 px-4 sm:px-6 lg:px-8 sticky top-0 w-full z-20">
       <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px]">
-        {/* Left side: Becomes logo when scrolled to personalize section */}
+        {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-1">
           <Link
             href="/"
             className={`transition-opacity duration-500 ${
-              isPersonalizeActive
+              showBreadcrumbs
                 ? 'opacity-100'
                 : 'opacity-0 pointer-events-none'
             }`}
@@ -30,10 +39,10 @@ export default function Header({ scrollY }: { scrollY: number }) {
         {/* Center: Logo when not scrolled, Breadcrumbs when scrolled */}
         <div className="flex-1 text-center">
           <div className="relative w-full h-full">
-            {/* Logo when NOT in personalize section */}
+            {/* Logo when NOT in a section with breadcrumbs */}
             <div
               className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                !isPersonalizeActive
+                !showBreadcrumbs
                   ? 'opacity-100'
                   : 'opacity-0 pointer-events-none'
               }`}
@@ -44,15 +53,15 @@ export default function Header({ scrollY }: { scrollY: number }) {
                 </h1>
               </Link>
             </div>
-            {/* Breadcrumbs when in personalize section */}
+            {/* Breadcrumbs when in a section with breadcrumbs */}
             <div
               className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                isPersonalizeActive
+                showBreadcrumbs
                   ? 'opacity-100'
                   : 'opacity-0 pointer-events-none'
               }`}
             >
-              <Breadcrumbs />
+              <Breadcrumbs activeStep={activeStep} />
             </div>
           </div>
         </div>
