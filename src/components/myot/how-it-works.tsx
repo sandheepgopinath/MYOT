@@ -21,14 +21,14 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
     return (
         <section 
             id="how-it-works" 
-            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-24 md:pt-32 items-center gap-10"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-20 md:pt-32 items-center gap-6 md:gap-10"
             style={{ opacity, pointerEvents }}
         >
-            <div className="text-center">
+            <div className="text-center px-4">
                  <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
                     Step 01
                 </h3>
-                <h2 className="font-display text-4xl md:text-5xl text-text-primary font-normal">
+                <h2 className="font-display text-3xl md:text-4xl text-text-primary font-normal">
                     Choose your Fabric
                 </h2>
             </div>
@@ -56,11 +56,11 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                 </div>
             </div>
 
-            <div className="flex justify-center gap-4 mt-4">
+            <div className="flex justify-center gap-2 sm:gap-4 mt-4">
                 {qualityOptions.map((quality) => (
                     <div 
                         key={quality}
-                        className="btn-outline py-2 px-6 text-sm text-text-secondary"
+                        className="btn-outline py-2 px-4 text-xs sm:text-sm text-text-secondary"
                     >
                         {quality}
                     </div>
