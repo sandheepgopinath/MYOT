@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { ChevronRight } from 'lucide-react';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
@@ -23,33 +22,32 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
           <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
             Step 02
           </h3>
-          <h2 className="font-display text-3xl md:text-5xl text-text-primary font-normal">
+          <h2 className="font-display text-3xl md:text-4xl text-text-primary font-normal">
             Make It Yours
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          {/* Custom Studio - Full Width Top */}
-          <div className="lg:col-span-2 glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer">
-            <div className="flex-1">
-              <h4 className="font-display text-lg md:text-2xl mb-1 font-normal">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+          {/* Custom Studio - First */}
+          <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
+            <Image
+              src="/personalize.png"
+              alt="Custom Studio"
+              fill
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+            <div className="relative z-10">
+              <h4 className="font-display text-xl md:text-3xl mb-2 font-normal text-white">
                 Custom Studio
               </h4>
-              <p className="text-text-secondary text-xs">
+              <p className="text-gray-200 text-sm max-w-xs">
                 Your vision, our canvas. Design bespoke apparel in seconds.
               </p>
             </div>
-            <div className="ml-4 w-36 h-20 relative">
-              <Image
-                src="/upload_icon.png"
-                alt="Custom Studio"
-                fill
-                className="object-cover rounded-md"
-              />
-            </div>
           </div>
 
-          {/* Signature Series - Left */}
+          {/* Signature Series - Second */}
           <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
             {curatedDesignImage && (
               <>
@@ -64,16 +62,16 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
               </>
             )}
             <div className="relative z-10">
-              <h4 className="font-display text-xl md:text-3xl mb-2 font-normal">
+              <h4 className="font-display text-xl md:text-3xl mb-2 font-normal text-white">
                 Signature Series
               </h4>
-              <p className="text-text-secondary text-sm max-w-xs">
+              <p className="text-gray-200 text-sm max-w-xs">
                 Discover exclusive, limited-edition artwork from our studio.
               </p>
             </div>
           </div>
 
-          {/* Designer Partner Program - Right (Same size as Signature) */}
+          {/* Designer Partner Program - Third */}
           <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
             <Image
               src="/partner_program_bg.png"
