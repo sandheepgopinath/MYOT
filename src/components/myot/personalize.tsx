@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Upload, Type, ChevronRight } from 'lucide-react';
+import { Type, ChevronRight } from 'lucide-react';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
@@ -64,8 +64,13 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                   Bring your vision — we’ll handle the rest.
                 </p>
               </div>
-              <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center backdrop-blur-sm border border-white/10">
-                <Upload className="w-6 h-6 text-text-secondary" />
+              <div className="ml-4 w-28 h-16 relative">
+                <Image
+                  src="/upload_icon.png"
+                  alt="Upload your artwork"
+                  fill
+                  className="object-cover rounded-md"
+                />
               </div>
             </div>
 
