@@ -13,7 +13,7 @@ export default {
         body: ['Inter', 'sans-serif'],
         heading: ['Montserrat', 'sans-serif'],
         brand: ['"Bebas Neue"', 'sans-serif'],
-        tagline: ['Cinzel', 'serif'],
+        tagline: ['Alegreya', 'serif'],
         code: ['monospace'],
       },
       colors: {
