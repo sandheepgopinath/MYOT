@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer";
 import Hero from "@/components/myot/hero";
 import HowItWorks from "@/components/myot/how-it-works";
 import Personalize from "@/components/myot/personalize";
+import ReviewOrder from "@/components/myot/review-order";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -19,7 +20,7 @@ export default function Home() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  
+
   return (
     <div className="flex flex-col">
       <Header scrollY={scrollY} />
@@ -30,6 +31,7 @@ export default function Home() {
           <Hero scrollY={scrollY} />
           <HowItWorks scrollY={scrollY} />
           <Personalize scrollY={scrollY} />
+          <ReviewOrder scrollY={scrollY} />
         </main>
       </div>
       <Footer />

@@ -22,7 +22,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
   return (
     <section
       id="how-it-works"
-      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-28 sm:pt-32 pb-4"
+      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-20 sm:pt-32 pb-4"
       style={{ opacity, pointerEvents, transform: `scale(${scale})` }}
     >
       <div className="text-center">
@@ -41,7 +41,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
               key={tee.id}
               className="glass-card p-2 sm:p-4 relative overflow-hidden transition-all duration-300 aspect-[4/5]"
             >
-              <div className="relative w-full h-full -mt-[20%]">
+              <div className="relative w-full h-full scale-110">
                 <Image
                   src={tee.imageSrc}
                   alt={tee.id}
@@ -61,7 +61,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
         {qualityOptions.map((quality) => (
           <div
             key={quality}
-            className="btn-outline py-1 px-2 sm:py-1 sm:px-3 text-xs text-text-secondary"
+            className="btn-outline py-1 px-2 sm:py-1 sm:px-3 text-xs text-text-primary font-normal"
           >
             {quality}
           </div>
