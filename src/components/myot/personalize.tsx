@@ -9,16 +9,18 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
   const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
+  const scale = Math.min(1, 0.98 + (scrollY - 6000) / 1000 * 0.02);
+
   const curatedDesignImage = getImageById('curated_design_tee');
 
   return (
     <section
       id="personalize"
-      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-8 px-4 pt-24 pb-4"
-      style={{ opacity, pointerEvents }}
+      className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-4 px-4 pt-24 sm:pt-32 pb-4"
+      style={{ opacity, pointerEvents, transform: `scale(${scale})` }}
     >
       <div className="text-center">
-        <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
+        <h3 className="font-heading text-xs sm:text-sm uppercase tracking-[0.2em] text-text-secondary mb-1 sm:mb-2">
           Step 02
         </h3>
         <h2 className="font-display text-2xl sm:text-3xl text-text-primary font-normal">
