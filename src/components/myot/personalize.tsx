@@ -15,11 +15,11 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
   return (
     <section
       id="personalize"
-      className="fixed inset-0 text-text-primary flex flex-col items-center px-4 pt-24"
+      className="fixed inset-0 text-text-primary flex flex-col items-center px-4 pt-20 lg:pt-24"
       style={{ opacity, pointerEvents }}
     >
       <div className="w-full max-w-5xl mx-auto">
-        <div className="text-center my-10 md:my-12">
+        <div className="text-center my-4 lg:my-12">
           <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
             Step 02
           </h3>
@@ -28,9 +28,9 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           {/* Left Card */}
-          <div className="glass-card p-8 flex flex-col justify-end min-h-[380px] relative overflow-hidden cursor-pointer">
+          <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
             {curatedDesignImage && (
               <>
                 <Image
@@ -54,8 +54,8 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
           </div>
 
           {/* Right Cards */}
-          <div className="flex flex-col gap-6">
-            <div className="glass-card p-6 flex items-center justify-between relative cursor-pointer h-full">
+          <div className="flex flex-col gap-4 lg:gap-6">
+            <div className="glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer h-full">
               <div className="flex-1">
                 <h4 className="font-display text-2xl mb-1 font-normal">
                   Upload your artwork
@@ -74,7 +74,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
               </div>
             </div>
 
-            <div className="glass-card p-6 flex items-center justify-between relative cursor-pointer h-full">
+            <div className="glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer h-full">
               <div className="flex-1">
                 <h4 className="font-display text-2xl mb-1 font-normal">
                   Personal text
