@@ -7,11 +7,14 @@ import Breadcrumbs from '@/components/myot/breadcrumbs';
 export default function Header({ scrollY }: { scrollY: number }) {
   const howItWorksThreshold = 2000;
   const personalizeThreshold = 6000;
+  const reviewOrderThreshold = 9000;
 
   const showBreadcrumbs = scrollY >= howItWorksThreshold;
 
   let activeStep = '';
-  if (scrollY >= personalizeThreshold) {
+  if (scrollY >= reviewOrderThreshold) {
+    activeStep = 'Review & Ship';
+  } else if (scrollY >= personalizeThreshold) {
     activeStep = 'Personalize';
   } else if (scrollY >= howItWorksThreshold) {
     activeStep = 'Fabric';
@@ -75,7 +78,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
         <nav className="flex-none md:flex-1 flex items-center justify-end gap-2 md:gap-6">
           <a
             href="#how-it-works"
-            onClick={(e) => handleScrollTo(e, 2000)}
+            onClick={(e) => handleScrollTo(e, 2500)}
             className="btn-outline uppercase nav-link-desktop !py-2 !px-4 text-xs"
           >
             How it works

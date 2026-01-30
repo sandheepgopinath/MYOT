@@ -15,43 +15,44 @@ export default function ReviewOrder({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="review-order"
-            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-4 px-4 pt-20 sm:pt-32 pb-4"
+            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-24 sm:pt-32 pb-4"
             style={{ opacity, pointerEvents, transform: `scale(${scale})` }}
         >
             <div className="text-center mb-4 sm:mb-8">
-                <h3 className="font-heading text-xs sm:text-sm uppercase tracking-[0.2em] text-text-secondary mb-1 sm:mb-2">
+                <h3 className="font-heading text-xs uppercase tracking-[0.2em] text-text-secondary mb-1 sm:mb-2">
                     Step 03
                 </h3>
                 <h2 className="font-display text-2xl sm:text-3xl text-text-primary font-normal">
-                    Review & Place Order
+                    Review & Ship
                 </h2>
             </div>
 
             <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 px-2">
                 {/* AI Review Card */}
-                <div className="glass-card p-6 sm:p-8 flex flex-col items-center text-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent mb-2">
-                        <Sparkles className="w-6 h-6" />
+                <div className="glass-card p-4 sm:p-8 flex flex-col items-center text-center gap-2 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent mb-2">
+                        <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <h4 className="font-display text-xl text-text-primary">AI Content Review</h4>
+                    <h4 className="font-display text-lg sm:text-xl text-text-primary">AI Content Review</h4>
                     <p className="text-sm text-text-secondary max-w-xs">
                         For uploaded or contributed designs, our AI ensures quality and compliance before printing.
                     </p>
-                    <div className="mt-auto pt-4 flex gap-2 text-xs text-text-secondary">
+                    <div className="mt-auto pt-2 sm:pt-4 flex flex-wrap justify-center gap-2 text-xs text-text-secondary">
                         <span className="px-2 py-1 rounded-full border border-white/10">Quality Check</span>
                         <span className="px-2 py-1 rounded-full border border-white/10">Copyright Safe</span>
                     </div>
                 </div>
 
                 {/* Place Order Card */}
-                <div className="glass-card p-6 sm:p-8 flex flex-col items-center text-center gap-4 border-primary/30">
-                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2">
-                        <ShoppingBag className="w-6 h-6" />
+                <div className="glass-card p-4 sm:p-8 flex flex-col items-center text-center gap-2 sm:gap-4 border-primary/30">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2">
+                        <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <h4 className="font-display text-xl text-text-primary">Ready to Print?</h4>
+                    <h4 className="font-display text-lg sm:text-xl text-text-primary">Ready to Print?</h4>
                     <p className="text-sm text-text-secondary max-w-xs">
                         Finalize your custom tee and get it delivered to your doorstep.
                     </p>
+                     <div className="mt-auto pt-2 sm:pt-4"></div>
                 </div>
             </div>
         </section>
