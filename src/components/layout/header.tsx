@@ -7,7 +7,7 @@ import Breadcrumbs from '@/components/myot/breadcrumbs';
 export default function Header({ scrollY }: { scrollY: number }) {
   const howItWorksThreshold = 2000;
   const personalizeThreshold = 6000;
-  const reviewOrderThreshold = 9000;
+  const reviewOrderThreshold = 8999;
 
   const showBreadcrumbs = scrollY >= howItWorksThreshold;
 

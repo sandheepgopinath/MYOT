@@ -15,7 +15,7 @@ export default function ReviewOrder({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="review-order"
-            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-24 sm:pt-32 pb-4"
+            className="fixed inset-0 text-text-primary flex flex-col justify-center items-center gap-2 sm:gap-4 px-4 pt-20 sm:pt-32 pb-4"
             style={{ opacity, pointerEvents, transform: `scale(${scale})` }}
         >
             <div className="text-center mb-4 sm:mb-8">
