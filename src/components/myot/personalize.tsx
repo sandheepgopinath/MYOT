@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Type, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
@@ -23,13 +23,33 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
           <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
             Step 02
           </h3>
-          <h2 className="font-display text-4xl md:text-5xl text-text-primary font-normal">
+          <h2 className="font-display text-3xl md:text-5xl text-text-primary font-normal">
             Make It Yours
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          {/* Left Card */}
+          {/* Custom Studio - Full Width Top */}
+          <div className="lg:col-span-2 glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer">
+            <div className="flex-1">
+              <h4 className="font-display text-lg md:text-2xl mb-1 font-normal">
+                Custom Studio
+              </h4>
+              <p className="text-text-secondary text-xs">
+                Your vision, our canvas. Design bespoke apparel in seconds.
+              </p>
+            </div>
+            <div className="ml-4 w-36 h-20 relative">
+              <Image
+                src="/upload_icon.png"
+                alt="Custom Studio"
+                fill
+                className="object-cover rounded-md"
+              />
+            </div>
+          </div>
+
+          {/* Signature Series - Left */}
           <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
             {curatedDesignImage && (
               <>
@@ -44,48 +64,32 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
               </>
             )}
             <div className="relative z-10">
-              <h4 className="font-display text-3xl mb-2 font-normal">
-                Curated designs
+              <h4 className="font-display text-xl md:text-3xl mb-2 font-normal">
+                Signature Series
               </h4>
               <p className="text-text-secondary text-sm max-w-xs">
-                Explore original artwork crafted by our designers
+                Discover exclusive, limited-edition artwork from our studio.
               </p>
             </div>
           </div>
 
-          {/* Right Cards */}
-          <div className="flex flex-col gap-4 lg:gap-6">
-            <div className="glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer h-full">
-              <div className="flex-1">
-                <h4 className="font-display text-2xl mb-1 font-normal">
-                  Upload your artwork
-                </h4>
-                <p className="text-text-secondary text-xs">
-                  Bring your vision — we’ll handle the rest.
-                </p>
-              </div>
-              <div className="ml-4 w-36 h-20 relative">
-                <Image
-                  src="/upload_icon.png"
-                  alt="Upload your artwork"
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
-            </div>
+          {/* Designer Partner Program - Right (Same size as Signature) */}
+          <div className="glass-card p-4 lg:p-8 flex flex-col justify-end min-h-[250px] lg:min-h-[380px] relative overflow-hidden cursor-pointer">
+            <Image
+              src="/partner_program_bg.png"
+              alt="Designer Partner Program"
+              fill
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
 
-            <div className="glass-card p-4 lg:p-6 flex items-center justify-between relative cursor-pointer h-full">
-              <div className="flex-1">
-                <h4 className="font-display text-2xl mb-1 font-normal">
-                  Personal text
-                </h4>
-                <p className="text-text-secondary text-xs">
-                  Words that matter, placed with intent
-                </p>
-              </div>
-              <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center font-tagline text-text-secondary text-lg italic backdrop-blur-sm border border-white/10">
-                <Type className="w-6 h-6 text-text-secondary" />
-              </div>
+            <div className="relative z-10">
+              <h4 className="font-display text-xl md:text-3xl mb-2 font-normal text-white">
+                Designer Partner Program
+              </h4>
+              <p className="text-gray-200 text-sm max-w-xs">
+                Showcase your portfolio and earn royalties on every sale.
+              </p>
             </div>
           </div>
         </div>
