@@ -17,6 +17,14 @@ export default function Header({ scrollY }: { scrollY: number }) {
     activeStep = 'Fabric';
   }
 
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, y: number) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: y,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <header className="py-4 px-4 sm:px-6 lg:px-8 sticky top-0 w-full z-20">
       <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px]">
@@ -65,12 +73,13 @@ export default function Header({ scrollY }: { scrollY: number }) {
 
         {/* Right-aligned Navigation */}
         <nav className="flex-none md:flex-1 flex items-center justify-end gap-2 md:gap-6">
-          <Link
+          <a
             href="#how-it-works"
+            onClick={(e) => handleScrollTo(e, 2000)}
             className="btn-outline uppercase nav-link-desktop !py-2 !px-4 text-xs"
           >
             How it works
-          </Link>
+          </a>
           <ThemeSwitcher />
         </nav>
       </div>
