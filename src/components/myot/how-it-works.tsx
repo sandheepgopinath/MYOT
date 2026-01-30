@@ -48,7 +48,7 @@ export default function HowItWorks({ scrollY }: { scrollY: number }) {
                                     className="object-contain drop-shadow-2xl"
                                 />
                             </div>
-                            <p className="text-base md:text-lg text-text-primary z-10 relative">
+                            <p className="text-xs text-text-primary z-10 relative">
                                 {tee.id}
                             </p>
                         </div>
