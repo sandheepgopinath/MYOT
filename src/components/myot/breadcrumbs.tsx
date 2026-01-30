@@ -9,7 +9,7 @@ export default function Breadcrumbs({ activeStep }: { activeStep: string }) {
         <div key={step} className="flex items-center">
           <div className="relative py-2">
             <span
-              className={`font-heading font-light text-xs transition-colors duration-300 ${
+              className={`font-heading font-light text-xs transition-colors duration-300 whitespace-nowrap ${
                 step === activeStep
                   ? 'gold-gradient'
                   : 'text-text-secondary/60 hover:text-text-secondary'
