@@ -9,7 +9,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 6000) / 1000));
     const fadeOutOpacity = Math.max(0, 1 - (scrollY - 9000) / 1000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
-    const pointerEvents = opacity > 0 ? 'none' : 'auto';
+    const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
     const curatedDesignImage = getImageById('curated_design_tee');
 
