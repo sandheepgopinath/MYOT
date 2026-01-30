@@ -22,7 +22,7 @@ export default function Home() {
   
   return (
     <div className="flex flex-col">
-      <Header />
+      <Header scrollY={scrollY} />
       {/* This outer div creates the scrollable height */}
       <div className="relative h-[1300vh] w-full">
         {/* This main tag will stick to the top */}
