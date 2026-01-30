@@ -6,8 +6,8 @@ import Breadcrumbs from './breadcrumbs';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function Personalize({ scrollY }: { scrollY: number }) {
-    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 9000) / 1000));
-    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 12000) / 1000);
+    const fadeInOpacity = Math.max(0, Math.min(1, (scrollY - 6000) / 1000));
+    const fadeOutOpacity = Math.max(0, 1 - (scrollY - 8000) / 1000);
     const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
     const pointerEvents = opacity > 0 ? 'auto' : 'none';
 
@@ -16,7 +16,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="personalize"
-            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-24 md:pt-40 items-center px-4"
+            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center px-4"
             style={{ opacity, pointerEvents }}
         >
             <div className="w-full max-w-5xl mx-auto">
@@ -28,7 +28,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                     <h3 className="font-heading text-sm uppercase tracking-[0.2em] text-text-secondary mb-2">
                         Step 02
                     </h3>
-                    <h2 className="font-tagline text-4xl md:text-5xl text-text-primary">
+                    <h2 className="font-display text-4xl md:text-5xl text-text-primary">
                         Make it yours
                     </h2>
                 </div>
@@ -46,7 +46,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                           />
                         )}
                         <div className="relative z-10">
-                            <h4 className="font-tagline text-3xl mb-2">Curated designs</h4>
+                            <h4 className="font-display text-3xl mb-2">Curated designs</h4>
                             <p className="text-text-secondary text-sm max-w-xs">Explore original artwork crafted by our designers</p>
                         </div>
                          <ChevronRight className="w-6 h-6 absolute bottom-8 right-8 z-10 text-text-secondary group-hover:translate-x-1 transition-transform" />
@@ -56,7 +56,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
                     <div className="flex flex-col gap-6">
                         <div className="glass-card p-6 flex items-center justify-between relative group cursor-pointer animate-fade-in h-full" style={{ animationDelay: '0.6s' }}>
                             <div className="flex-1">
-                                <h4 className="font-tagline text-2xl mb-1">Upload your artwork</h4>
+                                <h4 className="font-display text-2xl mb-1">Upload your artwork</h4>
                                 <p className="text-text-secondary text-xs">Bring your vision — we’ll handle the rest.</p>
                             </div>
                             <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center backdrop-blur-sm border border-white/10">
@@ -67,7 +67,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
 
                         <div className="glass-card p-6 flex items-center justify-between relative group cursor-pointer animate-fade-in h-full" style={{ animationDelay: '0.8s' }}>
                             <div className="flex-1">
-                                <h4 className="font-tagline text-2xl mb-1">Personal text</h4>
+                                <h4 className="font-display text-2xl mb-1">Personal text</h4>
                                 <p className="text-text-secondary text-xs">Words that matter, placed with intent</p>
                             </div>
                             <div className="ml-4 w-28 h-16 bg-black/20 rounded-md flex items-center justify-center font-tagline text-text-secondary text-lg italic backdrop-blur-sm border border-white/10">

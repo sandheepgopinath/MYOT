@@ -14,6 +14,7 @@ export default {
         heading: ['Montserrat', 'sans-serif'],
         brand: ['"Bebas Neue"', 'sans-serif'],
         tagline: ['Alegreya', 'serif'],
+        display: ['"Playfair Display"', 'serif'],
         code: ['monospace'],
       },
       colors: {
