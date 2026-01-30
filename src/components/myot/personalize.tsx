@@ -16,7 +16,7 @@ export default function Personalize({ scrollY }: { scrollY: number }) {
     return (
         <section
             id="personalize"
-            className="fixed inset-0 text-text-primary flex flex-col justify-start pt-40 items-center px-4"
+            className="fixed inset-0 text-text-primary flex flex-col items-center px-4 pt-28"
             style={{ opacity, pointerEvents }}
         >
             <div className="w-full max-w-5xl mx-auto">
