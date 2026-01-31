@@ -9,8 +9,6 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -78,10 +76,7 @@ export default function CraftPage() {
         {/* Right Sidebar: Controls */}
         <div className="lg:col-span-4 xl:col-span-3">
           <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="text-2xl">Customize Your Tee</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 pt-6">
               {/* T-Shirt Selection */}
               <div>
                 <Label className="text-lg font-semibold flex items-center gap-2 mb-4">
