@@ -1,13 +1,21 @@
 'use client';
 import { useAdminRole } from '@/hooks/use-admin-role';
 import Dashboard from '@/components/admin/dashboard';
-import Login from '@/components/admin/login';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AdministratorPage() {
   const { isAdmin, isLoading, user } = useAdminRole();
+  const router = useRouter();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && (!user || !isAdmin)) {
+      router.replace('/login');
+    }
+  }, [isLoading, user, isAdmin, router]);
+
+  if (isLoading || !user || !isAdmin) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin" />
@@ -15,9 +23,5 @@ export default function AdministratorPage() {
     );
   }
 
-  if (user && isAdmin) {
-    return <Dashboard />;
-  }
-
-  return <Login />;
+  return <Dashboard />;
 }
