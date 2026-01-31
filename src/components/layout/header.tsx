@@ -79,7 +79,9 @@ export default function Header({ scrollY }: { scrollY: number }) {
           <a
             href="#how-it-works"
             onClick={(e) => handleScrollTo(e, 2500)}
-            className="btn-outline uppercase nav-link-desktop !py-2 !px-4 text-xs"
+            className={`btn-outline uppercase !py-2 !px-4 text-xs ${
+              showBreadcrumbs ? 'hidden' : 'inline-block'
+            } md:inline-block`}
           >
             How it works
           </a>
