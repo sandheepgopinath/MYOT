@@ -66,6 +66,7 @@ export default function TShirtsManagement() {
       gsmValue: gsm?.gsm,
       colorName: color?.name,
       colorHex: color?.hexCode,
+      isAvailable: tshirt.isAvailable,
     };
   });
 
