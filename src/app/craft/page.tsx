@@ -41,7 +41,47 @@ export default function CraftPage() {
     <div className="flex flex-col min-h-screen">
       <CraftHeader />
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6">
-        {/* Left Sidebar: Controls */}
+        {/* Left Side: T-Shirt Preview */}
+        <div className="lg:col-span-8 xl:col-span-9 flex flex-col items-center justify-center py-10">
+          <div className="relative w-full max-w-[500px] aspect-1">
+            {tshirtImage && (
+              <Image
+                src={tshirtImage.imageUrl}
+                alt={`T-shirt ${view}`}
+                fill
+                className="object-contain drop-shadow-2xl"
+              />
+            )}
+            {designImage && view === 'front' && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/4">
+                <Image
+                  src={designImage.imageUrl}
+                  alt={selectedDesign!.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex gap-4 mt-4">
+            <Button
+              variant={view === 'front' ? 'default' : 'outline'}
+              onClick={() => setView('front')}
+              className="btn-outline"
+            >
+              Front
+            </Button>
+            <Button
+              variant={view === 'back' ? 'default' : 'outline'}
+              onClick={() => setView('back')}
+              className="btn-outline"
+            >
+              Back
+            </Button>
+          </div>
+        </div>
+
+        {/* Right Sidebar: Controls */}
         <div className="lg:col-span-4 xl:col-span-3 space-y-6">
           <Card className="glass-card">
             <CardHeader>
@@ -160,46 +200,6 @@ export default function CraftPage() {
               </Button>
             </CardFooter>
           </Card>
-        </div>
-
-        {/* Right Side: T-Shirt Preview */}
-        <div className="lg:col-span-8 xl:col-span-9 flex flex-col items-center justify-center py-10">
-          <div className="relative w-full max-w-[500px] aspect-1">
-            {tshirtImage && (
-              <Image
-                src={tshirtImage.imageUrl}
-                alt={`T-shirt ${view}`}
-                fill
-                className="object-contain drop-shadow-2xl"
-              />
-            )}
-            {designImage && view === 'front' && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/4">
-                <Image
-                  src={designImage.imageUrl}
-                  alt={selectedDesign!.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            )}
-          </div>
-          <div className="flex gap-4 mt-4">
-            <Button
-              variant={view === 'front' ? 'default' : 'outline'}
-              onClick={() => setView('front')}
-              className="btn-outline"
-            >
-              Front
-            </Button>
-            <Button
-              variant={view === 'back' ? 'default' : 'outline'}
-              onClick={() => setView('back')}
-              className="btn-outline"
-            >
-              Back
-            </Button>
-          </div>
         </div>
       </main>
     </div>
