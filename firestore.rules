@@ -1,0 +1,146 @@
+/**
+ * Core Philosophy: This ruleset implements a Role-Based Access Control (RBAC) model.
+ * Public users (including unauthenticated visitors) are granted read-only access to
+ * the product catalog collections (t-shirts, types, colors, GSMs). All write
+ * operations (creating, updating, or deleting products) are strictly limited to
+ * authenticated users who have been designated as administrators.
+ *
+ * Data Structure: The data is organized into several flat, top-level collections.
+ * Product data is stored in `/tshirt_types`, `/tshirt_gsms`, `/tshirt_colors`, and
+ * `/tshirts`. Administrative roles are managed in a separate `/roles_admin`
+ * collection. This segregation simplifies rules and improves query performance.
+ *
+ * Key Security Decisions:
+ * - Admin Access: A user is considered an admin if a document with their UID exists
+ *   in the `/roles_admin` collection. This provides a single, verifiable source of truth
+ *   for administrative privileges.
+ * - Public Catalog: All product data is publicly readable to support a customer-facing
+ *   storefront. Listing collections is permitted.
+ * - Admin-Only Writes: All data modification is restricted to admins, preventing
+ *   unauthorized users from altering the product catalog.
+ * - Admin Management: The `/roles_admin` collection itself is locked down from client-side
+ *   writes to prevent privilege escalation. Admins must be managed through the
+ *   Firebase Console or a trusted server-side environment.
+ * - Data Flexibility: In this prototyping stage, the rules do not validate the specific
+ *   shape or data types of the product information, allowing for rapid iteration by
+ *   administrators.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // Helper Functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user is an administrator.
+     * Admin status is granted by the existence of a document in the /roles_admin
+     * collection with the user's UID as the document ID.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    // -------------------------------------------------------------------------
+    // Administrative Rules
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Manages admin role documents. These rules are highly restrictive.
+     *   Client-side modifications are disabled to prevent privilege escalation.
+     *   Admin roles should be assigned via the Firebase Console or a secure backend.
+     * @path /roles_admin/{adminId}
+     * @allow (get) An admin checking their own role status: `get /roles_admin/my-admin-uid`
+     * @deny (list) Any user attempting to list all admins: `list /roles_admin`
+     * @deny (create) An admin trying to create a new admin role from the client.
+     * @principle Prevents client-side privilege escalation and admin enumeration.
+     */
+    match /roles_admin/{adminId} {
+      allow get: if isAdmin() && request.auth.uid == adminId;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // Product Catalog Rules
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Manages T-shirt types (e.g., Oversized, Normal). Publicly readable,
+     *   but only writable by administrators.
+     * @path /tshirt_types/{tshirtTypeId}
+     * @allow (get) Any user, signed in or not, reading a T-shirt type: `get /tshirt_types/oversized`
+     * @allow (create) An admin creating a new T-shirt type.
+     * @deny (create) A regular user attempting to create a new type.
+     * @principle Enforces public read access for catalog data and admin-only writes.
+     */
+    match /tshirt_types/{tshirtTypeId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Manages T-shirt GSMs (fabric weight). Publicly readable,
+     *   but only writable by administrators.
+     * @path /tshirt_gsms/{tshirtGsmId}
+     * @allow (list) Any user, signed in or not, listing all available GSMs: `list /tshirt_gsms`
+     * @allow (update) An admin updating an existing GSM document.
+     * @deny (delete) A regular user attempting to delete a GSM document.
+     * @principle Enforces public read access for catalog data and admin-only writes.
+     */
+    match /tshirt_gsms/{tshirtGsmId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Manages T-shirt colors. Publicly readable,
+     *   but only writable by administrators.
+     * @path /tshirt_colors/{tshirtColorId}
+     * @allow (get) Any user, signed in or not, reading a specific color: `get /tshirt_colors/black`
+     * @allow (delete) An admin deleting an existing color document.
+     * @deny (create) A non-admin user trying to add a new color.
+     * @principle Enforces public read access for catalog data and admin-only writes.
+     */
+    match /tshirt_colors/{tshirtColorId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Manages the final T-shirt products, combining type, GSM, color, and price.
+     *   Publicly readable, but only writable by administrators.
+     * @path /tshirts/{tshirtId}
+     * @allow (list) Any user, signed in or not, listing all available T-shirts for sale.
+     * @allow (create) An admin adding a new T-shirt configuration to the catalog.
+     * @deny (update) A regular signed-in user trying to change the price of a T-shirt.
+     * @principle Enforces public read access for catalog data and admin-only writes.
+     */
+    match /tshirts/{tshirtId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+  }
+}
