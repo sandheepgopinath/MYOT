@@ -6,13 +6,6 @@ import { TSHIRTS, DESIGNS, Tshirt, Design } from '@/lib/data';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Card,
   CardContent,
   CardFooter,
@@ -24,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Palette, Shirt, ShoppingCart } from 'lucide-react';
 import CraftHeader from '@/components/craft/header';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function CraftPage() {
   const [selectedTshirt, setSelectedTshirt] = useState<Tshirt>(TSHIRTS[0]);
@@ -82,116 +76,127 @@ export default function CraftPage() {
         </div>
 
         {/* Right Sidebar: Controls */}
-        <div className="lg:col-span-4 xl:col-span-3 space-y-6">
+        <div className="lg:col-span-4 xl:col-span-3">
           <Card className="glass-card">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shirt size={20} /> Select Your Canvas
-              </CardTitle>
+              <CardTitle className="text-2xl">Customize Your Tee</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
+              {/* T-Shirt Selection */}
               <div>
-                <Label className="text-text-secondary">Fit & GSM</Label>
-                <Select
+                <Label className="text-lg font-semibold flex items-center gap-2 mb-4">
+                  <Shirt size={20} /> T-Shirt
+                </Label>
+                <RadioGroup
+                  value={selectedTshirt.id}
                   onValueChange={(id) =>
                     setSelectedTshirt(
                       TSHIRTS.find((t) => t.id === id) || TSHIRTS[0]
                     )
                   }
-                  defaultValue={selectedTshirt.id}
+                  className="space-y-2"
                 >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select T-Shirt" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TSHIRTS.map((tshirt) => (
-                      <SelectItem key={tshirt.id} value={tshirt.id}>
-                        {tshirt.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {TSHIRTS.map((tshirt) => (
+                    <Label
+                      key={tshirt.id}
+                      className="flex items-center justify-between p-3 rounded-md border border-transparent hover:border-primary/50 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/10 transition-all cursor-pointer"
+                    >
+                      <span>{tshirt.name}</span>
+                      <span className="font-bold">
+                        ${tshirt.price.toFixed(2)}
+                      </span>
+                      <RadioGroupItem
+                        value={tshirt.id}
+                        id={tshirt.id}
+                        className="sr-only"
+                      />
+                    </Label>
+                  ))}
+                </RadioGroup>
               </div>
-            </CardContent>
-          </Card>
 
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette size={20} /> Personalize
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="designs" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="designs">Designs</TabsTrigger>
-                  <TabsTrigger value="upload">Upload</TabsTrigger>
-                </TabsList>
-                <TabsContent value="designs" className="mt-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    {DESIGNS.map((design) => {
-                      const img = getImageById(design.image);
-                      return img ? (
-                        <button
-                          key={design.id}
-                          onClick={() => setSelectedDesign(design)}
-                          className={`relative aspect-square rounded-md overflow-hidden border-2 ${
-                            selectedDesign?.id === design.id
-                              ? 'border-primary'
-                              : 'border-transparent'
-                          }`}
-                        >
-                          <Image
-                            src={img.imageUrl}
-                            alt={design.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </button>
-                      ) : null;
-                    })}
-                  </div>
-                </TabsContent>
-                <TabsContent value="upload" className="mt-4">
-                  <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-border rounded-md">
-                    <Upload className="w-8 h-8 text-text-secondary mb-2" />
-                    <p className="text-sm text-text-secondary mb-2">
-                      Drop your design here
-                    </p>
-                    <Button variant="outline" className="btn-outline text-xs">
-                      Browse Files
-                    </Button>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
+              <Separator className="bg-glass-border" />
 
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ShoppingCart size={20} /> Order Summary
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-text-secondary">
-                  {selectedTshirt.name}:
-                </span>
-                <span>${selectedTshirt.price.toFixed(2)}</span>
+              {/* Personalize Section */}
+              <div>
+                <Label className="text-lg font-semibold flex items-center gap-2 mb-4">
+                  <Palette size={20} /> Design
+                </Label>
+                <Tabs defaultValue="designs" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="designs">Designs</TabsTrigger>
+                    <TabsTrigger value="upload">Upload</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="designs" className="mt-4">
+                    <div className="grid grid-cols-3 gap-2">
+                      {DESIGNS.map((design) => {
+                        const img = getImageById(design.image);
+                        return img ? (
+                          <button
+                            key={design.id}
+                            onClick={() => setSelectedDesign(design)}
+                            className={`relative aspect-square rounded-md overflow-hidden border-2 ${
+                              selectedDesign?.id === design.id
+                                ? 'border-primary'
+                                : 'border-transparent'
+                            }`}
+                          >
+                            <Image
+                              src={img.imageUrl}
+                              alt={design.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </button>
+                        ) : null;
+                      })}
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="upload" className="mt-4">
+                    <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-border rounded-md">
+                      <Upload className="w-8 h-8 text-text-secondary mb-2" />
+                      <p className="text-sm text-text-secondary mb-2">
+                        Drop your design here
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="btn-outline text-xs"
+                      >
+                        Browse Files
+                      </Button>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
-              {selectedDesign && (
-                <div className="flex justify-between">
-                  <span className="text-text-secondary">
-                    {selectedDesign.name} Design:
-                  </span>
-                  <span>${selectedDesign.price.toFixed(2)}</span>
+
+              <Separator className="bg-glass-border" />
+
+              {/* Order Summary Section */}
+              <div>
+                <Label className="text-lg font-semibold flex items-center gap-2 mb-4">
+                  <ShoppingCart size={20} /> Order Summary
+                </Label>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-text-secondary">
+                      {selectedTshirt.name}:
+                    </span>
+                    <span>${selectedTshirt.price.toFixed(2)}</span>
+                  </div>
+                  {selectedDesign && (
+                    <div className="flex justify-between">
+                      <span className="text-text-secondary">
+                        {selectedDesign.name} Design:
+                      </span>
+                      <span>${selectedDesign.price.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <Separator className="my-2 bg-glass-border" />
+                  <div className="flex justify-between font-bold text-lg">
+                    <span className="text-text-primary">Total:</span>
+                    <span>${totalPrice.toFixed(2)}</span>
+                  </div>
                 </div>
-              )}
-              <Separator className="my-2 bg-glass-border" />
-              <div className="flex justify-between font-bold text-lg">
-                <span className="text-text-primary">Total:</span>
-                <span>${totalPrice.toFixed(2)}</span>
               </div>
             </CardContent>
             <CardFooter>
