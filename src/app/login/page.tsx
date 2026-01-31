@@ -139,11 +139,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="flex min-h-screen items-center justify-center bg-admin">
       <Card className="mx-auto max-w-sm glass-card">
         <CardHeader>
-          <CardTitle className="text-2xl">Admin Login</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl text-center text-white">Admin Login</CardTitle>
+          <CardDescription className="text-center text-white">
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
@@ -157,7 +157,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="m@example.com" {...field} />
+                      <Input placeholder="m@example.com" {...field} className="input-glass" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -170,7 +170,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} className="input-glass" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,13 +178,13 @@ export default function LoginPage() {
               />
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full btn-login-glow"
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Login
+                Log In
               </Button>
             </form>
           </Form>
