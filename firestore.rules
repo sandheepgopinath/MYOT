@@ -65,7 +65,10 @@ service cloud.firestore {
      */
     match /roles_admin/{adminId} {
       allow get: if isSignedIn() && request.auth.uid == adminId;
-      allow list: if false;
+      // Allow a non-admin to check for the existence of any admin document
+      // which is needed to bootstrap the first admin user.
+      // Also allow existing admins to list roles if needed.
+      allow list: if isAdmin() || request.query.limit == 1;
       // Allow any authenticated user to create their own role document.
       // The client-side logic will ensure this is only done for the first user.
       allow create: if isSignedIn() && request.auth.uid == adminId;
