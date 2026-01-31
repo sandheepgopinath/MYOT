@@ -23,7 +23,16 @@ import {
 import { useAuth, useFirestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { signInWithEmailAndPassword, AuthError, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  limit,
+  getDocs,
+  setDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useAdminRole } from '@/hooks/use-admin-role';
 import { useEffect } from 'react';
@@ -63,30 +72,52 @@ export default function LoginPage() {
         values.email,
         values.password
       );
+      const user = userCredential.user;
 
-      // After successful sign-in, check for admin role immediately
-      // to provide specific feedback to the user.
-      const adminRoleRef = doc(
-        firestore,
-        'roles_admin',
-        userCredential.user.uid
-      );
+      const adminRoleRef = doc(firestore, 'roles_admin', user.uid);
       const adminRoleSnap = await getDoc(adminRoleRef);
 
-      if (!adminRoleSnap.exists()) {
-        // If the user is not an admin, sign them out and show an error.
-        await signOut(auth);
-        toast({
-          variant: 'destructive',
-          title: 'Authentication Failed',
-          description: 'You do not have permission to access this page.',
-        });
-      } else {
-        // If the user is an admin, show success. The useEffect will handle the redirect.
+      if (adminRoleSnap.exists()) {
+        // User is a confirmed admin.
         toast({
           title: 'Login Successful',
           description: 'Redirecting to your dashboard...',
         });
+      } else {
+        // User is not an admin. Check if they can be bootstrapped as the first one.
+        const adminCollectionRef = collection(firestore, 'roles_admin');
+        const allAdminsQuery = query(adminCollectionRef, limit(1));
+        const allAdminsSnap = await getDocs(allAdminsQuery);
+
+        if (allAdminsSnap.empty) {
+          // No admins exist, make this user the first admin.
+          try {
+            await setDoc(adminRoleRef, {
+              createdAt: serverTimestamp(),
+              email: user.email,
+            });
+            toast({
+              title: 'Admin Account Created',
+              description: 'You have been set as the first administrator.',
+            });
+            // The useEffect will handle the redirect now that isAdmin will be true.
+          } catch (setupError) {
+            await signOut(auth);
+            toast({
+              variant: 'destructive',
+              title: 'Setup Failed',
+              description: 'Could not create the initial admin account.',
+            });
+          }
+        } else {
+          // Admins exist, and this user is not one.
+          await signOut(auth);
+          toast({
+            variant: 'destructive',
+            title: 'Authentication Failed',
+            description: 'You do not have permission to access this page.',
+          });
+        }
       }
     } catch (error) {
       const authError = error as AuthError;
