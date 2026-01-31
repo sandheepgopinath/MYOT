@@ -14,7 +14,7 @@ export function useAdminRole() {
   const { data: adminRole, isLoading: isAdminRoleLoading } = useDoc(adminRoleRef);
 
   const isAdmin = !!adminRole;
-  const isLoading = isUserLoading || (user ? isAdminRoleLoading : false);
+  const isLoading = isUserLoading || (user ? (isAdminRoleLoading || adminRole === undefined) : false);
 
   return { isAdmin, isLoading, user, userError };
 }

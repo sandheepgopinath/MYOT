@@ -12,6 +12,7 @@ import TShirtsManagement from './tshirts/tshirts-management';
 import TypesManagement from './types/types-management';
 import GsmsManagement from './gsms/gsms-management';
 import ColorsManagement from './colors/colors-management';
+import { LogOut } from 'lucide-react';
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -22,7 +23,8 @@ export default function Dashboard() {
         <h1 className="text-xl font-semibold">Admin Dashboard</h1>
         <div className="ml-auto">
           <Button variant="outline" onClick={() => signOut(auth)}>
-            Sign Out
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
           </Button>
         </div>
       </header>
