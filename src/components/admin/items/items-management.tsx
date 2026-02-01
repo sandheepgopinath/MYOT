@@ -9,11 +9,12 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, orderBy, query } from 'firebase/firestore';
+import { collection, doc, orderBy, query } from 'firebase/firestore';
 import { columns } from './columns';
 import { DataTable } from '../data-table/data-table';
 import ItemForm from './item-form';
 import { Plus } from 'lucide-react';
+import { deleteDocumentNonBlocking } from '@/firebase';
 
 export default function ItemsManagement() {
     const [open, setOpen] = useState(false);
@@ -30,6 +31,12 @@ export default function ItemsManagement() {
     const handleEdit = (item: any) => {
         setSelectedItem(item);
         setOpen(true);
+    };
+
+    const handleDelete = (item: any) => {
+        if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+            deleteDocumentNonBlocking(doc(firestore, 'tshirts', item.id));
+        }
     };
 
     const handleAddNew = () => {
@@ -60,7 +67,7 @@ export default function ItemsManagement() {
             <Card className="glass-card border-white/10 bg-black/20">
                 <CardContent className="p-0">
                     <DataTable
-                        columns={columns({ onEdit: handleEdit })}
+                        columns={columns({ onEdit: handleEdit, onDelete: handleDelete })}
                         data={items || []}
                     />
                 </CardContent>

@@ -25,9 +25,10 @@ export type Item = {
 
 interface ColumnsProps {
     onEdit: (item: Item) => void;
+    onDelete: (item: Item) => void;
 }
 
-export const columns = ({ onEdit }: ColumnsProps): ColumnDef<Item>[] => [
+export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Item>[] => [
     {
         accessorKey: 'imageUrl',
         header: 'Image',
@@ -112,7 +113,13 @@ export const columns = ({ onEdit }: ColumnsProps): ColumnDef<Item>[] => [
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                         </DropdownMenuItem>
-                        {/* Add delete functionality if needed in future */}
+                        <DropdownMenuItem
+                            onClick={() => onDelete(item)}
+                            className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer"
+                        >
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
