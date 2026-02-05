@@ -147,5 +147,31 @@ service cloud.firestore {
       allow update: if isAdmin() && resource != null;
       allow delete: if isAdmin() && resource != null;
     }
+    // -------------------------------------------------------------------------
+    // Community Designs Rules
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Manages user-submitted designs.
+     * @path /community_designs/{designId}
+     * @allow (read, write) Authenticated users can read/write their own designs.
+     */
+    match /community_designs/{designId} {
+      // Allow reading a specific doc if the user is the owner OR if it's approved (public)
+      // For now, simpler rule: owner can read.
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Allow listing if filtering by owned userId
+      allow list: if isSignedIn() && (
+        (request.query.filters.userId == request.auth.uid) || isAdmin()
+      );
+
+      // Allow create if auth uid matches the data userId
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+
+      // Allow update/delete if owner
+      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
   }
 }
+
