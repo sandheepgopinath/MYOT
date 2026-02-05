@@ -128,12 +128,14 @@ service cloud.firestore {
       );
 
       // Allow listing designs.
-      // 1. Admins can list all designs (unfiltered).
-      // 2. Owners can list their own designs (must be filtered by userId in the query).
-      allow list: if isSignedIn() && (
-        isAdmin() || 
-        (resource.data.userId == request.auth.uid)
-      );
+      // SPLIT RULE: Separating admin listing from owner listing resolves
+      // query validation errors for unfiltered requests.
+      
+      // 1. Admins can list all designs (unfiltered query).
+      allow list: if isAdmin();
+      
+      // 2. Owners can list their own designs (requires userId filter in query).
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
 
       // Allow creation if signed in and the userId in data matches the creator.
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;

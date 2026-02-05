@@ -5,9 +5,8 @@ import { collection, doc, orderBy, query } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, Clock, ImageOff } from 'lucide-react';
 import { format } from 'date-fns';
-import Image from 'next/image';
 
 export default function DesignsManagement() {
     const firestore = useFirestore();
@@ -46,8 +45,8 @@ export default function DesignsManagement() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {designs && designs.length > 0 ? (
                     designs.map((design: any) => (
-                        <Card key={design.id} className="glass-card overflow-hidden border-white/10 bg-black/20 group">
-                            <div className="relative aspect-square bg-zinc-900">
+                        <Card key={design.id} className="glass-card overflow-hidden border-white/10 bg-black/20 group flex flex-col">
+                            <div className="relative aspect-square bg-zinc-900 flex-shrink-0">
                                 {design.imageUrl ? (
                                     <img
                                         src={design.imageUrl}
@@ -55,8 +54,9 @@ export default function DesignsManagement() {
                                         className="w-full h-full object-cover transition-transform group-hover:scale-105"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-white/20">
-                                        No Image
+                                    <div className="w-full h-full flex flex-col items-center justify-center text-white/20 gap-2">
+                                        <ImageOff className="h-10 w-10" />
+                                        <span className="text-xs">No Image Available</span>
                                     </div>
                                 )}
                                 <div className="absolute top-2 left-2">
@@ -68,44 +68,44 @@ export default function DesignsManagement() {
                                     </Badge>
                                 </div>
                             </div>
-                            <CardContent className="p-4 space-y-4">
-                                <div>
+                            <CardContent className="p-4 space-y-4 flex-1 flex flex-col">
+                                <div className="space-y-1">
                                     <h3 className="font-semibold text-white truncate" title={design.name}>{design.name}</h3>
                                     <p className="text-xs text-white/50">
                                         by {design.authorName || 'Unknown'} • {design.createdAt?.toDate ? format(design.createdAt.toDate(), 'MMM d, yyyy') : 'Recently'}
                                     </p>
                                 </div>
                                 
-                                {design.status === 'pending' && (
-                                    <div className="flex gap-2 pt-2">
+                                <div className="mt-auto pt-2 space-y-2">
+                                    {design.status === 'pending' ? (
+                                        <div className="flex gap-2">
+                                            <Button 
+                                                size="sm" 
+                                                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                                                onClick={() => handleStatusUpdate(design.id, 'approved')}
+                                            >
+                                                <CheckCircle className="h-4 w-4 mr-2" /> Approve
+                                            </Button>
+                                            <Button 
+                                                size="sm" 
+                                                variant="destructive" 
+                                                className="flex-1"
+                                                onClick={() => handleStatusUpdate(design.id, 'rejected')}
+                                            >
+                                                <XCircle className="h-4 w-4 mr-2" /> Reject
+                                            </Button>
+                                        </div>
+                                    ) : (
                                         <Button 
+                                            variant="outline" 
                                             size="sm" 
-                                            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                                            onClick={() => handleStatusUpdate(design.id, 'approved')}
+                                            className="w-full border-white/10 text-white/50 hover:text-white"
+                                            onClick={() => handleStatusUpdate(design.id, 'pending')}
                                         >
-                                            <CheckCircle className="h-4 w-4 mr-2" /> Approve
+                                            <Clock className="h-4 w-4 mr-2" /> Reset to Pending
                                         </Button>
-                                        <Button 
-                                            size="sm" 
-                                            variant="destructive" 
-                                            className="flex-1"
-                                            onClick={() => handleStatusUpdate(design.id, 'rejected')}
-                                        >
-                                            <XCircle className="h-4 w-4 mr-2" /> Reject
-                                        </Button>
-                                    </div>
-                                )}
-                                
-                                {design.status !== 'pending' && (
-                                    <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        className="w-full border-white/10 text-white/50 hover:text-white"
-                                        onClick={() => handleStatusUpdate(design.id, 'pending')}
-                                    >
-                                        <Clock className="h-4 w-4 mr-2" /> Reset to Pending
-                                    </Button>
-                                )}
+                                    )}
+                                </div>
                             </CardContent>
                         </Card>
                     ))
