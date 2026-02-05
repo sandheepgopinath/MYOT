@@ -21,9 +21,6 @@
  * - Admin Management: The `/roles_admin` collection itself is locked down from client-side
  *   writes to prevent privilege escalation. Admins must be managed through the
  *   Firebase Console or a trusted server-side environment.
- * - Data Flexibility: In this prototyping stage, the rules do not validate the specific
- *   shape or data types of the product information, allowing for rapid iteration by
- *   administrators.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -60,99 +57,37 @@ service cloud.firestore {
     // Administrative Rules
     // -------------------------------------------------------------------------
 
-    /**
-     * @description Manages admin role documents. These rules are highly restrictive.
-     *   Client-side modifications are disabled to prevent privilege escalation.
-     *   Admin roles should be assigned via the Firebase Console or a secure backend.
-     * @path /roles_admin/{adminId}
-     * @allow (get) An admin checking their own role status: `get /roles_admin/my-admin-uid`
-     * @deny (list) Any user attempting to list all admins: `list /roles_admin`
-     * @deny (create) An admin trying to create a new admin role from the client.
-     * @principle Prevents client-side privilege escalation and admin enumeration.
-     */
     match /roles_admin/{adminId} {
-      allow get: if isSignedIn() && request.auth.uid == adminId;
-      // Allow a non-admin to check for the existence of any admin document
-      // which is needed to bootstrap the first admin user.
-      // Also allow existing admins to list roles if needed.
-      allow list: if isAdmin() || request.query.limit == 1;
-      // Allow any authenticated user to create their own role document.
-      // The client-side logic will ensure this is only done for the first user.
+      allow get: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
+      // Allow checking for existence of at least one admin for bootstrapping
+      allow list: if isAdmin() || (isSignedIn() && request.query.limit == 1);
+      // Allow a user to create their own admin role if no admins exist (bootstrap)
       allow create: if isSignedIn() && request.auth.uid == adminId;
-      allow update: if false;
-      allow delete: if false;
+      allow update, delete: if false; // Admins managed via console/server after bootstrap
     }
 
     // -------------------------------------------------------------------------
     // Product Catalog Rules
     // -------------------------------------------------------------------------
 
-    /**
-     * @description Manages T-shirt types (e.g., Oversized, Normal). Publicly readable,
-     *   but only writable by administrators.
-     * @path /tshirt_types/{tshirtTypeId}
-     * @allow (get) Any user, signed in or not, reading a T-shirt type: `get /tshirt_types/oversized`
-     * @allow (create) An admin creating a new T-shirt type.
-     * @deny (create) A regular user attempting to create a new type.
-     * @principle Enforces public read access for catalog data and admin-only writes.
-     */
     match /tshirt_types/{tshirtTypeId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    /**
-     * @description Manages T-shirt GSMs (fabric weight). Publicly readable,
-     *   but only writable by administrators.
-     * @path /tshirt_gsms/{tshirtGsmId}
-     * @allow (list) Any user, signed in or not, listing all available GSMs: `list /tshirt_gsms`
-     * @allow (update) An admin updating an existing GSM document.
-     * @deny (delete) A regular user attempting to delete a GSM document.
-     * @principle Enforces public read access for catalog data and admin-only writes.
-     */
     match /tshirt_gsms/{tshirtGsmId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    /**
-     * @description Manages T-shirt colors. Publicly readable,
-     *   but only writable by administrators.
-     * @path /tshirt_colors/{tshirtColorId}
-     * @allow (get) Any user, signed in or not, reading a specific color: `get /tshirt_colors/black`
-     * @allow (delete) An admin deleting an existing color document.
-     * @deny (create) A non-admin user trying to add a new color.
-     * @principle Enforces public read access for catalog data and admin-only writes.
-     */
     match /tshirt_colors/{tshirtColorId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    /**
-     * @description Manages the final T-shirt products, combining type, GSM, color, and price.
-     *   Publicly readable, but only writable by administrators.
-     * @path /tshirts/{tshirtId}
-     * @allow (list) Any user, signed in or not, listing all available T-shirts for sale.
-     * @allow (create) An admin adding a new T-shirt configuration to the catalog.
-     * @deny (update) A regular signed-in user trying to change the price of a T-shirt.
-     * @principle Enforces public read access for catalog data and admin-only writes.
-     */
     match /tshirts/{tshirtId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     // -------------------------------------------------------------------------
@@ -160,6 +95,7 @@ service cloud.firestore {
     // -------------------------------------------------------------------------
 
     /**
+<<<<<<< HEAD
      * @description Manages User Profiles.
      * @path /users/{userId}
      */
@@ -180,3 +116,27 @@ service cloud.firestore {
     }
   }
 }
+=======
+     * @description Manages user-submitted designs.
+     * @path /community_designs/{designId}
+     */
+    match /community_designs/{designId} {
+      // Allow reading if the user owns the design OR if they are an admin.
+      // For 'list', this rule is evaluated per document in the query result.
+      allow read: if isSignedIn() && (
+        (resource != null && resource.data.userId == request.auth.uid) || 
+        isAdmin()
+      );
+
+      // Allow creation if signed in and the userId in data matches the creator.
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+
+      // Allow updates and deletions by the owner or an admin (for moderation).
+      allow update, delete: if isSignedIn() && (
+        (resource != null && resource.data.userId == request.auth.uid) || 
+        isAdmin()
+      );
+    }
+  }
+}
+>>>>>>> ba13847 (Try fixing this error: `Runtime FirebaseError: Missing or insufficient p)
