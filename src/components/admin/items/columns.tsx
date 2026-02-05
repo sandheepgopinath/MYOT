@@ -16,11 +16,13 @@ export type Item = {
     id: string;
     name: string;
     type: string;
-    gsm: string;
-    color: string;
-    price: number;
     imageUrl?: string;
-    isAvailable: boolean;
+    variants?: { gsm: string; price: number; color: string; isAvailable: boolean }[];
+    // Legacy
+    gsm?: string;
+    color?: string;
+    price?: number;
+    isAvailable?: boolean;
 };
 
 interface ColumnsProps {
@@ -58,38 +60,24 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Item>[] =
         cell: ({ row }) => <div className="text-white/80">{row.getValue('type')}</div>,
     },
     {
-        accessorKey: 'gsm',
-        header: 'GSM',
-        cell: ({ row }) => <div className="text-white/80">{row.getValue('gsm')}</div>,
-    },
-    {
-        accessorKey: 'color',
-        header: 'Color',
-        cell: ({ row }) => <div className="text-white/80">{row.getValue('color')}</div>,
-    },
-    {
-        accessorKey: 'price',
-        header: 'Price',
+        id: 'variants_count',
+        header: 'Variants',
         cell: ({ row }) => {
-            const price = parseFloat(row.getValue('price'));
-            const formatted = new Intl.NumberFormat('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-            }).format(price);
-            return <div className="text-white font-medium">{formatted}</div>;
-        },
-    },
-    {
-        accessorKey: 'isAvailable',
-        header: 'Status',
-        cell: ({ row }) => {
-            const isAvailable = row.getValue('isAvailable');
-            return (
-                <Badge variant={isAvailable ? 'default' : 'destructive'} className={isAvailable ? "bg-green-500/20 text-green-400 hover:bg-green-500/30" : ""}>
-                    {isAvailable ? 'Available' : 'Unavailable'}
-                </Badge>
-            );
-        },
+            // @ts-ignore
+            const variants = row.original.variants;
+            if (variants && variants.length > 0) {
+                return (
+                    <Badge
+                        variant="secondary"
+                        className="cursor-pointer hover:bg-secondary/80"
+                        onClick={() => row.toggleExpanded()}
+                    >
+                        {variants.length} Variants {row.getIsExpanded() ? '▲' : '▼'}
+                    </Badge>
+                )
+            }
+            return <span className="text-white/50 text-xs">Legacy / No Variants</span>
+        }
     },
     {
         id: 'actions',

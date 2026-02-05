@@ -69,6 +69,31 @@ export default function ItemsManagement() {
                     <DataTable
                         columns={columns({ onEdit: handleEdit, onDelete: handleDelete })}
                         data={items || []}
+                        getRowCanExpand={(row) => !!(row.original as any).variants?.length}
+                        renderSubComponent={({ row }) => {
+                            const variants = (row.original as any).variants;
+                            return (
+                                <div className="p-4 grid grid-cols-1 gap-2">
+                                    <h4 className="text-sm font-semibold text-white mb-2">Variant Details</h4>
+                                    <div className="grid grid-cols-4 gap-4 text-xs font-semibold text-white/50 border-b border-white/10 pb-2">
+                                        <div>GSM</div>
+                                        <div>Color</div>
+                                        <div>Price</div>
+                                        <div>Status</div>
+                                    </div>
+                                    {variants.map((v: any, i: number) => (
+                                        <div key={i} className="grid grid-cols-4 gap-4 text-sm text-white border-b border-white/5 last:border-0 py-2">
+                                            <div>{v.gsm}</div>
+                                            <div>{v.color}</div>
+                                            <div>₹{v.price}</div>
+                                            <div className={v.isAvailable ? 'text-green-400' : 'text-red-400'}>
+                                                {v.isAvailable ? 'Available' : 'Unavailable'}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+                        }}
                     />
                 </CardContent>
             </Card>
