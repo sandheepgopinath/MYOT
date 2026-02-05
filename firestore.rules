@@ -121,11 +121,18 @@ service cloud.firestore {
      * @path /community_designs/{designId}
      */
     match /community_designs/{designId} {
-      // Allow reading if the user owns the design OR if they are an admin.
-      // For 'list', this rule is evaluated per document in the query result.
-      allow read: if isSignedIn() && (
-        (resource != null && resource.data.userId == request.auth.uid) || 
+      // Allow getting a single document if the user is the owner or an admin.
+      allow get: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || 
         isAdmin()
+      );
+
+      // Allow listing designs.
+      // 1. Admins can list all designs (unfiltered).
+      // 2. Owners can list their own designs (must be filtered by userId in the query).
+      allow list: if isSignedIn() && (
+        isAdmin() || 
+        (resource.data.userId == request.auth.uid)
       );
 
       // Allow creation if signed in and the userId in data matches the creator.
@@ -133,7 +140,7 @@ service cloud.firestore {
 
       // Allow updates and deletions by the owner or an admin (for moderation).
       allow update, delete: if isSignedIn() && (
-        (resource != null && resource.data.userId == request.auth.uid) || 
+        resource.data.userId == request.auth.uid || 
         isAdmin()
       );
     }
