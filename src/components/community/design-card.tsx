@@ -3,83 +3,114 @@
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Eye, Trash2, UploadCloud, MoreVertical } from 'lucide-react';
+import { Trash2, Eye, RefreshCw, ShoppingBag } from 'lucide-react';
+import Image from 'next/image';
+import { formatDistanceToNow } from 'date-fns';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { CommunityDesign } from '@/hooks/use-community-designs';
-import { useState } from 'react';
-import { format } from 'date-fns';
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
-interface DesignCardProps {
-    design: CommunityDesign;
-    onDelete: (id: string) => void;
-    onReupload: (design: CommunityDesign) => void;
+export interface Design {
+    id: string;
+    imageUrl: string;
+    name: string;
+    status: 'pending' | 'approved' | 'rejected';
+    sales: number;
+    createdAt: any; // Firestore timestamp
 }
 
-export function DesignCard({ design, onDelete, onReupload }: DesignCardProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
+interface DesignCardProps {
+    design: Design;
+    onDelete: (id: string) => void;
+    onView: (design: Design) => void;
+    onReupload: (design: Design) => void;
+}
 
-    const handleDelete = () => {
-        if (confirm('Are you sure you want to delete this design?')) {
-            onDelete(design.id);
-        }
+export function DesignCard({ design, onDelete, onView, onReupload }: DesignCardProps) {
+    const statusColor = {
+        pending: 'bg-yellow-500',
+        approved: 'bg-green-500',
+        rejected: 'bg-red-500',
     };
 
     return (
-        <Card className="overflow-hidden glass-card group">
-            <div className="relative aspect-square bg-zinc-900">
-                {design.imageUrl ? (
-                    <img
-                        src={design.imageUrl}
-                        alt={design.name}
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        No Image
-                    </div>
-                )}
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full bg-black/50 hover:bg-black/70 text-white border-none">
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => onReupload(design)}>
-                                <UploadCloud className="mr-2 h-4 w-4" /> Re-upload Image
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={handleDelete} className="text-red-500 focus:text-red-500">
-                                <Trash2 className="mr-2 h-4 w-4" /> Delete Design
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <div className="absolute bottom-2 left-2">
-                    <Badge variant={design.status === 'approved' ? 'default' : 'secondary'} className={design.status === 'approved' ? 'bg-green-500/80 hover:bg-green-500' : ''}>
+        <Card className="overflow-hidden group hover:shadow-lg transition-shadow duration-300">
+            <div className="relative aspect-square">
+                <Image
+                    src={design.imageUrl}
+                    alt={design.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute top-2 right-2">
+                    <Badge className={`${statusColor[design.status]} text-white border-0`}>
                         {design.status}
                     </Badge>
                 </div>
             </div>
-            <CardContent className="p-4 pb-2">
-                <h3 className="font-semibold truncate" title={design.name}>{design.name}</h3>
-                <p className="text-xs text-muted-foreground">
-                    {design.createdAt?.toDate ? format(design.createdAt.toDate(), 'MMM d, yyyy') : 'Just now'}
+            <CardContent className="p-4">
+                <h3 className="font-semibold truncate" title={design.name}>
+                    {design.name}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                    {design.createdAt?.seconds
+                        ? formatDistanceToNow(new Date(design.createdAt.seconds * 1000), {
+                            addSuffix: true,
+                        })
+                        : 'Just now'}
                 </p>
+                <div className="flex items-center mt-2 text-sm font-medium">
+                    <ShoppingBag className="w-4 h-4 mr-1 text-primary" />
+                    {design.sales} Sold
+                </div>
             </CardContent>
-            <CardFooter className="p-4 pt-2 flex justify-between items-center text-sm text-muted-foreground border-t border-border/50 mt-2 bg-black/20">
-                <div className="flex items-center">
-                    <Eye className="h-3 w-3 mr-1" />
-                    <span>{design.views || 0} views</span>
-                </div>
-                <div className="font-medium text-primary">
-                    {design.sales || 0} sold
-                </div>
+            <CardFooter className="p-4 pt-0 flex justify-between gap-2">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => onView(design)}
+                                className="hover:text-primary"
+                            >
+                                <Eye className="w-4 h-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>View Details</TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => onReupload(design)}
+                                className="hover:text-blue-500"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Re-upload/Update</TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => onDelete(design.id)}
+                                className="hover:text-red-500 hover:bg-red-50"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete Design</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </CardFooter>
         </Card>
     );

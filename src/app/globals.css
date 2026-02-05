@@ -5,11 +5,12 @@
 @layer base {
   :root {
     /* Light Theme */
-    --background: 0 0% 100%;
+    --background: 0 0% 96%;
+    /* Greyish white #f5f5f5 */
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 0 0% 96%;
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 96%;
     --popover-foreground: 0 0% 3.9%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
@@ -26,9 +27,10 @@
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
 
-    --bg-color: transparent;
+    --bg-color: #f5f5f5;
     --bg-gradient: url('/light background.png');
-    --bg-secondary: #f5f5f5;
+    /* Keeping provided asset */
+    --bg-secondary: #eaeaea;
     --text-primary: #050505;
     --text-secondary: #666666;
     --glass-bg: rgba(255, 255, 255, 0.05);
@@ -45,15 +47,17 @@
 
   .dark {
     /* Default Dark Theme - Refined Gray Gradient */
-    --background: 0 0% 3.9%;
+    --background: 0 0% 12%;
+    /* Dark Grey #1f1f1f */
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 0 0% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
+    --popover: 0 0% 12%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
+    /* Adjusted relative to background */
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
@@ -61,13 +65,16 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
     --ring: 0 0% 83.1%;
 
-    --bg-color: transparent;
-    --bg-gradient: url('/Background.png');
-    --bg-secondary: #222222;
+    --bg-color: #1f1f1f;
+    /* Remove image gradient override if we want pure color, or assuming this image matches the vibe. 
+       But user complained "Black is too black". The image might be black. 
+       Use a dark grey gradient fallback or color. */
+    --bg-gradient: linear-gradient(to bottom, #1f1f1f, #121212);
+    --bg-secondary: #2a2a2a;
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
     --accent-gold: #d4af37;

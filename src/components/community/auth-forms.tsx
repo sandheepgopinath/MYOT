@@ -4,9 +4,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { useAuth } from '@/firebase';
-import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
@@ -16,202 +13,194 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth, useFirestore } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    AuthError,
+} from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Loader2 } from 'lucide-react';
 
 const authSchema = z.object({
-    email: z.string().email('Invalid email address'),
+    email: z.string().email(),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     name: z.string().optional(),
 });
 
-type AuthApiError = {
-    code?: string;
-    message: string;
-}
+type AuthStats = 'signin' | 'signup';
 
 export function AuthForms() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<AuthStats>('signin');
     const auth = useAuth();
+    const firestore = useFirestore();
     const { toast } = useToast();
-    const router = useRouter();
 
-    const loginForm = useForm<z.infer<typeof authSchema>>({
+    const form = useForm<z.infer<typeof authSchema>>({
         resolver: zodResolver(authSchema),
         defaultValues: {
             email: '',
             password: '',
-        },
-    });
-
-    const signupForm = useForm<z.infer<typeof authSchema>>({
-        resolver: zodResolver(authSchema),
-        defaultValues: {
             name: '',
-            email: '',
-            password: '',
         },
     });
 
-    const onLogin = async (values: z.infer<typeof authSchema>) => {
+    const onSubmit = async (values: z.infer<typeof authSchema>) => {
+        console.log("Submitting form", activeTab, values);
         try {
-            setIsLoading(true);
-            await signInWithEmailAndPassword(auth, values.email, values.password);
-            toast({
-                title: 'Welcome back!',
-                description: 'Successfully logged in.',
-            });
-            router.push('/community/profile');
-        } catch (error) {
-            const err = error as AuthApiError;
-            toast({
-                variant: 'destructive',
-                title: 'Login failed',
-                description: err.message || 'Please check your credentials.',
-            });
-        } finally {
-            setIsLoading(false);
-        }
-    };
+            if (activeTab === 'signup') {
+                if (!values.name || values.name.length < 2) {
+                    form.setError('name', { type: 'manual', message: 'Name must be at least 2 characters' });
+                    return;
+                }
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth,
+                    values.email,
+                    values.password
+                );
+                const user = userCredential.user;
 
-    const onSignup = async (values: z.infer<typeof authSchema>) => {
-        try {
-            setIsLoading(true);
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                values.email,
-                values.password
-            );
+                // Update profile with name
+                if (values.name) {
+                    await updateProfile(user, {
+                        displayName: values.name,
+                    });
+                }
 
-            if (values.name) {
-                await updateProfile(userCredential.user, {
-                    displayName: values.name,
+                // Create user document in Firestore
+                await setDoc(doc(firestore, 'users', user.uid), {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: values.name || '',
+                    createdAt: serverTimestamp(),
+                    role: 'designer', // Tagging them as a designer
                 });
+
+                toast({
+                    title: 'Account Created',
+                    description: 'Welcome to the community!',
+                });
+            } else {
+                await signInWithEmailAndPassword(auth, values.email, values.password);
+                toast({
+                    title: 'Welcome Back',
+                    description: 'Successfully signed in.',
+                });
+            }
+        } catch (error) {
+            const authError = error as AuthError;
+            let errorMessage = authError.message;
+
+            // Improve error messages
+            if (authError.code === 'auth/email-already-in-use') {
+                errorMessage = 'This email is already registered. Please sign in instead.';
+            } else if (authError.code === 'auth/invalid-credential') {
+                errorMessage = 'Invalid email or password.';
             }
 
             toast({
-                title: 'Account created!',
-                description: 'Welcome to the community.',
-            });
-            router.push('/community/profile');
-        } catch (error) {
-            const err = error as AuthApiError;
-            toast({
                 variant: 'destructive',
-                title: 'Signup failed',
-                description: err.message || 'Could not create account.',
+                title: activeTab === 'signup' ? 'Sign Up Failed' : 'Login Failed',
+                description: errorMessage,
             });
-        } finally {
-            setIsLoading(false);
         }
     };
 
     return (
-        <Card className="w-full max-w-md mx-auto glass-card">
-            <CardHeader>
-                <CardTitle className="text-2xl text-center">Join the Community</CardTitle>
-                <CardDescription className="text-center">
-                    Login or create an account to manage your designs
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Tabs defaultValue="login" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 mb-4">
-                        <TabsTrigger value="login">Login</TabsTrigger>
-                        <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                    </TabsList>
+        <div className="w-full max-w-md mx-auto">
+            <Card className="glass-card">
+                <CardHeader>
+                    <CardTitle className="text-2xl text-center text-foreground">
+                        Designer Community
+                    </CardTitle>
+                    <CardDescription className="text-center text-muted-foreground">
+                        Join other designers, start earning.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Tabs
+                        defaultValue="signin"
+                        value={activeTab}
+                        onValueChange={(v) => setActiveTab(v as AuthStats)}
+                        className="w-full"
+                    >
+                        <TabsList className="grid w-full grid-cols-2 mb-4 bg-muted/20">
+                            <TabsTrigger value="signin" className="data-[state=active]:bg-background text-foreground">Sign In</TabsTrigger>
+                            <TabsTrigger value="signup" className="data-[state=active]:bg-background text-foreground">Sign Up</TabsTrigger>
+                        </TabsList>
 
-                    <TabsContent value="login">
-                        <Form {...loginForm}>
-                            <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                {activeTab === 'signup' && (
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-foreground">Display Name</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="John Doe" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
+
                                 <FormField
-                                    control={loginForm.control}
+                                    control={form.control}
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Email</FormLabel>
+                                            <FormLabel className="text-foreground">Email</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="name@example.com" {...field} />
+                                                <Input placeholder="name@example.com" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={loginForm.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <Input type="password" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit" className="w-full" disabled={isLoading}>
-                                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                    Login
-                                </Button>
-                            </form>
-                        </Form>
-                    </TabsContent>
 
-                    <TabsContent value="signup">
-                        <Form {...signupForm}>
-                            <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
                                 <FormField
-                                    control={signupForm.control}
-                                    name="name"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Full Name</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="John Doe" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={signupForm.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Email</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="name@example.com" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={signupForm.control}
+                                    control={form.control}
                                     name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Password</FormLabel>
+                                            <FormLabel className="text-foreground">Password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" {...field} />
+                                                <Input type="password" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit" className="w-full" disabled={isLoading}>
-                                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                    Create Account
+
+                                <Button
+                                    type="submit"
+                                    className="w-full btn-login-glow"
+                                    disabled={form.formState.isSubmitting}
+                                >
+                                    {form.formState.isSubmitting && (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    )}
+                                    {activeTab === 'signup' ? 'Create Account' : 'Sign In'}
                                 </Button>
                             </form>
                         </Form>
-                    </TabsContent>
-                </Tabs>
-            </CardContent>
-        </Card>
+                    </Tabs>
+                </CardContent>
+            </Card>
+        </div>
     );
 }

@@ -49,6 +49,13 @@ service cloud.firestore {
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
+    /**
+     * Checks if the user is the owner of the resource.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
     // -------------------------------------------------------------------------
     // Administrative Rules
     // -------------------------------------------------------------------------
@@ -147,31 +154,29 @@ service cloud.firestore {
       allow update: if isAdmin() && resource != null;
       allow delete: if isAdmin() && resource != null;
     }
+
     // -------------------------------------------------------------------------
-    // Community Designs Rules
+    // Community & User Rules
     // -------------------------------------------------------------------------
 
     /**
-     * @description Manages user-submitted designs.
-     * @path /community_designs/{designId}
-     * @allow (read, write) Authenticated users can read/write their own designs.
+     * @description Manages User Profiles.
+     * @path /users/{userId}
      */
-    match /community_designs/{designId} {
-      // Allow reading a specific doc if the user is the owner OR if it's approved (public)
-      // For now, simpler rule: owner can read.
-      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
-      
-      // Allow listing if filtering by owned userId
-      allow list: if isSignedIn() && (
-        (request.query.filters.userId == request.auth.uid) || isAdmin()
-      );
+    /**
+     * @description Manages User Profiles.
+     * @path /users/{userId}
+     */
+    match /users/{userId} {
+      allow read, write: if isSignedIn();
+    }
 
-      // Allow create if auth uid matches the data userId
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-
-      // Allow update/delete if owner
-      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    /**
+     * @description Manages User Designs.
+     * @path /designs/{designId}
+     */
+    match /designs/{designId} {
+      allow read, write: if isSignedIn();
     }
   }
 }
-
