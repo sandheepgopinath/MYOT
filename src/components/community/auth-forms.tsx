@@ -157,6 +157,7 @@ export function AuthForms() {
             const verifier = (window as any).recaptchaVerifier;
             const result = await signInWithPhoneNumber(auth, values.phoneNumber, verifier);
             setConfirmationResult(result);
+            codeForm.reset({ code: '' }); // Ensure code form is empty
             setPhoneStep('verify');
             toast({ title: 'Code Sent', description: 'Verification code sent to your phone.' });
         } catch (error: any) {
@@ -204,7 +205,7 @@ export function AuthForms() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-white">Email</FormLabel>
-                                                <FormControl><Input placeholder="name@example.com" {...field} className="input-glass" /></FormControl>
+                                                <FormControl><Input placeholder="name@example.com" {...field} autoComplete="email" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -215,7 +216,7 @@ export function AuthForms() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-white">Password</FormLabel>
-                                                <FormControl><Input type="password" {...field} className="input-glass" /></FormControl>
+                                                <FormControl><Input type="password" {...field} autoComplete="current-password" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -237,7 +238,7 @@ export function AuthForms() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-white">Display Name</FormLabel>
-                                                <FormControl><Input placeholder="John Doe" {...field} className="input-glass" /></FormControl>
+                                                <FormControl><Input placeholder="John Doe" {...field} autoComplete="name" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -248,7 +249,7 @@ export function AuthForms() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-white">Email</FormLabel>
-                                                <FormControl><Input placeholder="name@example.com" {...field} className="input-glass" /></FormControl>
+                                                <FormControl><Input placeholder="name@example.com" {...field} autoComplete="email" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -259,7 +260,7 @@ export function AuthForms() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-white">Password</FormLabel>
-                                                <FormControl><Input type="password" {...field} className="input-glass" /></FormControl>
+                                                <FormControl><Input type="password" {...field} autoComplete="new-password" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -274,7 +275,7 @@ export function AuthForms() {
 
                         <TabsContent value="phone" className="mt-0">
                             {phoneStep === 'request' ? (
-                                <Form {...phoneForm}>
+                                <Form {...phoneForm} key="phone-request">
                                     <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-4">
                                         <FormField
                                             control={phoneForm.control}
@@ -282,7 +283,7 @@ export function AuthForms() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-white">Phone Number</FormLabel>
-                                                    <FormControl><Input placeholder="+1234567890" {...field} className="input-glass" /></FormControl>
+                                                    <FormControl><Input placeholder="+1234567890" {...field} autoComplete="tel" className="input-glass" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -295,7 +296,7 @@ export function AuthForms() {
                                     </form>
                                 </Form>
                             ) : (
-                                <Form {...codeForm}>
+                                <Form {...codeForm} key="phone-verify">
                                     <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-4">
                                         <FormField
                                             control={codeForm.control}
@@ -303,7 +304,7 @@ export function AuthForms() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-white">Verification Code</FormLabel>
-                                                    <FormControl><Input placeholder="123456" {...field} className="input-glass text-center tracking-widest" /></FormControl>
+                                                    <FormControl><Input placeholder="123456" {...field} autoComplete="one-time-code" className="input-glass text-center tracking-widest" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
