@@ -24,14 +24,14 @@ export default function CommunityPage() {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-background">
-                <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+            <div className="flex h-screen items-center justify-center bg-black">
+                <Loader2 className="h-8 w-8 animate-spin text-white" />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-background flex flex-col">
+        <div className="min-h-screen bg-black flex flex-col">
             <Header scrollY={0} />
             <main className="flex-grow pt-24 pb-12">
                 {currentUser ? (

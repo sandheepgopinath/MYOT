@@ -48,6 +48,9 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
 
     const form = useForm<z.infer<typeof uploadSchema>>({
         resolver: zodResolver(uploadSchema),
+        defaultValues: {
+            name: '',
+        },
     });
 
     const onSubmit = async (values: z.infer<typeof uploadSchema>) => {
@@ -108,7 +111,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                 <FormItem>
                                     <FormLabel>Design Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Cool T-Shirt" {...field} />
+                                        <Input placeholder="Cool T-Shirt" {...field} value={field.value || ''} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

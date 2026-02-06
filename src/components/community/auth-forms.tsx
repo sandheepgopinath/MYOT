@@ -121,10 +121,10 @@ export function AuthForms() {
         <div className="w-full max-w-md mx-auto">
             <Card className="glass-card">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center text-foreground">
+                    <CardTitle className="text-2xl text-center text-white">
                         Designer Community
                     </CardTitle>
-                    <CardDescription className="text-center text-muted-foreground">
+                    <CardDescription className="text-center text-white/80">
                         Join other designers, start earning.
                     </CardDescription>
                 </CardHeader>
@@ -135,9 +135,9 @@ export function AuthForms() {
                         onValueChange={(v) => setActiveTab(v as AuthStats)}
                         className="w-full"
                     >
-                        <TabsList className="grid w-full grid-cols-2 mb-4 bg-muted/20">
-                            <TabsTrigger value="signin" className="data-[state=active]:bg-background text-foreground">Sign In</TabsTrigger>
-                            <TabsTrigger value="signup" className="data-[state=active]:bg-background text-foreground">Sign Up</TabsTrigger>
+                        <TabsList className="grid w-full grid-cols-2 mb-4 bg-white/10">
+                            <TabsTrigger value="signin" className="data-[state=active]:bg-white/20 text-white">Sign In</TabsTrigger>
+                            <TabsTrigger value="signup" className="data-[state=active]:bg-white/20 text-white">Sign Up</TabsTrigger>
                         </TabsList>
 
                         <Form {...form}>
@@ -148,9 +148,9 @@ export function AuthForms() {
                                         name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-foreground">Display Name</FormLabel>
+                                                <FormLabel className="text-white">Display Name</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="John Doe" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
+                                                    <Input placeholder="John Doe" {...field} className="input-glass text-white placeholder:text-white/50" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -163,9 +163,9 @@ export function AuthForms() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-foreground">Email</FormLabel>
+                                            <FormLabel className="text-white">Email</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="name@example.com" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
+                                                <Input placeholder="name@example.com" {...field} className="input-glass text-white placeholder:text-white/50" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -177,9 +177,9 @@ export function AuthForms() {
                                     name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-foreground">Password</FormLabel>
+                                            <FormLabel className="text-white">Password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" {...field} className="input-glass text-foreground placeholder:text-muted-foreground" />
+                                                <Input type="password" {...field} className="input-glass text-white placeholder:text-white/50" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
