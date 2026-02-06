@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -21,11 +22,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useFirestore } from '@/firebase'; // Assuming useFirebaseStorage or I'll access storage directly from init
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { initializeFirebase } from '@/firebase';
-import { addDoc, collection, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
-import { useAuth } from '@/firebase'; // Make sure this import is correct
+import { useFirestore, useStorage, addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, doc, serverTimestamp, increment } from 'firebase/firestore';
 import { Loader2, UploadCloud } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -43,7 +42,7 @@ interface UploadModalProps {
 export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
     const { toast } = useToast();
     const firestore = useFirestore();
-    const { storage } = initializeFirebase(); // Get storage instance
+    const storage = useStorage();
     const [isUploading, setIsUploading] = useState(false);
 
     const form = useForm<z.infer<typeof uploadSchema>>({
@@ -57,25 +56,37 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
         try {
             setIsUploading(true);
             const file = values.file[0];
-            const storageRef = ref(storage, `designs/${userId}/${Date.now()}_${file.name}`);
+            const storagePath = `designs/${userId}/${Date.now()}_${file.name}`;
+            const storageRef = ref(storage, storagePath);
 
-            // Upload image
+            // 1. Upload image
             const snapshot = await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(snapshot.ref);
 
-            // Save to Firestore
-            await addDoc(collection(firestore, 'designs'), {
-                userId,
+            // 2. Save to Designer's Sub-collection
+            const designData = {
                 name: values.name,
                 imageUrl: downloadURL,
-                status: 'pending', // Default status
-                sales: 0,
-                createdAt: serverTimestamp(),
+                status: 'pending',
+                isActive: true,
+                salesCount: 0,
+                profit: 0,
+                uploadedAt: serverTimestamp(),
+            };
+
+            const designsSubRef = collection(firestore, 'users', userId, 'designs');
+            addDocumentNonBlocking(designsSubRef, designData);
+
+            // 3. Update Aggregate Count in Profile
+            const profileRef = doc(firestore, 'users', userId);
+            updateDocumentNonBlocking(profileRef, {
+                designsUploadedCount: increment(1),
+                lastActiveAt: serverTimestamp()
             });
 
             toast({
                 title: 'Design Uploaded',
-                description: 'Your design has been submitted successfully.',
+                description: 'Your design has been added to your profile and is pending review.',
             });
 
             onOpenChange(false);
@@ -94,10 +105,10 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-700 text-white">
                 <DialogHeader>
                     <DialogTitle>Upload New Design</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-slate-400">
                         Share your creativity with the community.
                     </DialogDescription>
                 </DialogHeader>
@@ -111,7 +122,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                 <FormItem>
                                     <FormLabel>Design Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Cool T-Shirt" {...field} value={field.value || ''} />
+                                        <Input placeholder="Cool T-Shirt" {...field} className="bg-slate-800 border-slate-700" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -121,25 +132,24 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                         <FormField
                             control={form.control}
                             name="file"
-                            render={({ field: { onChange, value, ...field } }) => (
+                            render={({ field: { onChange, ...field } }) => (
                                 <FormItem>
                                     <FormLabel>Design Image</FormLabel>
                                     <FormControl>
-                                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                                            <Input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => onChange(e.target.files)}
-                                                {...field}
-                                            />
-                                        </div>
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => onChange(e.target.files)}
+                                            className="bg-slate-800 border-slate-700"
+                                            {...field}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
 
-                        <Button type="submit" className="w-full" disabled={isUploading}>
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500" disabled={isUploading}>
                             {isUploading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

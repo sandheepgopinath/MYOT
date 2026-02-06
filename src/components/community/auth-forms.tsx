@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -23,7 +24,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import {
     signInWithEmailAndPassword,
@@ -36,8 +37,8 @@ import {
     signInWithPhoneNumber,
     ConfirmationResult,
 } from 'firebase/auth';
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { Loader2, Mail, Phone, Chrome } from 'lucide-react';
+import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { Loader2, Phone, Chrome } from 'lucide-react';
 
 const authSchema = z.object({
     email: z.string().email(),
@@ -99,14 +100,22 @@ export function AuthForms() {
         const userDocSnap = await getDoc(userDocRef);
         
         if (!userDocSnap.exists()) {
-            await setDoc(userDocRef, {
+            const initialProfile = {
                 uid: user.uid,
+                name: name || user.displayName || 'New Designer',
+                username: (name || user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
                 email: user.email || null,
-                phoneNumber: user.phoneNumber || null,
-                displayName: name || user.displayName || 'Designer',
+                phone: user.phoneNumber || null,
+                profilePhotoUrl: user.photoURL || null,
+                description: "Passionate about creating unique t-shirt designs.",
+                designsUploadedCount: 0,
+                designsApprovedCount: 0,
+                salesCount: 0,
+                totalRevenue: 0,
                 createdAt: serverTimestamp(),
-                role: 'designer',
-            });
+                lastActiveAt: serverTimestamp()
+            };
+            setDocumentNonBlocking(userDocRef, initialProfile, { merge: true });
         }
     };
 

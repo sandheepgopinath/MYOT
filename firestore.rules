@@ -1,147 +1,45 @@
-/**
- * Core Philosophy: This ruleset implements a Role-Based Access Control (RBAC) model.
- * Public users (including unauthenticated visitors) are granted read-only access to
- * the product catalog collections (t-shirts, types, colors, GSMs). All write
- * operations (creating, updating, or deleting products) are strictly limited to
- * authenticated users who have been designated as administrators.
- *
- * Data Structure: The data is organized into several flat, top-level collections.
- * Product data is stored in `/tshirt_types`, `/tshirt_gsms`, `/tshirt_colors`, and
- * `/tshirts`. Administrative roles are managed in a separate `/roles_admin`
- * collection. This segregation simplifies rules and improves query performance.
- *
- * Key Security Decisions:
- * - Admin Access: A user is considered an admin if a document with their UID exists
- *   in the `/roles_admin` collection. This provides a single, verifiable source of truth
- *   for administrative privileges.
- * - Public Catalog: All product data is publicly readable to support a customer-facing
- *   storefront. Listing collections is permitted.
- * - Admin-Only Writes: All data modification is restricted to admins, preventing
- *   unauthorized users from altering the product catalog.
- * - Admin Management: The `/roles_admin` collection itself is locked down from client-side
- *   writes to prevent privilege escalation. Admins must be managed through the
- *   Firebase Console or a trusted server-side environment.
- */
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // -------------------------------------------------------------------------
-    // Helper Functions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checks if the user is authenticated.
-     */
     function isSignedIn() {
       return request.auth != null;
     }
 
-    /**
-     * Checks if the currently authenticated user is an administrator.
-     * Admin status is granted by the existence of a document in the /roles_admin
-     * collection with the user's UID as the document ID.
-     */
     function isAdmin() {
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
-    /**
-     * Checks if the user is the owner of the resource.
-     */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // -------------------------------------------------------------------------
-    // Administrative Rules
-    // -------------------------------------------------------------------------
-
     match /roles_admin/{adminId} {
-      // A user can read their own admin document, or an existing admin can read any admin document.
       allow get: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
-      
-      // Allow checking for existence of at least one admin for bootstrapping.
-      // This is used by the login page to determine if it should promote the first user.
       allow list: if isAdmin() || (isSignedIn() && request.query.limit == 1);
-      
-      // Allow a user to create their own admin role if no admins exist (bootstrap).
       allow create: if isSignedIn() && request.auth.uid == adminId;
-      
-      allow update, delete: if false; // Admins managed via console/server after bootstrap.
+      allow update, delete: if false;
     }
 
-    // -------------------------------------------------------------------------
-    // Product Catalog Rules
-    // -------------------------------------------------------------------------
-
-    match /tshirt_types/{tshirtTypeId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /tshirt_gsms/{tshirtGsmId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /tshirt_colors/{tshirtColorId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /tshirts/{tshirtId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // -------------------------------------------------------------------------
-    // Community & User Rules
-    // -------------------------------------------------------------------------
-
-    /**
-<<<<<<< HEAD
-     * @description Manages User Profiles.
-     * @path /users/{userId}
-     */
-    /**
-     * @description Manages User Profiles.
-     * @path /users/{userId}
-     */
     match /users/{userId} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isOwner(userId);
+
+      match /designs/{designId} {
+        allow read: if true;
+        allow write: if isOwner(userId);
+      }
     }
 
-    /**
-     * @description Manages User Designs.
-     * @path /designs/{designId}
-     */
-    match /designs/{designId} {
-      allow read, write: if isSignedIn();
-    }
-  }
-}
-=======
-     * @description Manages user-submitted designs.
-     * @path /community_designs/{designId}
-     */
+    match /tshirt_types/{tshirtTypeId} { allow read: if true; allow write: if isAdmin(); }
+    match /tshirt_gsms/{tshirtGsmId} { allow read: if true; allow write: if isAdmin(); }
+    match /tshirt_colors/{tshirtColorId} { allow read: if true; allow write: if isAdmin(); }
+    match /tshirts/{tshirtId} { allow read: if true; allow write: if isAdmin(); }
+
     match /community_designs/{designId} {
-      // Allow read (get and list) if the user is an admin or the owner.
-      // For 'list', admins can fetch all, while owners must filter by their userId.
-      allow read: if isSignedIn() && (
-        isAdmin() || 
-        resource.data.userId == request.auth.uid
-      );
-
-      // Allow creation if signed in and the userId in data matches the creator.
+      allow read: if isSignedIn() && (isAdmin() || resource.data.userId == request.auth.uid);
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-
-      // Allow updates and deletions by the owner or an admin (for moderation).
-      allow update, delete: if isSignedIn() && (
-        resource.data.userId == request.auth.uid || 
-        isAdmin()
-      );
+      allow update, delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
     }
   }
 }
->>>>>>> ba13847 (Try fixing this error: `Runtime FirebaseError: Missing or insufficient p)

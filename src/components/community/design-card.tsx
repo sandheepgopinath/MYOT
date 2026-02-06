@@ -1,17 +1,12 @@
+
 'use client';
 
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Eye, RefreshCw, ShoppingBag, MoreHorizontal } from 'lucide-react';
+import { Trash2, Eye, RefreshCw, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,15 +14,15 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 export interface Design {
     id: string;
     imageUrl: string;
     name: string;
     status: 'pending' | 'approved' | 'rejected';
-    sales: number;
-    createdAt: any; // Firestore timestamp
+    salesCount: number;
+    uploadedAt: any; // Firestore timestamp
 }
 
 interface DesignCardProps {
@@ -63,15 +58,15 @@ export function DesignCard({ design, onDelete, onView, onReupload }: DesignCardP
                 </div>
             </div>
 
-            {/* Quick Actions Overlay (Optional - visible on hover) */}
+            {/* Quick Actions Overlay */}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-end justify-between">
                 <div>
                     <h3 className="font-bold text-white text-lg leading-tight truncate w-32 md:w-40" title={design.name}>
                         {design.name}
                     </h3>
                     <p className="text-white/70 text-xs">
-                        {design.createdAt?.seconds
-                            ? formatDistanceToNow(new Date(design.createdAt.seconds * 1000), {
+                        {design.uploadedAt?.seconds
+                            ? formatDistanceToNow(new Date(design.uploadedAt.seconds * 1000), {
                                 addSuffix: true,
                             })
                             : 'Just now'}

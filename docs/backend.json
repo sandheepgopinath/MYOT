@@ -1,202 +1,65 @@
 
 {
   "entities": {
-    "TShirtType": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "TShirtType",
+    "DesignerProfile": {
+      "title": "DesignerProfile",
       "type": "object",
-      "description": "Represents the type of T-shirt available (e.g., Oversized, Normal).",
+      "description": "Represents a designer in the community.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the T-shirt type."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the T-shirt type (e.g., Oversized, Normal)."
-        },
-        "description": {
-          "type": "string",
-          "description": "A more detailed description of the T-shirt type."
-        }
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "profilePhotoUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "designsUploadedCount": { "type": "number", "default": 0 },
+        "designsApprovedCount": { "type": "number", "default": 0 },
+        "salesCount": { "type": "number", "default": 0 },
+        "totalRevenue": { "type": "number", "default": 0 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastActiveAt": { "type": "string", "format": "date-time" }
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "required": ["uid", "name", "email"]
     },
-    "TShirtGSM": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "TShirtGSM",
+    "DesignerDesign": {
+      "title": "DesignerDesign",
       "type": "object",
-      "description": "Represents the GSM (grams per square meter) of a T-shirt.",
+      "description": "A design uploaded by a designer.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the T-shirt GSM."
-        },
-        "gsm": {
-          "type": "number",
-          "description": "The GSM value of the T-shirt (e.g., 100, 200, 220)."
-        }
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "isActive": { "type": "boolean", "default": true },
+        "salesCount": { "type": "number", "default": 0 },
+        "profit": { "type": "number", "default": 0 },
+        "uploadedAt": { "type": "string", "format": "date-time" },
+        "approvedAt": { "type": "string", "format": "date-time" }
       },
-      "required": [
-        "id",
-        "gsm"
-      ]
-    },
-    "TShirtColor": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "TShirtColor",
-      "type": "object",
-      "description": "Represents the color of a T-shirt.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the T-shirt color."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the T-shirt color (e.g., Black)."
-        },
-        "hexCode": {
-          "type": "string",
-          "description": "Hex code representation of the T-shirt color (e.g., #000000 for Black)."
-        }
-      },
-      "required": [
-        "id",
-        "name",
-        "hexCode"
-      ]
-    },
-    "TShirt": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "TShirt",
-      "type": "object",
-      "description": "Represents a specific T-shirt with its type, GSM, color and price.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the T-shirt."
-        },
-        "typeId": {
-          "type": "string",
-          "description": "Reference to TShirtType. (Relationship: TShirtType 1:N TShirt)"
-        },
-        "gsmId": {
-          "type": "string",
-          "description": "Reference to TShirtGSM. (Relationship: TShirtGSM 1:N TShirt)"
-        },
-        "colorId": {
-          "type": "string",
-          "description": "Reference to TShirtColor. (Relationship: TShirtColor 1:N TShirt)"
-        },
-        "price": {
-          "type": "number",
-          "description": "The price of the T-shirt."
-        }
-      },
-      "required": [
-        "id",
-        "typeId",
-        "gsmId",
-        "colorId",
-        "price"
-      ]
+      "required": ["name", "imageUrl", "status"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous",
-      "google.com",
-      "phone"
-    ]
+    "providers": ["password", "anonymous", "google.com", "phone"]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/roles_admin/{adminId}",
-        "definition": {
-          "entityName": "admin",
-          "schema": {
-            "$ref": "#/backend/entities/admin"
-          },
-          "description": "Collection to store admin roles. The existence of a document with the admin's UID grants admin access.",
-          "params": [
-            {
-              "name": "adminId",
-              "description": "The UID of the administrator."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/tshirt_types/{tshirtTypeId}",
-        "definition": {
-          "entityName": "TShirtType",
-          "schema": {
-            "$ref": "#/backend/entities/TShirtType"
-          },
-          "description": "Collection to store T-shirt types (e.g., Oversized, Normal).",
-          "params": [
-            {
-              "name": "tshirtTypeId",
-              "description": "The ID of the T-shirt type."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/tshirt_gsms/{tshirtGsmId}",
-        "definition": {
-          "entityName": "TShirtGSM",
-          "schema": {
-            "$ref": "#/backend/entities/TShirtGSM"
-          },
-          "description": "Collection to store T-shirt GSM values (e.g., 100, 200, 220).",
-          "params": [
-            {
-              "name": "tshirtGsmId",
-              "description": "The ID of the T-shirt GSM."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/tshirt_colors/{tshirtColorId}",
-        "definition": {
-          "entityName": "TShirtColor",
-          "schema": {
-            "$ref": "#/backend/entities/TShirtColor"
-          },
-          "description": "Collection to store T-shirt colors (e.g., Black, White).",
-          "params": [
-            {
-              "name": "tshirtColorId",
-              "description": "The ID of the T-shirt color."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/tshirts/{tshirtId}",
-        "definition": {
-          "entityName": "TShirt",
-          "schema": {
-            "$ref": "#/backend/entities/TShirt"
-          },
-          "description": "Collection to store T-shirt configurations with type, GSM, color, and price.",
-          "params": [
-            {
-              "name": "tshirtId",
-              "description": "The ID of the T-shirt."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The Firestore structure is designed to manage T-shirt types, GSM, colors, and T-shirt configurations efficiently, with a focus on enabling admin management of product data. To secure the administrative functionalities, we use a dedicated collection `/roles_admin/{uid}`. The existence of a document under this collection is sufficient to grant admin privileges. The T-shirt related data (types, GSM, colors, and T-shirts) are stored in root-level collections, allowing for easy querying and management. This approach prioritizes clarity and simplifies security rules by segregating administrative roles and product data. This structure supports the QAPs by providing secure and distinct paths for administrative data and product catalog data, and it avoids reliance on `get()` calls in security rules, enhancing security and performance. The structure facilitates listing operations by storing all T-shirt related information within its respective collections, allowing for simple collection-level reads."
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/DesignerProfile" },
+      "description": "Top-level collection for designer profiles."
+    },
+    "/users/{userId}/designs/{designId}": {
+      "schema": { "$ref": "#/entities/DesignerDesign" },
+      "description": "Sub-collection of designs for a specific designer."
+    },
+    "/roles_admin/{adminId}": {
+      "schema": { "type": "object" },
+      "description": "Admin roles."
+    },
+    "/tshirt_types/{tshirtTypeId}": { "schema": { "type": "object" }, "description": "T-shirt types." },
+    "/tshirt_gsms/{tshirtGsmId}": { "schema": { "type": "object" }, "description": "T-shirt GSMs." },
+    "/tshirt_colors/{tshirtColorId}": { "schema": { "type": "object" }, "description": "T-shirt colors." },
+    "/tshirts/{tshirtId}": { "schema": { "type": "object" }, "description": "T-shirts." },
+    "/community_designs/{designId}": { "schema": { "type": "object" }, "description": "Global list for moderation." }
   }
 }
