@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -16,8 +17,8 @@ export default function CommunityPage() {
 
     useEffect(() => {
         // Force dark mode for Community page
-        const originalTheme = localStorage.getItem('theme');
         document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
         
         const unsubscribe = onAuthStateChanged(auth, (u) => {
             setCurrentUser(u);
@@ -26,11 +27,6 @@ export default function CommunityPage() {
 
         return () => {
             unsubscribe();
-            // Revert theme if we leave the page (optional, but good practice)
-            if (originalTheme !== 'dark') {
-                // We keep it dark for now as per user request "Always keep it in dark mode"
-                // document.documentElement.classList.remove('dark');
-            }
         };
     }, [auth]);
 
@@ -43,13 +39,13 @@ export default function CommunityPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0B1116] flex flex-col transition-colors duration-500">
+        <div className="min-h-screen bg-[#0B1116] flex flex-col">
             <Header scrollY={0} />
-            <main className="flex-grow pb-12">
+            <main className="flex-grow">
                 {currentUser ? (
                     <ProfileView user={currentUser} />
                 ) : (
-                    <div className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[70vh]">
+                    <div className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] py-12">
                         <div className="text-center mb-12">
                             <h1 className="text-4xl md:text-7xl font-bold text-white mb-6 tracking-tighter">
                                 JOIN THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-gradient">REVOLUTION</span>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -26,7 +27,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
 
   return (
     <header className="py-4 px-4 sm:px-6 lg:px-8 w-full z-20 relative">
-      <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px] bg-[#0B1116]/80 backdrop-blur-md border-white/10">
+      <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px] bg-background/50 backdrop-blur-md border-white/10">
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-none md:flex-1">
           <Link
@@ -72,6 +73,12 @@ export default function Header({ scrollY }: { scrollY: number }) {
 
         {/* Right-aligned Navigation */}
         <nav className="flex-none md:flex-1 flex items-center justify-end gap-2 md:gap-6">
+          <Link
+            href="/community"
+            className="text-xs uppercase font-medium hover:text-primary transition-colors hidden md:inline-block"
+          >
+            Community
+          </Link>
           <Link
             href="/craft"
             className={`btn-outline uppercase !py-2 !px-4 text-xs ${showBreadcrumbs ? 'hidden' : 'inline-block'
