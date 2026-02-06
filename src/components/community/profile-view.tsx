@@ -88,7 +88,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 pt-2 max-w-7xl">
+            <div className="container mx-auto px-4 pb-8 pt-0 max-w-7xl">
                 {/* Profile Header */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16 items-start">
                     {/* Avatar Column */}
@@ -213,7 +213,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                     </TabsContent>
                     <TabsContent value="approved" className="mt-0">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {/* Keep upload card visible even in filtered views? The mockup implies "Designs" is ALL, so maybe just listing designs here is fine. Let's just list designs. */}
                             {filteredDesigns.length === 0 && !isLoading ? (
                                 <div className="col-span-full py-20 text-center text-slate-500">No approved designs found.</div>
                             ) : (

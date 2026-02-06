@@ -33,7 +33,7 @@ export default function CommunityPage() {
     return (
         <div className="min-h-screen bg-[#0B1116] flex flex-col">
             <Header scrollY={0} />
-            <main className="flex-grow pt-20 pb-12">
+            <main className="flex-grow pb-12">
                 {currentUser ? (
                     <ProfileView user={currentUser} />
                 ) : (

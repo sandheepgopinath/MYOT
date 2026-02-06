@@ -21,7 +21,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
   }
 
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 sticky top-0 w-full z-20">
+    <header className="py-4 px-4 sm:px-6 lg:px-8 w-full z-20">
       <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px] bg-[#0B1116]/80 backdrop-blur-md border-white/10">
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-none md:flex-1">
