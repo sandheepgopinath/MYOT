@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "TShirtType": {
@@ -108,7 +109,9 @@
   "auth": {
     "providers": [
       "password",
-      "anonymous"
+      "anonymous",
+      "google.com",
+      "phone"
     ]
   },
   "firestore": {
