@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -47,7 +46,7 @@ const authSchema = z.object({
 });
 
 const phoneSchema = z.object({
-    phoneNumber: z.string().min(10, 'Enter a valid phone number with country code (e.g. +1...)'),
+    phoneNumber: z.string().length(10, 'Enter a valid 10-digit mobile number'),
 });
 
 const codeSchema = z.object({
@@ -64,7 +63,6 @@ export function AuthForms() {
     const firestore = useFirestore();
     const { toast } = useToast();
 
-    // ReCAPTCHA cleanup
     useEffect(() => {
         return () => {
             if ((window as any).recaptchaVerifier) {
@@ -155,11 +153,12 @@ export function AuthForms() {
         try {
             setupRecaptcha();
             const verifier = (window as any).recaptchaVerifier;
-            const result = await signInWithPhoneNumber(auth, values.phoneNumber, verifier);
+            const fullNumber = `+91${values.phoneNumber}`;
+            const result = await signInWithPhoneNumber(auth, fullNumber, verifier);
             setConfirmationResult(result);
-            codeForm.reset({ code: '' }); // Ensure code form is empty
+            codeForm.reset({ code: '' });
             setPhoneStep('verify');
-            toast({ title: 'Code Sent', description: 'Verification code sent to your phone.' });
+            toast({ title: 'Code Sent', description: `Verification code sent to ${fullNumber}` });
         } catch (error: any) {
             toast({ variant: 'destructive', title: 'Failed to send code', description: error.message });
         }
@@ -178,10 +177,10 @@ export function AuthForms() {
 
     return (
         <div className="w-full max-w-md mx-auto">
-            <Card className="glass-card">
+            <Card className="glass-card border-white/10 shadow-2xl">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center text-white">Designer Community</CardTitle>
-                    <CardDescription className="text-center text-white/80">Join our creative network.</CardDescription>
+                    <CardTitle className="text-2xl text-center text-white font-bold">Designer Community</CardTitle>
+                    <CardDescription className="text-center text-white/60">Join our creative network.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Tabs
@@ -190,7 +189,7 @@ export function AuthForms() {
                         onValueChange={(v) => setActiveTab(v as AuthTab)}
                         className="w-full"
                     >
-                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-white/10">
+                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-white/5 border border-white/10 p-1">
                             <TabsTrigger value="signin">Sign In</TabsTrigger>
                             <TabsTrigger value="signup">Sign Up</TabsTrigger>
                             <TabsTrigger value="phone"><Phone size={14} className="mr-2" /> Phone</TabsTrigger>
@@ -283,7 +282,18 @@ export function AuthForms() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-white">Phone Number</FormLabel>
-                                                    <FormControl><Input placeholder="+1234567890" {...field} autoComplete="tel" className="input-glass" /></FormControl>
+                                                    <div className="relative flex items-center">
+                                                        <span className="absolute left-3 text-white/50 font-medium">+91</span>
+                                                        <FormControl>
+                                                            <Input 
+                                                                placeholder="9876543210" 
+                                                                {...field} 
+                                                                autoComplete="tel-national" 
+                                                                className="input-glass pl-12"
+                                                                maxLength={10}
+                                                            />
+                                                        </FormControl>
+                                                    </div>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -303,8 +313,8 @@ export function AuthForms() {
                                             name="code"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white">Verification Code</FormLabel>
-                                                    <FormControl><Input placeholder="123456" {...field} autoComplete="one-time-code" className="input-glass text-center tracking-widest" /></FormControl>
+                                                    <FormLabel className="text-white text-center block w-full">Verification Code</FormLabel>
+                                                    <FormControl><Input placeholder="123456" {...field} autoComplete="one-time-code" className="input-glass text-center tracking-[1em] font-bold text-xl" maxLength={6} /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -313,8 +323,8 @@ export function AuthForms() {
                                             {codeForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                             Verify Code
                                         </Button>
-                                        <Button variant="ghost" onClick={() => setPhoneStep('request')} className="w-full text-white/50 text-xs">
-                                            Change Number
+                                        <Button variant="ghost" onClick={() => setPhoneStep('request')} className="w-full text-white/40 text-xs hover:text-white transition-colors">
+                                            Change Phone Number
                                         </Button>
                                     </form>
                                 </Form>
@@ -324,13 +334,13 @@ export function AuthForms() {
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center"><Separator className="bg-white/10" /></div>
-                        <div className="relative flex justify-center text-xs uppercase"><span className="bg-transparent px-2 text-white/40">Or continue with</span></div>
+                        <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#0B1116] px-2 text-white/30">Or continue with</span></div>
                     </div>
 
                     <Button 
                         variant="outline" 
                         type="button" 
-                        className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                        className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white font-semibold"
                         onClick={handleGoogleSignIn}
                     >
                         <Chrome className="mr-2 h-4 w-4" />

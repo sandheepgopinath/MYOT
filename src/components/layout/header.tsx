@@ -3,8 +3,12 @@
 import Link from 'next/link';
 import { ThemeSwitcher } from './theme-switcher';
 import Breadcrumbs from '@/components/myot/breadcrumbs';
+import { usePathname } from 'next/navigation';
 
 export default function Header({ scrollY }: { scrollY: number }) {
+  const pathname = usePathname();
+  const isCommunityPage = pathname === '/community';
+
   const howItWorksThreshold = 2000;
   const personalizeThreshold = 6000;
   const reviewOrderThreshold = 8999;
@@ -21,7 +25,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
   }
 
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 w-full z-20">
+    <header className="py-4 px-4 sm:px-6 lg:px-8 w-full z-20 relative">
       <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px] bg-[#0B1116]/80 backdrop-blur-md border-white/10">
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-none md:flex-1">
@@ -75,7 +79,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
           >
             How it works
           </Link>
-          <ThemeSwitcher />
+          {!isCommunityPage && <ThemeSwitcher />}
         </nav>
       </div>
     </header>
