@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Camera, Share2, Settings, Loader2, UploadCloud, Check, X, Pencil } from 'lucide-react';
-import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking } from '@/firebase';
+import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import { DesignCard, Design } from './design-card';
@@ -34,12 +34,32 @@ export function ProfileView({ user }: ProfileViewProps) {
     const designerRef = useMemoFirebase(() => doc(firestore, 'users', user.uid), [user.uid, firestore]);
     const { data: designer, isLoading: isDesignerLoading } = useDoc(designerRef);
 
-    // Designs Sub-collection
-    const designsRef = useMemoFirebase(() => query(
-        collection(firestore, 'users', user.uid, 'designs'),
-        orderBy('uploadedAt', 'desc')
-    ), [user.uid, firestore]);
+    // Designs Sub-collection - fetch and sort in memory to avoid index requirements for now
+    const designsRef = useMemoFirebase(() => collection(firestore, 'users', user.uid, 'designs'), [user.uid, firestore]);
     const { data: designs, isLoading: isDesignsLoading } = useCollection(designsRef);
+
+    // Initialize/Sync Profile
+    useEffect(() => {
+        if (!isDesignerLoading && designer === null && user) {
+            // Document doesn't exist (e.g. for Admins or direct logins). Let's initialize it.
+            const initialProfile = {
+                uid: user.uid,
+                name: user.displayName || 'New Designer',
+                username: (user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
+                email: user.email || null,
+                phone: user.phoneNumber || null,
+                profilePhotoUrl: user.photoURL || null,
+                description: "Passionate about creating unique t-shirt designs.",
+                designsUploadedCount: 0,
+                designsApprovedCount: 0,
+                salesCount: 0,
+                totalRevenue: 0,
+                createdAt: serverTimestamp(),
+                lastActiveAt: serverTimestamp()
+            };
+            setDocumentNonBlocking(designerRef, initialProfile, { merge: true });
+        }
+    }, [designer, isDesignerLoading, user, designerRef]);
 
     useEffect(() => {
         if (designer?.description) {
@@ -60,12 +80,19 @@ export function ProfileView({ user }: ProfileViewProps) {
         signOut(auth);
     };
 
-    const filteredDesigns = designs?.filter(d => {
+    // Sort designs in memory by uploadedAt
+    const sortedDesigns = designs ? [...designs].sort((a, b) => {
+        const dateA = a.uploadedAt?.seconds || 0;
+        const dateB = b.uploadedAt?.seconds || 0;
+        return dateB - dateA;
+    }) : [];
+
+    const filteredDesigns = sortedDesigns.filter(d => {
         if (activeTab === 'designs') return true;
         if (activeTab === 'approved') return d.status === 'approved';
         if (activeTab === 'pending') return d.status === 'pending';
         return true;
-    }) || [];
+    });
 
     if (isDesignerLoading) {
         return (
@@ -77,9 +104,9 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 max-w-7xl">
+            <div className="container mx-auto px-4 pb-8 max-w-7xl pt-4">
                 {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-8">
+                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start">
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
                             <Avatar className="w-full h-full border-4 border-[#0B1116]">

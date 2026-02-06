@@ -142,7 +142,7 @@ export function AuthForms() {
 
     const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
         try {
-            // Uniqueness check
+            // Uniqueness check for username
             const isUnique = await checkUsernameUnique(values.username);
             if (!isUnique) {
                 signupForm.setError('username', { message: 'Username is already taken' });

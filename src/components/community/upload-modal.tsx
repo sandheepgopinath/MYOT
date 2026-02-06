@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useFirestore, useStorage, addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase';
+import { useFirestore, useStorage, addDocumentNonBlocking, setDocumentNonBlocking, useFirebase } from '@/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, doc, serverTimestamp, increment } from 'firebase/firestore';
 import { Loader2, UploadCloud } from 'lucide-react';
@@ -43,6 +43,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
     const { toast } = useToast();
     const firestore = useFirestore();
     const storage = useStorage();
+    const { user } = useFirebase();
     const [isUploading, setIsUploading] = useState(false);
 
     const form = useForm<z.infer<typeof uploadSchema>>({
@@ -72,17 +73,24 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                 salesCount: 0,
                 profit: 0,
                 uploadedAt: serverTimestamp(),
+                userId: userId, // For easy filtering/moderation
+                authorName: user?.displayName || 'Designer'
             };
 
             const designsSubRef = collection(firestore, 'users', userId, 'designs');
             addDocumentNonBlocking(designsSubRef, designData);
 
+            // Also add to global collection for Admin moderation
+            const globalDesignsRef = collection(firestore, 'community_designs');
+            addDocumentNonBlocking(globalDesignsRef, designData);
+
             // 3. Update Aggregate Count in Profile
+            // Using setDocumentNonBlocking with merge: true is safer if the profile document is missing
             const profileRef = doc(firestore, 'users', userId);
-            updateDocumentNonBlocking(profileRef, {
+            setDocumentNonBlocking(profileRef, {
                 designsUploadedCount: increment(1),
                 lastActiveAt: serverTimestamp()
-            });
+            }, { merge: true });
 
             toast({
                 title: 'Design Uploaded',
@@ -132,7 +140,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                         <FormField
                             control={form.control}
                             name="file"
-                            render={({ field: { onChange, value, ...field } }) => (
+                            render={({ field: { onChange, ...field } }) => (
                                 <FormItem>
                                     <FormLabel>Design Image</FormLabel>
                                     <FormControl>
