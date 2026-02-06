@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuth, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -37,13 +38,22 @@ import {
     signInWithPhoneNumber,
     ConfirmationResult,
 } from 'firebase/auth';
-import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, limit, serverTimestamp } from 'firebase/firestore';
 import { Loader2, Phone, Chrome } from 'lucide-react';
 
-const authSchema = z.object({
+const signupSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6, 'Password must be at least 6 characters'),
-    name: z.string().optional(),
+    name: z.string().min(2, 'Name is required'),
+    username: z.string()
+        .min(3, 'Username must be at least 3 characters')
+        .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+    bio: z.string().optional(),
+});
+
+const signinSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1, 'Password is required'),
 });
 
 const phoneSchema = z.object({
@@ -72,9 +82,14 @@ export function AuthForms() {
         };
     }, []);
 
-    const form = useForm<z.infer<typeof authSchema>>({
-        resolver: zodResolver(authSchema),
-        defaultValues: { email: '', password: '', name: '' },
+    const signupForm = useForm<z.infer<typeof signupSchema>>({
+        resolver: zodResolver(signupSchema),
+        defaultValues: { email: '', password: '', name: '', username: '', bio: '' },
+    });
+
+    const signinForm = useForm<z.infer<typeof signinSchema>>({
+        resolver: zodResolver(signinSchema),
+        defaultValues: { email: '', password: '' },
     });
 
     const phoneForm = useForm<z.infer<typeof phoneSchema>>({
@@ -95,19 +110,25 @@ export function AuthForms() {
         }
     };
 
-    const handleSyncUserDoc = async (user: any, name?: string) => {
+    const checkUsernameUnique = async (username: string) => {
+        const q = query(collection(firestore, 'users'), where('username', '==', username.toLowerCase()), limit(1));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.empty;
+    };
+
+    const handleSyncUserDoc = async (user: any, details?: { name: string; username: string; bio?: string }) => {
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
         
         if (!userDocSnap.exists()) {
             const initialProfile = {
                 uid: user.uid,
-                name: name || user.displayName || 'New Designer',
-                username: (name || user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
+                name: details?.name || user.displayName || 'New Designer',
+                username: (details?.username || user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
                 email: user.email || null,
                 phone: user.phoneNumber || null,
                 profilePhotoUrl: user.photoURL || null,
-                description: "Passionate about creating unique t-shirt designs.",
+                description: details?.bio || "Passionate about creating unique t-shirt designs.",
                 designsUploadedCount: 0,
                 designsApprovedCount: 0,
                 salesCount: 0,
@@ -119,29 +140,45 @@ export function AuthForms() {
         }
     };
 
-    const onSubmit = async (values: z.infer<typeof authSchema>) => {
+    const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
         try {
-            if (activeTab === 'signup') {
-                if (!values.name || values.name.length < 2) {
-                    form.setError('name', { type: 'manual', message: 'Name must be at least 2 characters' });
-                    return;
-                }
-                const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-                const user = userCredential.user;
-                if (values.name) {
-                    await updateProfile(user, { displayName: values.name });
-                }
-                await handleSyncUserDoc(user, values.name);
-                toast({ title: 'Account Created', description: 'Welcome to the community!' });
-            } else {
-                await signInWithEmailAndPassword(auth, values.email, values.password);
-                toast({ title: 'Welcome Back', description: 'Successfully signed in.' });
+            // Uniqueness check
+            const isUnique = await checkUsernameUnique(values.username);
+            if (!isUnique) {
+                signupForm.setError('username', { message: 'Username is already taken' });
+                return;
             }
+
+            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+            const user = userCredential.user;
+            await updateProfile(user, { displayName: values.name });
+            
+            await handleSyncUserDoc(user, { 
+                name: values.name, 
+                username: values.username.toLowerCase(), 
+                bio: values.bio 
+            });
+            
+            toast({ title: 'Account Created', description: 'Welcome to the community!' });
         } catch (error) {
             const authError = error as AuthError;
             toast({
                 variant: 'destructive',
-                title: activeTab === 'signup' ? 'Sign Up Failed' : 'Login Failed',
+                title: 'Sign Up Failed',
+                description: authError.message,
+            });
+        }
+    };
+
+    const onSigninSubmit = async (values: z.infer<typeof signinSchema>) => {
+        try {
+            await signInWithEmailAndPassword(auth, values.email, values.password);
+            toast({ title: 'Welcome Back', description: 'Successfully signed in.' });
+        } catch (error) {
+            const authError = error as AuthError;
+            toast({
+                variant: 'destructive',
+                title: 'Login Failed',
                 description: authError.message,
             });
         }
@@ -205,10 +242,10 @@ export function AuthForms() {
                         </TabsList>
 
                         <TabsContent value="signin" className="mt-0">
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <Form {...signinForm}>
+                                <form onSubmit={signinForm.handleSubmit(onSigninSubmit)} className="space-y-4">
                                     <FormField
-                                        control={form.control}
+                                        control={signinForm.control}
                                         name="email"
                                         render={({ field }) => (
                                             <FormItem>
@@ -219,7 +256,7 @@ export function AuthForms() {
                                         )}
                                     />
                                     <FormField
-                                        control={form.control}
+                                        control={signinForm.control}
                                         name="password"
                                         render={({ field }) => (
                                             <FormItem>
@@ -229,8 +266,8 @@ export function AuthForms() {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit" className="w-full btn-login-glow" disabled={form.formState.isSubmitting}>
-                                        {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                    <Button type="submit" className="w-full btn-login-glow" disabled={signinForm.formState.isSubmitting}>
+                                        {signinForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                         Sign In
                                     </Button>
                                 </form>
@@ -238,44 +275,66 @@ export function AuthForms() {
                         </TabsContent>
 
                         <TabsContent value="signup" className="mt-0">
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <Form {...signupForm}>
+                                <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
                                     <FormField
-                                        control={form.control}
+                                        control={signupForm.control}
                                         name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-white">Display Name</FormLabel>
+                                                <FormLabel className="text-white">Full Name *</FormLabel>
                                                 <FormControl><Input placeholder="John Doe" {...field} autoComplete="name" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
                                     <FormField
-                                        control={form.control}
+                                        control={signupForm.control}
+                                        name="username"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-white">Username *</FormLabel>
+                                                <FormControl><Input placeholder="johndoe_creative" {...field} autoComplete="username" className="input-glass" /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={signupForm.control}
                                         name="email"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-white">Email</FormLabel>
+                                                <FormLabel className="text-white">Email *</FormLabel>
                                                 <FormControl><Input placeholder="name@example.com" {...field} autoComplete="email" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
                                     <FormField
-                                        control={form.control}
+                                        control={signupForm.control}
                                         name="password"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-white">Password</FormLabel>
+                                                <FormLabel className="text-white">Password *</FormLabel>
                                                 <FormControl><Input type="password" {...field} autoComplete="new-password" className="input-glass" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit" className="w-full btn-login-glow" disabled={form.formState.isSubmitting}>
-                                        {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                        Create Account
+                                    <FormField
+                                        control={signupForm.control}
+                                        name="bio"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-white">Bio (Optional)</FormLabel>
+                                                <FormControl><Textarea placeholder="Tell us about your style..." {...field} className="input-glass min-h-[80px]" /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className="w-full btn-login-glow" disabled={signupForm.formState.isSubmitting}>
+                                        {signupForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                        Create Designer Account
                                     </Button>
                                 </form>
                             </Form>
