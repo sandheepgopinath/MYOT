@@ -88,7 +88,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 py-8 max-w-7xl">
+            <div className="container mx-auto px-4 pb-8 pt-2 max-w-7xl">
                 {/* Profile Header */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16 items-start">
                     {/* Avatar Column */}

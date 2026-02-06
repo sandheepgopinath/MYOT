@@ -24,16 +24,16 @@ export default function CommunityPage() {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-black">
+            <div className="flex h-screen items-center justify-center bg-[#0B1116]">
                 <Loader2 className="h-8 w-8 animate-spin text-white" />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-black flex flex-col">
+        <div className="min-h-screen bg-[#0B1116] flex flex-col">
             <Header scrollY={0} />
-            <main className="flex-grow pt-24 pb-12">
+            <main className="flex-grow pt-20 pb-12">
                 {currentUser ? (
                     <ProfileView user={currentUser} />
                 ) : (
