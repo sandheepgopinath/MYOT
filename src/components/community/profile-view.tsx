@@ -76,17 +76,14 @@ export function ProfileView({ user }: ProfileViewProps) {
         }
     }, [designer, isDesignerLoading, user, designerRef]);
 
-    // Pre-fill modal fields when modal opens or designer data changes
+    // Robust Sync: Pre-fill modal fields when data is available and modal is opened
     useEffect(() => {
-        if (designer) {
+        if (designer && isEditProfileOpen) {
+            if (!isEditingName) setEditName(designer.name || '');
+            if (!isEditingUsername) setEditUsername(designer.username || '');
             setTempDescription(designer.description || '');
-            // Always sync Name and Username to the modal state when it's open
-            if (isEditProfileOpen) {
-                setEditName(designer.name || '');
-                setEditUsername(designer.username || '');
-            }
         }
-    }, [designer, isEditProfileOpen]);
+    }, [designer, isEditProfileOpen, isEditingName, isEditingUsername]);
 
     // Reset editing states when modal closes
     useEffect(() => {
@@ -342,7 +339,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent flex items-center gap-1"
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent !hover:text-blue-400 !hover:bg-transparent flex items-center gap-1 transition-none"
                                         onClick={() => setIsEditingName(true)}
                                     >
                                         <Pencil className="w-3 h-3" /> Edit
@@ -373,7 +370,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent flex items-center gap-1"
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent !hover:text-blue-400 !hover:bg-transparent flex items-center gap-1 transition-none"
                                         onClick={() => setIsEditingUsername(true)}
                                     >
                                         <Pencil className="w-3 h-3" /> Edit
