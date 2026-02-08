@@ -260,25 +260,22 @@ export function AuthForms() {
     return (
         <div className="w-full max-w-md mx-auto">
             <Card className="bg-[#0F1419]/60 backdrop-blur-3xl border border-amber-500/20 shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)] rounded-2xl overflow-hidden relative group">
-                {/* Inner Glow Decorative Layer */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                 
                 <div className="p-8 md:p-10 relative z-10 space-y-8">
                     <div className="text-center space-y-2">
-                        <h2 className="text-2xl md:text-3xl font-display text-white tracking-wide">Join Community</h2>
+                        <h2 className="text-xl md:text-2xl font-display text-white tracking-wide">Join Community</h2>
                         <p className="text-sm text-white/40 font-tagline italic">
                             {activeTab === 'signin' ? 'Sign in to manage your designs' : 'Register your creative legacy'}
                         </p>
                     </div>
 
                     <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as AuthTab); setPhoneStep('request'); }} className="w-full">
-                        {/* Styled Tabs List */}
                         <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/5 border border-white/10 p-1 h-11 rounded-lg">
                             <TabsTrigger value="signin" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign In</TabsTrigger>
                             <TabsTrigger value="signup" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign Up</TabsTrigger>
                         </TabsList>
 
-                        {/* SIGN IN VIEW */}
                         <TabsContent value="signin" className="mt-0 space-y-6">
                             {method === 'email' ? (
                                 <Form {...signinForm}>
@@ -357,7 +354,6 @@ export function AuthForms() {
                             )}
                         </TabsContent>
 
-                        {/* SIGN UP VIEW */}
                         <TabsContent value="signup" className="mt-0 space-y-6">
                             {method === 'email' ? (
                                 <Form {...signupForm}>
@@ -425,7 +421,6 @@ export function AuthForms() {
                                     </form>
                                 </Form>
                             ) : (
-                                // Phone signup steps (Same style as Sign In but with additional fields)
                                 phoneStep === 'request' ? (
                                     <Form {...phoneSignupForm}>
                                         <form onSubmit={phoneSignupForm.handleSubmit(onPhoneSignupSubmit)} className="space-y-4">
@@ -463,7 +458,6 @@ export function AuthForms() {
                         </TabsContent>
                     </Tabs>
 
-                    {/* Method Toggle / Mobile Switcher */}
                     <div className="relative flex items-center justify-center pt-2">
                         <Separator className="bg-white/10" />
                         <div className="absolute flex justify-center w-full">
@@ -480,7 +474,6 @@ export function AuthForms() {
                         </div>
                     </div>
 
-                    {/* Social Auth */}
                     <div className="pt-4">
                         <Button 
                             variant="outline" 
@@ -493,7 +486,6 @@ export function AuthForms() {
                         </Button>
                     </div>
 
-                    {/* Footer Attribution Section */}
                     <div className="text-center mt-10 space-y-4">
                         <p className="text-[10px] md:text-[11px] text-white/20 uppercase tracking-[0.2em] leading-relaxed font-tagline font-bold">
                             We handle printing, shipping, and support—<br />
