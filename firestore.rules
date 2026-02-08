@@ -20,8 +20,9 @@ service cloud.firestore {
       allow get: if isSignedIn() && request.auth.uid == adminId;
       // Allow existing admins to see other admin entries
       allow list: if isAdmin();
-      // Allow initial bootstrap check (listing with limit 1)
-      allow list: if isSignedIn() && request.query.limit == 1;
+      // Allow bootstrap check and email pre-verification check (listing with limit 1)
+      // Note: Removed isSignedIn() to allow the pre-login privilege check requested by user
+      allow list: if request.query.limit == 1;
       // Allow bootstrap creation of the first admin
       allow create: if isSignedIn() && request.auth.uid == adminId;
       allow update, delete: if false;

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -32,16 +33,19 @@ import {
   getDocs,
   setDoc,
   serverTimestamp,
+  where,
 } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useAdminRole } from '@/hooks/use-admin-role';
-import { useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters').optional(),
 });
+
+type LoginValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -49,6 +53,9 @@ export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
   const { isAdmin, user, isLoading } = useAdminRole();
+  
+  const [step, setStep] = useState<'email' | 'password'>('email');
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   useEffect(() => {
     // If user is logged in and is an admin, redirect to the dashboard
@@ -57,66 +64,104 @@ export default function LoginPage() {
     }
   }, [isLoading, user, isAdmin, router]);
 
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'admin@example.com',
-      password: 'password',
+      email: '',
+      password: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+  const onEmailSubmit = async (values: LoginValues) => {
+    setCheckingEmail(true);
+    try {
+      const adminCollectionRef = collection(firestore, 'roles_admin');
+      
+      // 1. Check if ANY admin exists (Bootstrap case)
+      const allAdminsQuery = query(adminCollectionRef, limit(1));
+      const allAdminsSnap = await getDocs(allAdminsQuery);
+      
+      if (allAdminsSnap.empty) {
+        // No admins exist at all. Proceed to password for bootstrap.
+        setStep('password');
+        return;
+      }
+
+      // 2. Check if THIS email is registered as an admin
+      const specificAdminQuery = query(adminCollectionRef, where('email', '==', values.email), limit(1));
+      const specificAdminSnap = await getDocs(specificAdminQuery);
+
+      if (!specificAdminSnap.empty) {
+        setStep('password');
+      } else {
+        form.setError('email', { 
+          message: 'Access denied. This email does not have administrator privileges.' 
+        });
+      }
+    } catch (error) {
+      console.error("Privilege check error:", error);
+      toast({
+        variant: 'destructive',
+        title: 'Verification Failed',
+        description: 'Could not verify administrator status. Please try again.',
+      });
+    } finally {
+      setCheckingEmail(false);
+    }
+  };
+
+  const onLoginSubmit = async (values: LoginValues) => {
+    if (!values.password) return;
+    
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
-      const user = userCredential.user;
+      const loggedUser = userCredential.user;
 
-      const adminRoleRef = doc(firestore, 'roles_admin', user.uid);
+      const adminRoleRef = doc(firestore, 'roles_admin', loggedUser.uid);
       const adminRoleSnap = await getDoc(adminRoleRef);
 
       if (adminRoleSnap.exists()) {
-        // User is a confirmed admin.
         toast({
           title: 'Login Successful',
           description: 'Redirecting to your dashboard...',
         });
       } else {
-        // User is not an admin. Check if they can be bootstrapped as the first one.
+        // Check for bootstrap if doc doesn't exist
         const adminCollectionRef = collection(firestore, 'roles_admin');
         const allAdminsQuery = query(adminCollectionRef, limit(1));
         const allAdminsSnap = await getDocs(allAdminsQuery);
 
         if (allAdminsSnap.empty) {
-          // No admins exist, make this user the first admin.
           try {
             await setDoc(adminRoleRef, {
               createdAt: serverTimestamp(),
-              email: user.email,
+              email: loggedUser.email,
             });
             toast({
               title: 'Admin Account Created',
-              description: 'You have been set as the first administrator.',
+              description: 'You have been registered as the first administrator.',
             });
-            // The useEffect will handle the redirect now that isAdmin will be true.
           } catch (setupError) {
             await signOut(auth);
             toast({
               variant: 'destructive',
               title: 'Setup Failed',
-              description: 'Could not create the initial admin account.',
+              description: 'Could not initialize your administrator account.',
             });
           }
         } else {
-          // Admins exist, and this user is not one.
+          // Admin exists elsewhere, but this user isn't one
           await signOut(auth);
           toast({
             variant: 'destructive',
             title: 'Authentication Failed',
-            description: 'You do not have permission to access this page.',
+            description: 'Your account is not authorized for administrator access.',
           });
+          setStep('email');
         }
       }
     } catch (error) {
@@ -129,7 +174,7 @@ export default function LoginPage() {
     }
   };
 
-  // If loading auth state or if user is already an admin, show a loader while redirecting
+  // Show a loader while checking for authentication and admin status
   if (isLoading || (user && isAdmin)) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -139,52 +184,83 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-admin">
-      <Card className="mx-auto max-w-sm glass-card">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center text-white">Admin Login</CardTitle>
-          <CardDescription className="text-center text-white">
-            Enter your email below to login to your account
+    <div className="flex min-h-screen items-center justify-center bg-admin p-4">
+      <Card className="w-full max-w-sm glass-card border-white/10 shadow-2xl">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl text-center text-white tracking-tight">Admin Portal</CardTitle>
+          <CardDescription className="text-center text-white/50 text-xs">
+            {step === 'email' 
+              ? 'Enter your email to verify administrative access' 
+              : 'Please enter your password to continue'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form 
+              onSubmit={form.handleSubmit(step === 'email' ? onEmailSubmit : onLoginSubmit)} 
+              className="space-y-5"
+            >
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-white/70 text-[10px] uppercase tracking-widest font-bold">Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="m@example.com" {...field} className="input-glass" />
+                      <Input 
+                        placeholder="admin@mmt.com" 
+                        {...field} 
+                        className="input-glass h-11"
+                        disabled={step === 'password' || checkingEmail}
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...field} className="input-glass" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              {step === 'password' && (
+                <div className="animate-in fade-in slide-in-from-top-2 duration-500">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center justify-between">
+                          <FormLabel className="text-white/70 text-[10px] uppercase tracking-widest font-bold">Password</FormLabel>
+                          <button 
+                            type="button" 
+                            onClick={() => setStep('email')}
+                            className="text-[9px] text-amber-500 hover:text-amber-400 uppercase tracking-widest font-bold flex items-center gap-1 transition-colors"
+                          >
+                            <ArrowLeft className="h-2.5 w-2.5" /> Back
+                          </button>
+                        </div>
+                        <FormControl>
+                          <Input 
+                            type="password" 
+                            placeholder="••••••••" 
+                            {...field} 
+                            className="input-glass h-11"
+                            autoFocus
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[10px]" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
               <Button
                 type="submit"
-                className="w-full btn-login-glow"
-                disabled={form.formState.isSubmitting}
+                className="w-full h-11 btn-login-glow mt-2 font-bold tracking-widest text-[10px] uppercase"
+                disabled={form.formState.isSubmitting || checkingEmail}
               >
-                {form.formState.isSubmitting && (
+                { (form.formState.isSubmitting || checkingEmail) && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Log In
+                {step === 'email' ? 'Verify Privilege' : 'Access Dashboard'}
               </Button>
             </form>
           </Form>
