@@ -177,7 +177,11 @@ export function AuthForms() {
             toast({ title: 'Legacy Created', description: 'Welcome to the designer community.' });
         } catch (error) {
             const authError = error as AuthError;
-            toast({ variant: 'destructive', title: 'Registration Failed', description: authError.message });
+            if (authError.code === 'auth/email-already-in-use') {
+                signupForm.setError('email', { message: 'This email is already in use.' });
+            } else {
+                toast({ variant: 'destructive', title: 'Registration Failed', description: authError.message });
+            }
         }
     };
 
