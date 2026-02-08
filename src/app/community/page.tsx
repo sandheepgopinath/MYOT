@@ -47,9 +47,11 @@ export default function CommunityPage() {
                         src="/admin-background.png" 
                         alt="Studio Background" 
                         fill 
-                        className="object-cover opacity-50 grayscale brightness-[0.4]"
+                        className="object-cover opacity-80"
                         priority
                     />
+                    {/* Atmospheric Overlays */}
+                    <div className="absolute inset-0 bg-[#0B1116]/40" />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B1116]/20 to-[#0B1116]" />
                 </div>
             )}
@@ -66,7 +68,7 @@ export default function CommunityPage() {
                         <div className="container mx-auto px-4 py-12 flex flex-col items-center">
                             {/* Refined Heading to match reference image typography and size */}
                             <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                                <h1 className="text-xl md:text-2xl lg:text-3xl font-display text-stone-200 leading-tight tracking-tight">
+                                <h1 className="text-lg md:text-xl lg:text-2xl font-display text-stone-200 leading-tight tracking-tight">
                                     Where independent designers build their legacy.
                                 </h1>
                             </div>
