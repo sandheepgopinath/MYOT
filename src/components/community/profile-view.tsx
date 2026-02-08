@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,8 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck, LogOut, Shirt, Sparkles } from 'lucide-react';
-import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
+import { Camera, Share2, Loader2, Pencil, UserPen, Mail, LogOut, Sparkles } from 'lucide-react';
+import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
 import { DesignCard } from './design-card';
@@ -41,22 +40,18 @@ export function ProfileView({ user }: ProfileViewProps) {
     const [isEditingDescription, setIsEditingDescription] = useState(false);
     const [tempDescription, setTempDescription] = useState('');
     
-    // Edit Profile states
     const [editName, setEditName] = useState('');
     const [editUsername, setEditUsername] = useState('');
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingUsername, setIsEditingUsername] = useState(false);
     const [isSavingProfile, setIsSavingProfile] = useState(false);
 
-    // Designer Profile Data
     const designerRef = useMemoFirebase(() => doc(firestore, 'users', user.uid), [user.uid, firestore]);
     const { data: designer, isLoading: isDesignerLoading } = useDoc(designerRef);
 
-    // Designs Sub-collection
     const designsRef = useMemoFirebase(() => collection(firestore, 'users', user.uid, 'designs'), [user.uid, firestore]);
     const { data: designs, isLoading: isDesignsLoading } = useCollection(designsRef);
 
-    // Initialize/Sync Profile
     useEffect(() => {
         if (!isDesignerLoading && designer === null && user) {
             const initialProfile = {
@@ -78,7 +73,6 @@ export function ProfileView({ user }: ProfileViewProps) {
         }
     }, [designer, isDesignerLoading, user, designerRef]);
 
-    // Pre-fill modal fields when data is available
     useEffect(() => {
         if (designer && isEditProfileOpen) {
             if (!isEditingName) setEditName(designer.name || '');
@@ -139,6 +133,13 @@ export function ProfileView({ user }: ProfileViewProps) {
         }
     };
 
+    const handleDeleteDesign = (id: string) => {
+        if (confirm('Are you sure you want to remove this design from your studio?')) {
+            deleteDocumentNonBlocking(doc(firestore, 'users', user.uid, 'designs', id));
+            toast({ title: 'Design Removed', description: 'The design has been removed from your portfolio.' });
+        }
+    };
+
     const handleSignOut = () => {
         signOut(auth);
     };
@@ -167,12 +168,11 @@ export function ProfileView({ user }: ProfileViewProps) {
     return (
         <div className="min-h-screen text-slate-200">
             <div className="container mx-auto px-4 pb-8 max-w-5xl">
-                {/* Profile Header - Compact */}
-                <div className="glass-card p-4 md:p-6 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
+                <div className="glass-card p-4 md:p-6 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden bg-black/40 backdrop-blur-3xl border-white/5">
                     <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                     
                     <div className="relative">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 bg-gradient-to-br from-amber-500/30 to-transparent shadow-2xl overflow-hidden relative group">
                             <Avatar className="w-full h-full border-2 border-black/40">
                                 <AvatarImage src={designer?.profilePhotoUrl || user.photoURL || ''} className="object-cover" />
                                 <AvatarFallback className="text-xl bg-zinc-900 text-amber-500/50">
@@ -244,7 +244,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     />
                                     <div className="flex gap-2">
                                         <Button size="sm" onClick={handleUpdateDescription} className="h-6 text-[9px] bg-amber-600 hover:bg-amber-500 text-white">
-                                            <Check className="w-2.5 h-2.5 mr-1" /> Save
+                                            Save
                                         </Button>
                                         <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-6 text-[9px] text-white/60">
                                             Cancel
@@ -270,15 +270,14 @@ export function ProfileView({ user }: ProfileViewProps) {
                     </div>
                 </div>
 
-                {/* Designs Navigation */}
                 <Tabs defaultValue="studio" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-                        <TabsList className="bg-transparent border-0 p-0 h-auto gap-8">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-10">
+                        <TabsList className="bg-transparent border-0 p-0 h-auto gap-12">
                             {[
                                 { id: 'studio', label: 'Studio' },
                                 { id: 'review', label: 'In Review' },
                                 { id: 'live', label: 'Live Designs' },
-                                { id: 'earnings', label: 'Earnings', comingSoon: true }
+                                { id: 'earnings', label: 'Earnings' }
                             ].map((tab) => (
                                 <TabsTrigger
                                     key={tab.id}
@@ -290,11 +289,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     )}
                                 >
                                     {tab.label}
-                                    {tab.comingSoon && (
-                                        <span className="text-[7px] bg-amber-500/20 text-amber-500 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-tighter animate-pulse border border-amber-500/20">
-                                            Soon
-                                        </span>
-                                    )}
                                 </TabsTrigger>
                             ))}
                         </TabsList>
@@ -302,7 +296,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
                     <TabsContent value={activeTab} className="mt-0 outline-none">
                         {activeTab === 'earnings' ? (
-                            <div className="flex flex-col items-center justify-center py-20 glass-card border-white/10 bg-black/40 rounded-2xl relative overflow-hidden group">
+                            <div className="flex flex-col items-center justify-center py-20 glass-card border-white/10 bg-black/40 rounded-3xl relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                                 <div className="relative z-10 flex flex-col items-center text-center px-6">
                                     <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 animate-pulse shadow-[0_0_30px_rgba(245,158,11,0.2)] border border-amber-500/20">
@@ -310,38 +304,28 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     </div>
                                     <h3 className="text-2xl font-display font-light text-white mb-3 tracking-tight">Earnings Portal</h3>
                                     <p className="text-white/50 text-sm max-w-sm leading-relaxed mb-8">
-                                        A dedicated space to track your creative revenue, view transaction history, and manage your payouts.
+                                        Track your creative revenue, view transaction history, and manage your payouts.
                                     </p>
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-px w-8 bg-gradient-to-r from-transparent to-amber-500/30" />
-                                        <div className="px-6 py-2 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-[0.3em] animate-bounce shadow-[0_0_15px_rgba(245,158,11,0.1)]">
-                                            Coming Soon
-                                        </div>
-                                        <div className="h-px w-8 bg-gradient-to-l from-transparent to-amber-500/30" />
+                                    <div className="px-8 py-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-[0.4em] animate-bounce">
+                                        Coming Soon
                                     </div>
                                 </div>
                             </div>
                         ) : isDesignsLoading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {Array.from({ length: 4 }).map((_, i) => (
-                                    <div key={i} className="aspect-square rounded-2xl bg-white/[0.02] animate-pulse" />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {Array.from({ length: 3 }).map((_, i) => (
+                                    <div key={i} className="aspect-[4/5] rounded-[24px] bg-white/[0.02] animate-pulse" />
                                 ))}
                             </div>
                         ) : sortedDesigns.length === 0 ? (
                             <div className="flex flex-col items-center justify-center animate-in fade-in duration-700">
-                                <div className="w-full max-w-2xl bg-[#0F1419]/40 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden group">
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-amber-500/30 blur-sm" />
-                                    
+                                <div className="w-full max-w-2xl bg-[#0F1419]/40 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl relative overflow-hidden">
                                     <div className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 text-white">
                                         <div className="flex-1 space-y-6 text-center md:text-left">
-                                            <div className="space-y-2">
-                                                <h2 className="text-3xl font-display font-light tracking-tight">Upload Your First Design</h2>
-                                            </div>
-                                            
+                                            <h2 className="text-3xl font-display font-light tracking-tight">Upload Your First Design</h2>
                                             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
                                                 We'll review it, print it, ship it — and you earn on every sale.
                                             </p>
-                                            
                                             <Button 
                                                 onClick={() => setIsUploadOpen(true)}
                                                 className="bg-white hover:bg-white/90 text-black px-10 h-12 rounded-lg font-bold transition-all shadow-xl"
@@ -349,38 +333,40 @@ export function ProfileView({ user }: ProfileViewProps) {
                                                 Upload Design
                                             </Button>
                                         </div>
-                                        
-                                        <div className="relative flex flex-col items-center">
-                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-amber-500/10 blur-[60px] rounded-full animate-pulse" />
-                                            
-                                            <div className="relative w-40 h-40 mb-[-15px] z-10">
-                                                <Image 
-                                                    src="/sell.png"
-                                                    alt="Design Studio Mockup"
-                                                    fill
-                                                    className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
-                                                    priority
-                                                />
-                                            </div>
-                                            
-                                            <div className="w-28 h-4 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 rounded-[100%] border-t border-white/20 shadow-2xl relative z-0" />
-                                            <div className="w-20 h-2 bg-black/60 blur-md rounded-full mt-1 opacity-80" />
+                                        <div className="relative w-40 h-40">
+                                            <Image 
+                                                src="/sell.png"
+                                                alt="Studio Mockup"
+                                                fill
+                                                className="object-contain drop-shadow-2xl"
+                                                priority
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {filteredDesigns.map((design) => (
-                                    <div key={design.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <div key={design.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                                         <DesignCard
                                             design={design as any}
-                                            onDelete={() => {}} 
+                                            onDelete={handleDeleteDesign} 
                                             onView={() => {}}
                                             onReupload={() => {}}
                                         />
                                     </div>
                                 ))}
+                                {/* Add New Trigger Card */}
+                                <button 
+                                    onClick={() => setIsUploadOpen(true)}
+                                    className="aspect-square sm:aspect-auto sm:h-full rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-amber-500/30 transition-all group flex flex-col items-center justify-center gap-4 text-white/20 hover:text-amber-500/60"
+                                >
+                                    <div className="p-4 rounded-full bg-white/5 group-hover:bg-amber-500/10 transition-colors">
+                                        <Sparkles className="w-8 h-8" />
+                                    </div>
+                                    <span className="text-[10px] uppercase tracking-[0.3em] font-bold">New Creation</span>
+                                </button>
                             </div>
                         )}
                     </TabsContent>
@@ -393,11 +379,8 @@ export function ProfileView({ user }: ProfileViewProps) {
                 userId={user.uid}
             />
 
-            {/* Edit Profile Modal */}
             <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-                <DialogContent className="sm:max-w-[400px] bg-[#0F1419]/90 backdrop-blur-3xl border border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden group p-0">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
-                    
+                <DialogContent className="sm:max-w-[400px] bg-[#0F1419]/90 backdrop-blur-3xl border border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden p-0">
                     <div className="p-6 space-y-6 relative z-10">
                         <DialogHeader>
                             <DialogTitle className="font-display text-2xl font-light tracking-tight text-white">Edit Profile</DialogTitle>
