@@ -53,7 +53,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
         defaultValues: {
             name: '',
             description: '',
-            file: null,
+            file: undefined,
         },
     });
 
@@ -188,7 +188,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                 )}
                             />
 
-                            <div className="pt-4">
+                            <div className="pt-4 flex flex-col gap-3">
                                 <Button 
                                     type="submit" 
                                     className="w-full h-12 bg-amber-500/80 hover:bg-amber-500 text-black font-bold tracking-widest rounded-lg transition-all shadow-lg shadow-black/40 disabled:opacity-50" 
@@ -205,6 +205,15 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                             FINALIZE UPLOAD
                                         </>
                                     )}
+                                </Button>
+                                <Button 
+                                    type="button" 
+                                    variant="ghost" 
+                                    onClick={() => onOpenChange(false)}
+                                    className="text-white/40 hover:text-white hover:bg-white/5 text-[10px] uppercase tracking-widest font-bold"
+                                    disabled={isUploading}
+                                >
+                                    Cancel
                                 </Button>
                             </div>
                         </form>
