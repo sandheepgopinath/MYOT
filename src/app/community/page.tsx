@@ -8,7 +8,7 @@ import { ProfileView } from '@/components/community/profile-view';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 export default function CommunityPage() {
     const auth = useAuth();
@@ -39,20 +39,10 @@ export default function CommunityPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0B1116] flex flex-col relative overflow-hidden">
-            {/* Cinematic Background Layer - Effects removed as requested */}
-            {!currentUser && (
-                <div className="absolute inset-0 z-0">
-                    <Image 
-                        src="/admin-background.png" 
-                        alt="Studio Background" 
-                        fill 
-                        className="object-cover"
-                        priority
-                    />
-                </div>
-            )}
-
+        <div className={cn(
+            "min-h-screen flex flex-col relative overflow-hidden",
+            !currentUser ? "bg-admin" : "bg-[#0B1116]"
+        )}>
             <div className="relative z-10 flex flex-col min-h-screen">
                 <Header scrollY={0} />
                 
