@@ -6,6 +6,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
+      // Use exists to check for admin role document
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
@@ -14,10 +15,13 @@ service cloud.firestore {
     }
 
     match /roles_admin/{adminId} {
-      // Allow users to check their own admin status and admins to see other admins
-      allow get: if isSignedIn() && (request.auth.uid == adminId || exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid)));
-      // Allow listing admins if the user is an admin or performing the initial bootstrap check (limit 1)
-      allow list: if isSignedIn() && (exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid)) || request.query.limit == 1);
+      // Allow users to read their own role document without recursive checks
+      allow get: if isSignedIn() && request.auth.uid == adminId;
+      // Allow admins to manage roles
+      allow read: if isAdmin();
+      // Allow initial bootstrap check (listing with limit 1)
+      allow list: if isSignedIn() && request.query.limit == 1;
+      // Allow initial bootstrap creation
       allow create: if isSignedIn() && request.auth.uid == adminId;
       allow update, delete: if false;
     }
