@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen } from 'lucide-react';
+import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock } from 'lucide-react';
 import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
@@ -44,6 +43,8 @@ export function ProfileView({ user }: ProfileViewProps) {
     // Edit Profile states
     const [editName, setEditName] = useState('');
     const [editUsername, setEditUsername] = useState('');
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [isEditingUsername, setIsEditingUsername] = useState(false);
     const [isSavingProfile, setIsSavingProfile] = useState(false);
 
     // Designer Profile Data
@@ -83,6 +84,14 @@ export function ProfileView({ user }: ProfileViewProps) {
             setEditUsername(designer.username || '');
         }
     }, [designer]);
+
+    // Reset editing states when modal closes
+    useEffect(() => {
+        if (!isEditProfileOpen) {
+            setIsEditingName(false);
+            setIsEditingUsername(false);
+        }
+    }, [isEditProfileOpen]);
 
     const handleUpdateDescription = () => {
         updateDocumentNonBlocking(designerRef, {
@@ -166,7 +175,7 @@ export function ProfileView({ user }: ProfileViewProps) {
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
             <div className="container mx-auto px-4 pb-8 max-w-7xl">
                 {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start">
+                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-8">
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
                             <Avatar className="w-full h-full border-4 border-[#0B1116]">
@@ -321,37 +330,97 @@ export function ProfileView({ user }: ProfileViewProps) {
                     <DialogHeader>
                         <DialogTitle>Edit Profile</DialogTitle>
                         <DialogDescription className="text-slate-400">
-                            Update your public information.
+                            Update your public information. Fields are locked by default; click the icon to edit.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-6 py-4">
+                        {/* Name Field */}
                         <div className="grid gap-2">
-                            <Label htmlFor="name" className="text-white">Full Name</Label>
-                            <Input 
-                                id="name" 
-                                value={editName} 
-                                onChange={(e) => setEditName(e.target.value)} 
-                                className="bg-slate-800 border-slate-700 text-white"
-                                placeholder="Your Name"
-                            />
+                            <Label htmlFor="name" className="text-white flex items-center justify-between">
+                                <span className="flex items-center gap-2"><UserPen className="w-3 h-3" /> Full Name</span>
+                                {!isEditingName && (
+                                    <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                                        onClick={() => setIsEditingName(true)}
+                                    >
+                                        <Pencil className="w-3 h-3" /> Edit
+                                    </Button>
+                                )}
+                            </Label>
+                            <div className="relative">
+                                <Input 
+                                    id="name" 
+                                    value={editName} 
+                                    onChange={(e) => setEditName(e.target.value)} 
+                                    disabled={!isEditingName}
+                                    className={cn(
+                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        !isEditingName && "opacity-60 cursor-not-allowed select-none"
+                                    )}
+                                    placeholder="Your Name"
+                                />
+                                {!isEditingName && <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />}
+                            </div>
                         </div>
+
+                        {/* Username Field */}
                         <div className="grid gap-2">
-                            <Label htmlFor="username" className="text-white">Username</Label>
-                            <Input 
-                                id="username" 
-                                value={editUsername} 
-                                onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
-                                className="bg-slate-800 border-slate-700 text-white"
-                                placeholder="unique_username"
-                            />
+                            <Label htmlFor="username" className="text-white flex items-center justify-between">
+                                <span className="flex items-center gap-2">@ Username</span>
+                                {!isEditingUsername && (
+                                    <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                                        onClick={() => setIsEditingUsername(true)}
+                                    >
+                                        <Pencil className="w-3 h-3" /> Edit
+                                    </Button>
+                                )}
+                            </Label>
+                            <div className="relative">
+                                <Input 
+                                    id="username" 
+                                    value={editUsername} 
+                                    onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
+                                    disabled={!isEditingUsername}
+                                    className={cn(
+                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        !isEditingUsername && "opacity-60 cursor-not-allowed select-none"
+                                    )}
+                                    placeholder="unique_username"
+                                />
+                                {!isEditingUsername && <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />}
+                            </div>
                             <p className="text-[10px] text-slate-500">Only letters, numbers, and underscores.</p>
                         </div>
+
+                        {/* Read-Only Contact Info */}
+                        <div className="grid gap-2">
+                            <Label className="text-white flex items-center gap-2">
+                                <ShieldCheck className="w-3 h-3" /> Registered Contact
+                            </Label>
+                            <div className="relative">
+                                <Input 
+                                    value={designer?.email || designer?.phone || 'Not available'} 
+                                    readOnly
+                                    className="bg-slate-800/50 border-slate-700 text-slate-500 cursor-not-allowed pl-10"
+                                />
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                                    {designer?.email ? <Mail className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
+                                </div>
+                                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                            </div>
+                            <p className="text-[10px] text-slate-600">This cannot be changed manually.</p>
+                        </div>
                     </div>
-                    <DialogFooter>
+                    <DialogFooter className="mt-4">
                         <Button 
                             type="submit" 
                             onClick={handleSaveProfile} 
-                            disabled={isSavingProfile}
+                            disabled={isSavingProfile || (!isEditingName && !isEditingUsername)}
                             className="bg-blue-600 hover:bg-blue-500 w-full sm:w-auto"
                         >
                             {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Changes'}
