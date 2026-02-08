@@ -157,7 +157,6 @@ export function ProfileView({ user }: ProfileViewProps) {
         return true;
     });
 
-    // Use a reliable path or placeholder
     const studioMockup = "/sell.png";
 
     if (isDesignerLoading) {
@@ -176,7 +175,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                     <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] pointer-events-none" />
                     
                     <div className="relative">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
                             <Avatar className="w-full h-full border-2 border-black/40">
                                 <AvatarImage src={designer?.profilePhotoUrl || user.photoURL || ''} className="object-cover" />
                                 <AvatarFallback className="text-xl bg-zinc-900 text-amber-500/50">
@@ -190,81 +189,81 @@ export function ProfileView({ user }: ProfileViewProps) {
                         </div>
                     </div>
 
-                    <div className="flex-1 text-center md:text-left space-y-3">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div className="flex-1 text-center md:text-left space-y-2">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                             <div className="space-y-0.5">
                                 <h1 className="text-xl md:text-2xl font-display font-light text-white tracking-tight">
                                     {designer?.name || user.displayName || 'Designer'}
                                 </h1>
-                                <p className="text-amber-500/80 text-xs font-medium tracking-wide">@{designer?.username || 'username'}</p>
+                                <p className="text-amber-500/80 text-[10px] font-medium tracking-wide">@{designer?.username || 'username'}</p>
                             </div>
                             
                             <div className="flex flex-wrap justify-center md:justify-end gap-2">
                                 <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-3 h-8 text-[10px]"
+                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-3 h-7 text-[9px] uppercase tracking-wider"
                                     onClick={() => setIsEditProfileOpen(true)}
                                 >
                                     <UserPen className="w-3 h-3 mr-1.5" />
                                     Edit Profile
                                 </Button>
-                                <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-8 h-8">
+                                <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-7 h-7">
                                     <Share2 className="w-3 h-3" />
                                 </Button>
-                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-8 h-8">
+                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-7 h-7">
                                     <LogOut className="w-3 h-3" />
                                 </Button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-4 gap-2 md:gap-4 py-3 border-y border-white/5">
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 text-center md:text-left">
                                 <span className="block text-lg font-brand text-white">{designer?.designsUploadedCount || 0}</span>
                                 <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Uploaded</span>
                             </div>
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 text-center md:text-left">
                                 <span className="block text-lg font-brand text-white">{designer?.designsApprovedCount || 0}</span>
                                 <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Approved</span>
                             </div>
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 text-center md:text-left">
                                 <span className="block text-lg font-brand text-white">{designer?.salesCount || 0}</span>
                                 <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Total Sales</span>
                             </div>
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 text-center md:text-left">
                                 <span className="block text-lg font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
                                 <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Revenue</span>
                             </div>
                         </div>
 
-                        <div className="max-w-2xl text-white/60 leading-relaxed text-[11px] group relative">
+                        <div className="max-w-2xl text-white/60 leading-relaxed text-[10px] group relative">
                             {isEditingDescription ? (
                                 <div className="space-y-2 mt-2">
                                     <Textarea 
                                         value={tempDescription} 
                                         onChange={(e) => setTempDescription(e.target.value)}
-                                        className="bg-black/40 border-white/10 text-white min-h-[60px] text-[11px] focus:border-amber-500/50"
+                                        className="bg-black/40 border-white/10 text-white min-h-[50px] text-[10px] focus:border-amber-500/50"
                                         placeholder="Write about your design style..."
                                     />
                                     <div className="flex gap-2">
-                                        <Button size="sm" onClick={handleUpdateDescription} className="h-7 text-[10px] bg-amber-600 hover:bg-amber-500 text-white">
+                                        <Button size="sm" onClick={handleUpdateDescription} className="h-6 text-[9px] bg-amber-600 hover:bg-amber-500 text-white">
                                             <Check className="w-2.5 h-2.5 mr-1" /> Save
                                         </Button>
-                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-7 text-[10px] text-white/60">
+                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-6 text-[9px] text-white/60">
                                             Cancel
                                         </Button>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-start gap-2">
-                                    <p className="italic font-tagline text-xs leading-snug">
+                                    <p className="italic font-tagline text-[11px] leading-snug">
                                         "{designer?.description || 'No description yet. Add a few words about your creative style.'}"
                                     </p>
                                     <Button 
                                         size="icon" 
                                         variant="ghost" 
                                         onClick={() => setIsEditingDescription(true)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-5 w-5 text-white/40 hover:text-white"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-4 w-4 text-white/40 hover:text-white"
                                     >
                                         <Pencil className="w-2.5 h-2.5" />
                                     </Button>
@@ -337,15 +336,13 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             
                                             {/* Floating T-Shirt Pedestal Look */}
                                             <div className="relative w-40 h-40 mb-[-15px] z-10">
-                                                {studioMockup && (
-                                                    <Image 
-                                                        src={studioMockup}
-                                                        alt="Design Studio Mockup"
-                                                        fill
-                                                        className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
-                                                        priority
-                                                    />
-                                                )}
+                                                <Image 
+                                                    src={studioMockup}
+                                                    alt="Design Studio Mockup"
+                                                    fill
+                                                    className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
+                                                    priority
+                                                />
                                             </div>
                                             
                                             {/* Pedestal Base */}
@@ -359,9 +356,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                                 <div className="mt-12 text-center space-y-2 max-w-lg">
                                     <p className="text-white/60 text-sm">
                                         <span className="text-white font-medium">Your studio</span> is set up and ready. Upload your first design to start selling worldwide.
-                                    </p>
-                                    <p className="text-white/40 text-xs italic">
-                                        We'll review it, print it, ship it — and <span className="text-white font-bold not-italic">you earn on every sale.</span>
                                     </p>
                                 </div>
                             </div>
