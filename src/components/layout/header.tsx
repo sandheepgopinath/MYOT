@@ -32,7 +32,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
     )}>
       <div className={cn(
         "flex items-center justify-between text-text-primary glass-card p-4 h-[72px] border-white/10",
-        isCommunityPage ? "bg-[#0B1116]/80 backdrop-blur-md" : "bg-background/50 backdrop-blur-md"
+        isCommunityPage ? "bg-black/20 backdrop-blur-xl" : "bg-background/50 backdrop-blur-md"
       )}>
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-none md:flex-1">
