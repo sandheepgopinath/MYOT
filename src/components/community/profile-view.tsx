@@ -76,13 +76,17 @@ export function ProfileView({ user }: ProfileViewProps) {
         }
     }, [designer, isDesignerLoading, user, designerRef]);
 
+    // Pre-fill modal fields when modal opens or designer data changes
     useEffect(() => {
         if (designer) {
             setTempDescription(designer.description || '');
-            setEditName(designer.name || '');
-            setEditUsername(designer.username || '');
+            // Always sync Name and Username to the modal state when it's open
+            if (isEditProfileOpen) {
+                setEditName(designer.name || '');
+                setEditUsername(designer.username || '');
+            }
         }
-    }, [designer]);
+    }, [designer, isEditProfileOpen]);
 
     // Reset editing states when modal closes
     useEffect(() => {
@@ -174,7 +178,7 @@ export function ProfileView({ user }: ProfileViewProps) {
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
             <div className="container mx-auto px-4 pb-8 max-w-7xl">
                 {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-8">
+                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-0">
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
                             <Avatar className="w-full h-full border-4 border-[#0B1116]">
@@ -332,7 +336,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                     <div className="grid gap-6 py-4">
                         {/* Name Field */}
                         <div className="grid gap-2">
-                            <Label htmlFor="name" className="text-white flex items-center justify-between">
+                            <Label htmlFor="name" className="text-sm font-medium leading-none text-white flex items-center justify-between">
                                 <span className="flex items-center gap-2"><UserPen className="w-3 h-3" /> Full Name</span>
                                 {!isEditingName && (
                                     <Button 
@@ -352,7 +356,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditName(e.target.value)} 
                                     disabled={!isEditingName}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
                                         !isEditingName && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="Your Name"
@@ -363,7 +367,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
                         {/* Username Field */}
                         <div className="grid gap-2">
-                            <Label htmlFor="username" className="text-white flex items-center justify-between">
+                            <Label htmlFor="username" className="text-sm font-medium leading-none text-white flex items-center justify-between">
                                 <span className="flex items-center gap-2">@ Username</span>
                                 {!isEditingUsername && (
                                     <Button 
@@ -383,7 +387,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
                                     disabled={!isEditingUsername}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
                                         !isEditingUsername && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="unique_username"
@@ -395,7 +399,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
                         {/* Read-Only Contact Info */}
                         <div className="grid gap-2">
-                            <Label className="text-white flex items-center gap-2">
+                            <Label className="text-sm font-medium leading-none text-white flex items-center gap-2">
                                 <ShieldCheck className="w-3 h-3" /> Registered Contact
                             </Label>
                             <div className="relative">
