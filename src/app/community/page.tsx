@@ -40,13 +40,12 @@ export default function CommunityPage() {
 
     return (
         <div className={cn(
-            "min-h-screen flex flex-col relative overflow-hidden",
-            !currentUser ? "bg-admin" : "bg-[#0B1116]"
+            "min-h-screen flex flex-col relative overflow-hidden bg-admin"
         )}>
             <div className="relative z-10 flex flex-col min-h-screen">
                 <Header scrollY={0} />
                 
-                <main className="flex-grow flex flex-col items-center justify-start pt-20">
+                <main className="flex-grow flex flex-col items-center justify-start pt-24">
                     {currentUser ? (
                         <div className="w-full">
                             <ProfileView user={currentUser} />
@@ -55,7 +54,7 @@ export default function CommunityPage() {
                         <div className="container mx-auto px-4 py-12 flex flex-col items-center">
                             {/* Refined Heading to match reference image typography and size */}
                             <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                                <h1 className="text-lg md:text-xl lg:text-2xl font-display text-stone-200 leading-tight tracking-tight">
+                                <h1 className="text-xl md:text-2xl lg:text-4xl font-display text-stone-200 leading-tight tracking-tight">
                                     Where independent designers build their legacy.
                                 </h1>
                             </div>

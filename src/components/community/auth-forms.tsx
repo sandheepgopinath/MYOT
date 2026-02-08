@@ -76,7 +76,7 @@ type AuthMethod = 'email' | 'phone';
 
 export function AuthForms() {
     const [activeTab, setActiveTab] = useState<AuthTab>('signin');
-    const [method, setMethod] = useState<AuthMethod>('email');
+    const [method, setMethod] = useState<AuthMethod>('phone');
     const [phoneStep, setPhoneStep] = useState<'request' | 'verify'>('request');
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
     const [pendingProfile, setPendingProfile] = useState<any>(null);
