@@ -7,14 +7,24 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Camera, Share2, Settings, Loader2, UploadCloud, Check, X, Pencil } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen } from 'lucide-react';
 import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
-import { collection, doc, orderBy, query, serverTimestamp } from 'firebase/firestore';
-import { DesignCard, Design } from './design-card';
+import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
+import { DesignCard } from './design-card';
 import { UploadModal } from './upload-modal';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
 
 interface ProfileViewProps {
     user: User;
@@ -26,22 +36,27 @@ export function ProfileView({ user }: ProfileViewProps) {
     const { toast } = useToast();
     
     const [isUploadOpen, setIsUploadOpen] = useState(false);
+    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('designs');
     const [isEditingDescription, setIsEditingDescription] = useState(false);
     const [tempDescription, setTempDescription] = useState('');
+    
+    // Edit Profile states
+    const [editName, setEditName] = useState('');
+    const [editUsername, setEditUsername] = useState('');
+    const [isSavingProfile, setIsSavingProfile] = useState(false);
 
     // Designer Profile Data
     const designerRef = useMemoFirebase(() => doc(firestore, 'users', user.uid), [user.uid, firestore]);
     const { data: designer, isLoading: isDesignerLoading } = useDoc(designerRef);
 
-    // Designs Sub-collection - fetch and sort in memory to avoid index requirements for now
+    // Designs Sub-collection
     const designsRef = useMemoFirebase(() => collection(firestore, 'users', user.uid, 'designs'), [user.uid, firestore]);
     const { data: designs, isLoading: isDesignsLoading } = useCollection(designsRef);
 
     // Initialize/Sync Profile
     useEffect(() => {
         if (!isDesignerLoading && designer === null && user) {
-            // Document doesn't exist (e.g. for Admins or direct logins). Let's initialize it.
             const initialProfile = {
                 uid: user.uid,
                 name: user.displayName || 'New Designer',
@@ -62,8 +77,10 @@ export function ProfileView({ user }: ProfileViewProps) {
     }, [designer, isDesignerLoading, user, designerRef]);
 
     useEffect(() => {
-        if (designer?.description) {
-            setTempDescription(designer.description);
+        if (designer) {
+            setTempDescription(designer.description || '');
+            setEditName(designer.name || '');
+            setEditUsername(designer.username || '');
         }
     }, [designer]);
 
@@ -76,11 +93,54 @@ export function ProfileView({ user }: ProfileViewProps) {
         toast({ title: 'Profile Updated', description: 'Your description has been saved.' });
     };
 
+    const handleSaveProfile = async () => {
+        if (!editName.trim() || !editUsername.trim()) {
+            toast({ variant: 'destructive', title: 'Error', description: 'Name and Username are required.' });
+            return;
+        }
+
+        setIsSavingProfile(true);
+
+        try {
+            // Check uniqueness if username changed
+            if (editUsername.toLowerCase() !== designer?.username?.toLowerCase()) {
+                const q = query(
+                    collection(firestore, 'users'), 
+                    where('username', '==', editUsername.toLowerCase()), 
+                    limit(1)
+                );
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    toast({ 
+                        variant: 'destructive', 
+                        title: 'Username Taken', 
+                        description: 'This username is already claimed by another designer.' 
+                    });
+                    setIsSavingProfile(false);
+                    return;
+                }
+            }
+
+            updateDocumentNonBlocking(designerRef, {
+                name: editName,
+                username: editUsername.toLowerCase(),
+                lastActiveAt: serverTimestamp()
+            });
+
+            toast({ title: 'Success', description: 'Your profile has been updated.' });
+            setIsEditProfileOpen(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast({ variant: 'destructive', title: 'Error', description: 'Failed to update profile.' });
+        } finally {
+            setIsSavingProfile(false);
+        }
+    };
+
     const handleSignOut = () => {
         signOut(auth);
     };
 
-    // Sort designs in memory by uploadedAt
     const sortedDesigns = designs ? [...designs].sort((a, b) => {
         const dateA = a.uploadedAt?.seconds || 0;
         const dateB = b.uploadedAt?.seconds || 0;
@@ -104,7 +164,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 max-w-7xl pt-4">
+            <div className="container mx-auto px-4 pb-8 max-w-7xl">
                 {/* Profile Header */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16 items-start">
                     <div className="relative group">
@@ -127,12 +187,17 @@ export function ProfileView({ user }: ProfileViewProps) {
                                 <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
                                     {designer?.name || user.displayName || 'Designer'}
                                 </h1>
-                                <p className="text-slate-400 font-medium">@{designer?.username || user.email?.split('@')[0] || 'username'}</p>
+                                <p className="text-slate-400 font-medium">@{designer?.username || 'username'}</p>
                             </div>
                             <div className="flex gap-3">
-                                <Button size="sm" variant="outline" className="bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300">
-                                    <Settings className="w-4 h-4 mr-2" />
-                                    Settings
+                                <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    className="bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300"
+                                    onClick={() => setIsEditProfileOpen(true)}
+                                >
+                                    <UserPen className="w-4 h-4 mr-2" />
+                                    Edit Profile
                                 </Button>
                                 <Button size="icon" variant="outline" className="bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300 w-9 h-9">
                                     <Share2 className="w-4 h-4" />
@@ -178,12 +243,12 @@ export function ProfileView({ user }: ProfileViewProps) {
                                 </div>
                             ) : (
                                 <div className="flex items-start gap-4">
-                                    <p className="flex-1">{designer?.description || 'No description yet. Click to add one.'}</p>
+                                    <p className="flex-1">{designer?.description || 'No description yet. Click the pencil to add one.'}</p>
                                     <Button 
                                         size="icon" 
                                         variant="ghost" 
                                         onClick={() => setIsEditingDescription(true)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
                                     >
                                         <Pencil className="w-4 h-4" />
                                     </Button>
@@ -221,7 +286,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     <UploadCloud className="w-8 h-8 text-slate-400 group-hover:text-blue-500" />
                                 </div>
                                 <h3 className="font-semibold text-white mb-1">Upload Design</h3>
-                                <p className="text-xs text-slate-500 text-center px-6">PNG or PSD mockups</p>
+                                <p className="text-xs text-slate-500 text-center px-6">Drag and drop high-res PNG or PSD mockups</p>
                             </div>
 
                             {isDesignsLoading ? (
@@ -249,6 +314,51 @@ export function ProfileView({ user }: ProfileViewProps) {
                 onOpenChange={setIsUploadOpen}
                 userId={user.uid}
             />
+
+            {/* Edit Profile Modal */}
+            <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
+                <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-700 text-white">
+                    <DialogHeader>
+                        <DialogTitle>Edit Profile</DialogTitle>
+                        <DialogDescription className="text-slate-400">
+                            Update your public information.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="name" className="text-white">Full Name</Label>
+                            <Input 
+                                id="name" 
+                                value={editName} 
+                                onChange={(e) => setEditName(e.target.value)} 
+                                className="bg-slate-800 border-slate-700 text-white"
+                                placeholder="Your Name"
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="username" className="text-white">Username</Label>
+                            <Input 
+                                id="username" 
+                                value={editUsername} 
+                                onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
+                                className="bg-slate-800 border-slate-700 text-white"
+                                placeholder="unique_username"
+                            />
+                            <p className="text-[10px] text-slate-500">Only letters, numbers, and underscores.</p>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button 
+                            type="submit" 
+                            onClick={handleSaveProfile} 
+                            disabled={isSavingProfile}
+                            className="bg-blue-600 hover:bg-blue-500 w-full sm:w-auto"
+                        >
+                            {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Changes'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
