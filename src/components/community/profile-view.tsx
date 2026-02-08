@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -303,24 +304,24 @@ export function ProfileView({ user }: ProfileViewProps) {
                         ) : sortedDesigns.length === 0 ? (
                             <div className="flex flex-col items-center justify-center animate-in fade-in duration-700">
                                 {/* Cinematic Empty State Card */}
-                                <div className="w-full max-w-2xl bg-stone-200 rounded-2xl shadow-2xl relative overflow-hidden group">
+                                <div className="w-full max-w-2xl bg-[#0F1419]/40 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden group">
                                     {/* Lighting Effects */}
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-amber-500/30 blur-sm" />
                                     
-                                    <div className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 text-zinc-900">
+                                    <div className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 text-white">
                                         <div className="flex-1 space-y-6 text-center md:text-left">
                                             <div className="space-y-2">
                                                 <h2 className="text-3xl font-display font-light tracking-tight">Upload Your First Design</h2>
-                                                <p className="text-sm text-zinc-500 font-medium">PNG or PSD • 300 DPI • Transparent background</p>
+                                                <p className="text-sm text-white/60 font-medium">PNG or PSD • 300 DPI • Transparent background</p>
                                             </div>
                                             
-                                            <p className="text-zinc-600 text-sm leading-relaxed max-w-xs">
+                                            <p className="text-white/50 text-sm leading-relaxed max-w-xs">
                                                 We'll automatically create mockups and handle printing.
                                             </p>
                                             
                                             <Button 
                                                 onClick={() => setIsUploadOpen(true)}
-                                                className="bg-zinc-900 hover:bg-zinc-800 text-white px-10 h-12 rounded-lg font-bold transition-all shadow-xl"
+                                                className="bg-white hover:bg-white/90 text-black px-10 h-12 rounded-lg font-bold transition-all shadow-xl"
                                             >
                                                 Upload Design
                                             </Button>
@@ -328,9 +329,9 @@ export function ProfileView({ user }: ProfileViewProps) {
                                         
                                         <div className="relative">
                                             <div className="absolute inset-0 bg-amber-500/20 blur-[40px] rounded-full scale-125 animate-pulse" />
-                                            <div className="relative z-10 p-6 rounded-full bg-stone-100 shadow-inner">
+                                            <div className="relative z-10 p-6 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-inner">
                                                 <div className="relative">
-                                                   <Shirt className="w-24 h-24 text-zinc-300 stroke-[1.5]" />
+                                                   <Shirt className="w-24 h-24 text-white/20 stroke-[1.5]" />
                                                    <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-amber-500/60" />
                                                 </div>
                                             </div>
