@@ -47,27 +47,26 @@ export default function CommunityPage() {
                         src="/admin-background.png" 
                         alt="Studio Background" 
                         fill 
-                        className="object-cover opacity-40 brightness-50"
+                        className="object-cover opacity-50 grayscale brightness-[0.4]"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#0B1116] via-transparent to-[#0B1116]" />
-                    <div className="absolute inset-0 bg-black/60" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B1116]/20 to-[#0B1116]" />
                 </div>
             )}
 
             <div className="relative z-10 flex flex-col min-h-screen">
                 <Header scrollY={0} />
                 
-                <main className="flex-grow flex flex-col items-center justify-center">
+                <main className="flex-grow flex flex-col items-center justify-start pt-20">
                     {currentUser ? (
                         <div className="w-full">
                             <ProfileView user={currentUser} />
                         </div>
                     ) : (
                         <div className="container mx-auto px-4 py-12 flex flex-col items-center">
-                            {/* Refined Heading to match reference image */}
+                            {/* Refined Heading to match reference image typography and size */}
                             <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-display text-stone-200 leading-tight tracking-tight">
+                                <h1 className="text-xl md:text-2xl lg:text-3xl font-display text-stone-200 leading-tight tracking-tight">
                                     Where independent designers build their legacy.
                                 </h1>
                             </div>
