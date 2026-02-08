@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -312,7 +311,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                                         <div className="flex-1 space-y-6 text-center md:text-left">
                                             <div className="space-y-2">
                                                 <h2 className="text-3xl font-display font-light tracking-tight">Upload Your First Design</h2>
-                                                <p className="text-sm text-white/60 font-medium">PNG or PSD • 300 DPI • Transparent background</p>
                                             </div>
                                             
                                             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
