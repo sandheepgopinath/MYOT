@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -50,6 +49,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
         resolver: zodResolver(uploadSchema),
         defaultValues: {
             name: '',
+            file: null,
         },
     });
 
@@ -140,7 +140,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                         <FormField
                             control={form.control}
                             name="file"
-                            render={({ field: { onChange, ...field } }) => (
+                            render={({ field: { onChange, value, ...field } }) => (
                                 <FormItem>
                                     <FormLabel>Design Image</FormLabel>
                                     <FormControl>
