@@ -1,4 +1,3 @@
-
 {
     "indexes": [
         {
@@ -17,6 +16,20 @@
         },
         {
             "collectionGroup": "designs",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "status",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "uploadedAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "community_designs",
             "queryScope": "COLLECTION",
             "fields": [
                 {

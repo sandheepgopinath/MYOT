@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState } from 'react';
 import { useCollection, useFirestore, useMemoFirebase, updateDocumentNonBlocking } from '@/firebase';
-import { collection, doc, orderBy, query, collectionGroup, where, increment, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, orderBy, query, where, increment, serverTimestamp } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,10 +24,10 @@ export default function DesignsManagement() {
     const [moderationComment, setModerationComment] = useState('');
     const [isUpdating, setIsUpdating] = useState(false);
 
-    // Query all designs from all user collections that are pending
+    // Query pending designs from the community mirror collection
     const designsRef = useMemoFirebase(
         () => query(
-            collectionGroup(firestore, 'designs'), 
+            collection(firestore, 'community_designs'), 
             where('status', '==', 'pending'),
             orderBy('uploadedAt', 'desc')
         ),
