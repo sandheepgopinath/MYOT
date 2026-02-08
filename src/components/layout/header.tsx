@@ -1,10 +1,10 @@
-
 'use client';
 
 import Link from 'next/link';
 import { ThemeSwitcher } from './theme-switcher';
 import Breadcrumbs from '@/components/myot/breadcrumbs';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export default function Header({ scrollY }: { scrollY: number }) {
   const pathname = usePathname();
@@ -26,8 +26,14 @@ export default function Header({ scrollY }: { scrollY: number }) {
   }
 
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 w-full z-20 relative">
-      <div className="flex items-center justify-between text-text-primary glass-card p-4 h-[72px] bg-background/50 backdrop-blur-md border-white/10">
+    <header className={cn(
+      "w-full z-20 relative",
+      isCommunityPage ? "py-0 px-4 sm:px-6 lg:px-8" : "py-4 px-4 sm:px-6 lg:px-8 sticky top-0"
+    )}>
+      <div className={cn(
+        "flex items-center justify-between text-text-primary glass-card p-4 h-[72px] border-white/10",
+        isCommunityPage ? "bg-[#0B1116]/80 backdrop-blur-md" : "bg-background/50 backdrop-blur-md"
+      )}>
         {/* Left side: Becomes logo when scrolled to a section with breadcrumbs */}
         <div className="flex-none md:flex-1">
           <Link

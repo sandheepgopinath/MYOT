@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock } from 'lucide-react';
+import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck } from 'lucide-react';
 import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
@@ -173,9 +173,9 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 max-w-7xl">
+            <div className="container mx-auto px-4 pb-8 max-w-7xl pt-0">
                 {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-8">
+                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-0">
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
                             <Avatar className="w-full h-full border-4 border-[#0B1116]">
@@ -330,7 +330,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                     <DialogHeader>
                         <DialogTitle>Edit Profile</DialogTitle>
                         <DialogDescription className="text-slate-400">
-                            Update your public information. Fields are locked by default; click the icon to edit.
+                            Update your public information. Fields are locked by default; click edit to change.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-6 py-4">
@@ -356,7 +356,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditName(e.target.value)} 
                                     disabled={!isEditingName}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
                                         !isEditingName && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="Your Name"
@@ -387,7 +387,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
                                     disabled={!isEditingUsername}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10",
+                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
                                         !isEditingUsername && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="unique_username"
@@ -404,12 +404,12 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </Label>
                             <div className="relative">
                                 <Input 
-                                    value={designer?.email || designer?.phone || 'Not available'} 
+                                    value={designer?.email || designer?.phone || user?.email || user?.phoneNumber || 'Not available'} 
                                     readOnly
                                     className="bg-slate-800/50 border-slate-700 text-slate-500 cursor-not-allowed pl-10"
                                 />
                                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                                    {designer?.email ? <Mail className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
+                                    {(designer?.email || user?.email) ? <Mail className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
                                 </div>
                                 <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
                             </div>
