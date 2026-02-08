@@ -1,16 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Trash2, Eye, RefreshCw, MoreHorizontal } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from '@/lib/utils';
 
 export interface Design {
@@ -48,29 +40,16 @@ export function DesignCard({ design, onDelete, onView, onReupload }: DesignCardP
                         className="object-contain transition-transform duration-1000 ease-out group-hover:scale-110 p-6"
                     />
                     
-                    {/* Discrete Action Menu */}
+                    {/* Direct Delete Action */}
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
-                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/60 text-white hover:bg-black/80 border border-white/10 backdrop-blur-md shadow-2xl">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-[#120D0B]/95 backdrop-blur-xl border-white/10 text-slate-200">
-                                <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-white/40">Management</DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-white/5" />
-                                <DropdownMenuItem onClick={() => onView(design)} className="focus:bg-white/10 cursor-pointer text-sm">
-                                    <Eye className="mr-2 h-4 w-4" /> View Studio
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onReupload(design)} className="focus:bg-white/10 cursor-pointer text-sm">
-                                    <RefreshCw className="mr-2 h-4 w-4" /> Re-upload
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator className="bg-white/5" />
-                                <DropdownMenuItem onClick={() => onDelete(design.id)} className="text-red-400 focus:text-red-300 focus:bg-red-900/20 cursor-pointer text-sm">
-                                    <Trash2 className="mr-2 h-4 w-4" /> Delete Design
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                         <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => onDelete(design.id)}
+                            className="h-8 w-8 rounded-full bg-black/60 text-white hover:bg-red-500/80 border border-white/10 backdrop-blur-md shadow-2xl transition-all"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
                     </div>
                 </div>
             </div>
