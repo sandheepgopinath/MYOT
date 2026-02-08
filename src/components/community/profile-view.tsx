@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -156,7 +157,8 @@ export function ProfileView({ user }: ProfileViewProps) {
         return true;
     });
 
-    const studioMockup = getImageById('jersey_mockup');
+    // Use a reliable path or placeholder
+    const studioMockup = getImageById('jersey_mockup')?.imageUrl || "/studio_mockup.png";
 
     if (isDesignerLoading) {
         return (
@@ -337,10 +339,11 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             <div className="relative w-40 h-40 mb-[-15px] z-10">
                                                 {studioMockup && (
                                                     <Image 
-                                                        src={studioMockup.imageUrl}
+                                                        src={studioMockup}
                                                         alt="Design Studio Mockup"
                                                         fill
                                                         className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
+                                                        priority
                                                     />
                                                 )}
                                             </div>
