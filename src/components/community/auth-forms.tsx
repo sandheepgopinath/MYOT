@@ -402,7 +402,7 @@ export function AuthForms() {
                                             name="password"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Secret Key</FormLabel>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Password</FormLabel>
                                                     <FormControl><Input type="password" placeholder="••••••••" {...field} className="bg-white/5 border-white/10 text-white h-11 rounded-lg" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
