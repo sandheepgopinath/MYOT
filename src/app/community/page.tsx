@@ -65,11 +65,10 @@ export default function CommunityPage() {
                         </div>
                     ) : (
                         <div className="container mx-auto px-4 py-12 flex flex-col items-center">
-                            {/* Legacy Header Section */}
-                            <div className="text-center mb-12 space-y-6 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-display text-white leading-tight tracking-tight">
-                                    Where independent designers <br className="hidden md:block" />
-                                    build their <span className="text-amber-500 italic">legacy.</span>
+                            {/* Refined Heading to match reference image */}
+                            <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-display text-stone-200 leading-tight tracking-tight">
+                                    Where independent designers build their legacy.
                                 </h1>
                             </div>
 
