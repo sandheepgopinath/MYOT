@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -54,24 +53,33 @@ export function ProfileView({ user }: ProfileViewProps) {
     const { data: designs, isLoading: isDesignsLoading } = useCollection(designsRef);
 
     useEffect(() => {
-        if (!isDesignerLoading && designer === null && user) {
-            const initialProfile = {
-                uid: user.uid,
-                name: user.displayName || 'New Designer',
-                username: (user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
-                email: user.email || null,
-                phone: user.phoneNumber || null,
-                profilePhotoUrl: user.photoURL || null,
-                description: "Passionate about creating unique t-shirt designs.",
-                privilege: 'designer',
-                designsUploadedCount: 0,
-                designsApprovedCount: 0,
-                salesCount: 0,
-                totalRevenue: 0,
-                createdAt: serverTimestamp(),
-                lastActiveAt: serverTimestamp()
-            };
-            setDocumentNonBlocking(designerRef, initialProfile, { merge: true });
+        if (!isDesignerLoading && user && designerRef) {
+            if (designer === null) {
+                // Initialize new designer profile
+                const initialProfile = {
+                    uid: user.uid,
+                    name: user.displayName || 'New Designer',
+                    username: (user.displayName || user.email?.split('@')[0] || 'designer').toLowerCase().replace(/\s+/g, '_'),
+                    email: user.email || null,
+                    phone: user.phoneNumber || null,
+                    profilePhotoUrl: user.photoURL || null,
+                    description: "Passionate about creating unique t-shirt designs.",
+                    privilege: 'designer',
+                    designsUploadedCount: 0,
+                    designsApprovedCount: 0,
+                    salesCount: 0,
+                    totalRevenue: 0,
+                    createdAt: serverTimestamp(),
+                    lastActiveAt: serverTimestamp()
+                };
+                setDocumentNonBlocking(designerRef, initialProfile, { merge: true });
+            } else if (designer && !designer.privilege) {
+                // Ensure privilege field exists for existing users
+                updateDocumentNonBlocking(designerRef, {
+                    privilege: 'designer',
+                    lastActiveAt: serverTimestamp()
+                });
+            }
         }
     }, [designer, isDesignerLoading, user, designerRef]);
 

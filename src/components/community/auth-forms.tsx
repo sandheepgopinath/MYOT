@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -38,7 +37,7 @@ import {
     ConfirmationResult,
 } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs, limit, serverTimestamp } from 'firebase/firestore';
-import { Loader2, Chrome, Mail, Phone } from 'lucide-react';
+import { Loader2, Chrome } from 'lucide-react';
 
 const signupSchema = z.object({
     email: z.string().email('Invalid email address'),
@@ -155,6 +154,9 @@ export function AuthForms() {
                 lastActiveAt: serverTimestamp()
             };
             setDocumentNonBlocking(userDocRef, initialProfile, { merge: true });
+        } else {
+            // Ensure privilege is set for existing users signing in through community
+            setDocumentNonBlocking(userDocRef, { privilege: 'designer' }, { merge: true });
         }
     };
 
@@ -215,7 +217,8 @@ export function AuthForms() {
 
     const onSigninSubmit = async (values: z.infer<typeof signinSchema>) => {
         try {
-            await signInWithEmailAndPassword(auth, values.email, values.password);
+            const result = await signInWithEmailAndPassword(auth, values.email, values.password);
+            await handleSyncUserDoc(result.user);
             toast({ title: 'Welcome Back', description: 'Accessing your designer studio...' });
         } catch (error) {
             const authError = error as AuthError;
