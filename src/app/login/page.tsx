@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -75,6 +74,7 @@ export default function LoginPage() {
   const onEmailSubmit = async (values: LoginValues) => {
     setCheckingEmail(true);
     try {
+      const email = values.email.toLowerCase().trim();
       const adminCollectionRef = collection(firestore, 'roles_admin');
       
       // 1. Check if ANY admin exists (Bootstrap case)
@@ -88,7 +88,7 @@ export default function LoginPage() {
       }
 
       // 2. Check if THIS email is registered as an admin
-      const specificAdminQuery = query(adminCollectionRef, where('email', '==', values.email), limit(1));
+      const specificAdminQuery = query(adminCollectionRef, where('email', '==', email), limit(1));
       const specificAdminSnap = await getDocs(specificAdminQuery);
 
       if (!specificAdminSnap.empty) {
@@ -98,12 +98,12 @@ export default function LoginPage() {
           message: 'Access denied. This email does not have administrator privileges.' 
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Privilege check error:", error);
       toast({
         variant: 'destructive',
         title: 'Verification Failed',
-        description: 'Could not verify administrator status. Please try again.',
+        description: error.message || 'Could not verify administrator status. Please try again.',
       });
     } finally {
       setCheckingEmail(false);
@@ -139,7 +139,7 @@ export default function LoginPage() {
           try {
             await setDoc(adminRoleRef, {
               createdAt: serverTimestamp(),
-              email: loggedUser.email,
+              email: loggedUser.email?.toLowerCase(),
             });
             toast({
               title: 'Admin Account Created',
@@ -174,6 +174,14 @@ export default function LoginPage() {
     }
   };
 
+  const handleFinalSubmit = async (values: LoginValues) => {
+    if (step === 'email') {
+      await onEmailSubmit(values);
+    } else {
+      await onLoginSubmit(values);
+    }
+  };
+
   // Show a loader while checking for authentication and admin status
   if (isLoading || (user && isAdmin)) {
     return (
@@ -197,7 +205,7 @@ export default function LoginPage() {
         <CardContent>
           <Form {...form}>
             <form 
-              onSubmit={form.handleSubmit(step === 'email' ? onEmailSubmit : onLoginSubmit)} 
+              onSubmit={form.handleSubmit(handleFinalSubmit)} 
               className="space-y-5"
             >
               <FormField
