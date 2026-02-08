@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -156,7 +157,10 @@ export function AuthForms() {
             setDocumentNonBlocking(userDocRef, initialProfile, { merge: true });
         } else {
             // Ensure privilege is set for existing users signing in through community
-            setDocumentNonBlocking(userDocRef, { privilege: 'designer' }, { merge: true });
+            setDocumentNonBlocking(userDocRef, { 
+                privilege: 'designer',
+                lastActiveAt: serverTimestamp() 
+            }, { merge: true });
         }
     };
 
@@ -275,7 +279,7 @@ export function AuthForms() {
                         </p>
                     </div>
 
-                    <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as AuthTab); setPhoneStep('request'); }} className="w-full">
+                    <Tabs value={activeTab} onOpenChange={(v) => { setActiveTab(v as AuthTab); setPhoneStep('request'); }} className="w-full">
                         <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/5 border border-white/10 p-1 h-11 rounded-lg">
                             <TabsTrigger value="signin" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign In</TabsTrigger>
                             <TabsTrigger value="signup" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign Up</TabsTrigger>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -73,8 +74,8 @@ export function ProfileView({ user }: ProfileViewProps) {
                     lastActiveAt: serverTimestamp()
                 };
                 setDocumentNonBlocking(designerRef, initialProfile, { merge: true });
-            } else if (designer && !designer.privilege) {
-                // Ensure privilege field exists for existing users
+            } else if (designer && designer.privilege !== 'designer') {
+                // Proactively ensure privilege is set for all community sign-ins
                 updateDocumentNonBlocking(designerRef, {
                     privilege: 'designer',
                     lastActiveAt: serverTimestamp()
