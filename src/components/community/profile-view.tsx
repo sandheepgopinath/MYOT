@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck } from 'lucide-react';
+import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck, LogOut } from 'lucide-react';
 import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
@@ -76,7 +76,7 @@ export function ProfileView({ user }: ProfileViewProps) {
         }
     }, [designer, isDesignerLoading, user, designerRef]);
 
-    // Robust Sync: Pre-fill modal fields when data is available and modal is opened
+    // Pre-fill modal fields when data is available
     useEffect(() => {
         if (designer && isEditProfileOpen) {
             if (!isEditingName) setEditName(designer.name || '');
@@ -111,7 +111,6 @@ export function ProfileView({ user }: ProfileViewProps) {
         setIsSavingProfile(true);
 
         try {
-            // Check uniqueness if username changed
             if (editUsername.toLowerCase() !== designer?.username?.toLowerCase()) {
                 const q = query(
                     collection(firestore, 'users'), 
@@ -166,98 +165,106 @@ export function ProfileView({ user }: ProfileViewProps) {
     if (isDesignerLoading) {
         return (
             <div className="flex h-[70vh] items-center justify-center">
-                <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+                <Loader2 className="h-10 w-10 animate-spin text-amber-500" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 max-w-7xl">
-                {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-0">
-                    <div className="relative group">
-                        <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
-                            <Avatar className="w-full h-full border-4 border-[#0B1116]">
+        <div className="min-h-screen text-slate-200">
+            <div className="container mx-auto px-4 pb-12 max-w-6xl">
+                {/* Profile Banner-style Header */}
+                <div className="glass-card p-8 md:p-12 mb-12 flex flex-col md:flex-row gap-10 items-center md:items-start relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
+                    
+                    <div className="relative">
+                        <div className="w-36 h-36 md:w-44 md:h-44 rounded-full p-1 bg-gradient-to-br from-amber-500/40 to-transparent shadow-2xl overflow-hidden relative group">
+                            <Avatar className="w-full h-full border-4 border-black/40">
                                 <AvatarImage src={designer?.profilePhotoUrl || user.photoURL || ''} className="object-cover" />
-                                <AvatarFallback className="text-4xl bg-slate-800 text-slate-400">
+                                <AvatarFallback className="text-4xl bg-zinc-900 text-amber-500/50">
                                     {designer?.name?.charAt(0) || user.displayName?.charAt(0) || 'D'}
                                 </AvatarFallback>
                             </Avatar>
-                        </div>
-                        <div className="absolute bottom-2 right-2 bg-blue-600 p-2 rounded-full shadow-lg cursor-pointer hover:bg-blue-500 transition-colors">
-                            <Camera className="w-5 h-5 text-white" />
+                            <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                <Camera className="w-6 h-6 text-white" />
+                                <input type="file" className="hidden" accept="image/*" />
+                            </label>
                         </div>
                     </div>
 
-                    <div className="flex-1 pt-2">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                            <div>
-                                <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                    <div className="flex-1 text-center md:text-left space-y-6">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                            <div className="space-y-1">
+                                <h1 className="text-4xl md:text-5xl font-display font-light text-white tracking-tight">
                                     {designer?.name || user.displayName || 'Designer'}
                                 </h1>
-                                <p className="text-slate-400 font-medium">@{designer?.username || 'username'}</p>
+                                <p className="text-amber-500/80 font-medium tracking-wide">@{designer?.username || 'username'}</p>
                             </div>
-                            <div className="flex gap-3">
+                            
+                            <div className="flex flex-wrap justify-center md:justify-end gap-3">
                                 <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300"
+                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-6"
                                     onClick={() => setIsEditProfileOpen(true)}
                                 >
                                     <UserPen className="w-4 h-4 mr-2" />
                                     Edit Profile
                                 </Button>
-                                <Button size="icon" variant="outline" className="bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300 w-9 h-9">
+                                <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-9 h-9">
                                     <Share2 className="w-4 h-4" />
                                 </Button>
-                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="bg-transparent hover:bg-slate-800 text-red-400 hover:text-red-300 w-9 h-9">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
+                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-9 h-9">
+                                    <LogOut className="w-4 h-4" />
                                 </Button>
                             </div>
                         </div>
 
-                        <div className="flex gap-12 mb-8">
-                            <div>
-                                <span className="block text-2xl font-bold text-white">{designer?.designsUploadedCount || 0}</span>
-                                <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">Designs</span>
+                        {/* Stats Section */}
+                        <div className="grid grid-cols-3 gap-6 md:gap-12 py-6 border-y border-white/5">
+                            <div className="space-y-1">
+                                <span className="block text-3xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
+                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Uploaded</span>
                             </div>
-                            <div>
-                                <span className="block text-2xl font-bold text-white">{designer?.salesCount || 0}</span>
-                                <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">Sales</span>
+                            <div className="space-y-1">
+                                <span className="block text-3xl font-brand text-white">{designer?.salesCount || 0}</span>
+                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Total Sales</span>
                             </div>
-                            <div>
-                                <span className="block text-2xl font-bold text-white">₹{designer?.totalRevenue || 0}</span>
-                                <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">Earnings</span>
+                            <div className="space-y-1">
+                                <span className="block text-3xl font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
+                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Revenue</span>
                             </div>
                         </div>
 
-                        <div className="max-w-2xl text-slate-400 leading-relaxed text-sm group">
+                        {/* Bio Section */}
+                        <div className="max-w-2xl text-white/60 leading-relaxed text-sm group relative">
                             {isEditingDescription ? (
-                                <div className="space-y-3">
+                                <div className="space-y-3 mt-4">
                                     <Textarea 
                                         value={tempDescription} 
                                         onChange={(e) => setTempDescription(e.target.value)}
-                                        className="bg-slate-900 border-slate-700 text-white min-h-[100px]"
+                                        className="bg-black/40 border-white/10 text-white min-h-[100px] focus:border-amber-500/50"
                                         placeholder="Write about your design style..."
                                     />
                                     <div className="flex gap-2">
-                                        <Button size="sm" onClick={handleUpdateDescription} className="bg-green-600 hover:bg-green-500">
+                                        <Button size="sm" onClick={handleUpdateDescription} className="bg-amber-600 hover:bg-amber-500 text-white">
                                             <Check className="w-4 h-4 mr-1" /> Save
                                         </Button>
-                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)}>
-                                            <X className="w-4 h-4 mr-1" /> Cancel
+                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="text-white/60">
+                                            Cancel
                                         </Button>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-start gap-4">
-                                    <p className="flex-1">{designer?.description || 'No description yet. Click the pencil to add one.'}</p>
+                                    <p className="italic font-tagline text-base leading-relaxed">
+                                        "{designer?.description || 'No description yet. Add a few words about your creative style.'}"
+                                    </p>
                                     <Button 
                                         size="icon" 
                                         variant="ghost" 
                                         onClick={() => setIsEditingDescription(true)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 text-white/40 hover:text-white"
                                     >
                                         <Pencil className="w-4 h-4" />
                                     </Button>
@@ -267,50 +274,63 @@ export function ProfileView({ user }: ProfileViewProps) {
                     </div>
                 </div>
 
-                {/* Tabs & Content */}
+                {/* Designs Navigation & Upload */}
                 <Tabs defaultValue="designs" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="flex items-center justify-center border-b border-slate-800 mb-10">
-                        <TabsList className="bg-transparent h-auto p-0 gap-8">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+                        <TabsList className="bg-white/5 border border-white/10 p-1 h-12 rounded-full px-2">
                             {['designs', 'approved', 'pending'].map((tab) => (
                                 <TabsTrigger
                                     key={tab}
                                     value={tab}
                                     className={cn(
-                                        "bg-transparent border-b-2 border-transparent px-2 py-4 rounded-none text-slate-400 hover:text-white transition-all uppercase text-xs font-bold tracking-widest data-[state=active]:border-blue-500 data-[state=active]:text-blue-500 shadow-none"
+                                        "rounded-full px-8 py-2 text-[10px] uppercase tracking-widest font-bold transition-all",
+                                        "data-[state=active]:bg-amber-500 data-[state=active]:text-black"
                                     )}
                                 >
-                                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                    {tab === 'designs' ? 'All Portfolio' : tab}
                                 </TabsTrigger>
                             ))}
                         </TabsList>
+                        
+                        <Button 
+                            onClick={() => setIsUploadOpen(true)}
+                            className="bg-white/10 hover:bg-amber-500 hover:text-black border border-white/10 text-white rounded-full px-8 h-12 transition-all duration-300 font-bold uppercase text-[10px] tracking-widest"
+                        >
+                            <UploadCloud className="w-4 h-4 mr-2" />
+                            New Design
+                        </Button>
                     </div>
 
-                    <TabsContent value="designs" className="mt-0">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            <div
-                                onClick={() => setIsUploadOpen(true)}
-                                className="aspect-square rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:border-blue-500/50 transition-all cursor-pointer flex flex-col items-center justify-center group"
-                            >
-                                <div className="w-16 h-16 rounded-full bg-slate-800 group-hover:bg-blue-600/20 flex items-center justify-center mb-4 transition-colors">
-                                    <UploadCloud className="w-8 h-8 text-slate-400 group-hover:text-blue-500" />
+                    <TabsContent value={activeTab} className="mt-0 outline-none">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {/* Empty State / Prompt */}
+                            {filteredDesigns.length === 0 && !isDesignsLoading && (
+                                <div
+                                    onClick={() => setIsUploadOpen(true)}
+                                    className="aspect-square rounded-3xl border-2 border-dashed border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-amber-500/30 transition-all cursor-pointer flex flex-col items-center justify-center group"
+                                >
+                                    <div className="w-20 h-20 rounded-full bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center mb-6 transition-all">
+                                        <UploadCloud className="w-10 h-10 text-white/20 group-hover:text-amber-500" />
+                                    </div>
+                                    <h3 className="font-display text-xl text-white/40 group-hover:text-white mb-2">Build Your Studio</h3>
+                                    <p className="text-[10px] uppercase tracking-widest text-white/20">Click to upload your first design</p>
                                 </div>
-                                <h3 className="font-semibold text-white mb-1">Upload Design</h3>
-                                <p className="text-xs text-slate-500 text-center px-6">Drag and drop high-res PNG or PSD mockups</p>
-                            </div>
+                            )}
 
                             {isDesignsLoading ? (
-                                Array.from({ length: 3 }).map((_, i) => (
-                                    <div key={i} className="aspect-square rounded-2xl bg-slate-800/50 animate-pulse" />
+                                Array.from({ length: 4 }).map((_, i) => (
+                                    <div key={i} className="aspect-square rounded-3xl bg-white/[0.02] animate-pulse" />
                                 ))
                             ) : (
                                 filteredDesigns.map((design) => (
-                                    <DesignCard
-                                        key={design.id}
-                                        design={design as any}
-                                        onDelete={() => {}} 
-                                        onView={() => {}}
-                                        onReupload={() => {}}
-                                    />
+                                    <div key={design.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                        <DesignCard
+                                            design={design as any}
+                                            onDelete={() => {}} 
+                                            onView={() => {}}
+                                            onReupload={() => {}}
+                                        />
+                                    </div>
                                 ))
                             )}
                         </div>
@@ -326,26 +346,13 @@ export function ProfileView({ user }: ProfileViewProps) {
 
             {/* Edit Profile Modal */}
             <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-                <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-700 text-white">
+                <DialogContent className="sm:max-w-[425px] bg-[#0F1419]/95 backdrop-blur-2xl border-white/10 text-white rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle>Edit Profile</DialogTitle>
+                        <DialogTitle className="font-display text-2xl font-light">Designer Identity</DialogTitle>
                     </DialogHeader>
-                    <div className="grid gap-6 py-4">
-                        {/* Name Field */}
+                    <div className="grid gap-6 py-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="name" className="text-sm font-medium leading-none text-white flex items-center justify-between">
-                                <span className="flex items-center gap-2"><UserPen className="w-3 h-3" /> Full Name</span>
-                                {!isEditingName && (
-                                    <Button 
-                                        variant="ghost" 
-                                        size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent !hover:text-blue-400 !hover:bg-transparent flex items-center gap-1 transition-none"
-                                        onClick={() => setIsEditingName(true)}
-                                    >
-                                        <Pencil className="w-3 h-3" /> Edit
-                                    </Button>
-                                )}
-                            </Label>
+                            <Label htmlFor="name" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Full Name</Label>
                             <div className="relative">
                                 <Input 
                                     id="name" 
@@ -353,30 +360,25 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditName(e.target.value)} 
                                     disabled={!isEditingName}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
-                                        !isEditingName && "opacity-60 cursor-not-allowed select-none"
+                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50",
+                                        !isEditingName && "opacity-60 cursor-not-allowed"
                                     )}
-                                    placeholder="Your Name"
                                 />
-                                {!isEditingName && <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />}
-                            </div>
-                        </div>
-
-                        {/* Username Field */}
-                        <div className="grid gap-2">
-                            <Label htmlFor="username" className="text-sm font-medium leading-none text-white flex items-center justify-between">
-                                <span className="flex items-center gap-2">@ Username</span>
-                                {!isEditingUsername && (
+                                {!isEditingName && (
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent !hover:text-blue-400 !hover:bg-transparent flex items-center gap-1 transition-none"
-                                        onClick={() => setIsEditingUsername(true)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500 h-8 hover:bg-transparent"
+                                        onClick={() => setIsEditingName(true)}
                                     >
-                                        <Pencil className="w-3 h-3" /> Edit
+                                        Edit
                                     </Button>
                                 )}
-                            </Label>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="username" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Handle</Label>
                             <div className="relative">
                                 <Input 
                                     id="username" 
@@ -384,43 +386,39 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
                                     disabled={!isEditingUsername}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
-                                        !isEditingUsername && "opacity-60 cursor-not-allowed select-none"
+                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50",
+                                        !isEditingUsername && "opacity-60 cursor-not-allowed"
                                     )}
-                                    placeholder="unique_username"
                                 />
-                                {!isEditingUsername && <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />}
+                                {!isEditingUsername && (
+                                    <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500 h-8 hover:bg-transparent"
+                                        onClick={() => setIsEditingUsername(true)}
+                                    >
+                                        Edit
+                                    </Button>
+                                )}
                             </div>
-                            <p className="text-[10px] text-slate-500">Only letters, numbers, and underscores.</p>
                         </div>
 
-                        {/* Read-Only Contact Info */}
-                        <div className="grid gap-2">
-                            <Label className="text-sm font-medium leading-none text-white flex items-center gap-2">
-                                <ShieldCheck className="w-3 h-3" /> Registered Contact
-                            </Label>
-                            <div className="relative">
-                                <Input 
-                                    value={designer?.email || designer?.phone || user?.email || user?.phoneNumber || 'Not available'} 
-                                    readOnly
-                                    className="bg-slate-800/50 border-slate-700 text-slate-500 cursor-not-allowed pl-10"
-                                />
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                                    {(designer?.email || user?.email) ? <Mail className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
-                                </div>
-                                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                        <div className="pt-4 border-t border-white/5 space-y-4">
+                            <Label className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/20 block">Protected Information</Label>
+                            <div className="flex items-center justify-between text-xs text-white/40">
+                                <span className="flex items-center gap-2"><Mail className="w-3 h-3" /> Email</span>
+                                <span>{designer?.email || user?.email || '—'}</span>
                             </div>
-                            <p className="text-[10px] text-slate-600">This cannot be changed manually.</p>
                         </div>
                     </div>
-                    <DialogFooter className="mt-4">
+                    <DialogFooter>
                         <Button 
                             type="submit" 
                             onClick={handleSaveProfile} 
                             disabled={isSavingProfile || (!isEditingName && !isEditingUsername)}
-                            className="bg-blue-600 hover:bg-blue-500 w-full sm:w-auto"
+                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold w-full h-12 rounded-lg"
                         >
-                            {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Changes'}
+                            {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Profile Update'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
