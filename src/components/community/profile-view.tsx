@@ -172,7 +172,7 @@ export function ProfileView({ user }: ProfileViewProps) {
             <div className="container mx-auto px-4 pb-8 max-w-5xl">
                 {/* Profile Header */}
                 <div className="glass-card p-4 md:p-6 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                     
                     <div className="relative">
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
@@ -279,27 +279,52 @@ export function ProfileView({ user }: ProfileViewProps) {
                         <TabsList className="bg-transparent border-0 p-0 h-auto gap-8">
                             {[
                                 { id: 'studio', label: 'Studio' },
-                                { id: 'live', label: 'Live Designs' },
                                 { id: 'review', label: 'In Review' },
-                                { id: 'earnings', label: 'Earnings' }
+                                { id: 'live', label: 'Live Designs' },
+                                { id: 'earnings', label: 'Earnings', comingSoon: true }
                             ].map((tab) => (
                                 <TabsTrigger
                                     key={tab.id}
                                     value={tab.id}
                                     className={cn(
-                                        "relative bg-transparent p-0 pb-2 text-[13px] font-medium transition-all rounded-none",
+                                        "relative bg-transparent p-0 pb-2 text-[13px] font-medium transition-all rounded-none flex items-center gap-2",
                                         "text-white/40 data-[state=active]:text-white",
                                         "data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-0.5 data-[state=active]:after:bg-amber-500 data-[state=active]:after:shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                                     )}
                                 >
                                     {tab.label}
+                                    {tab.comingSoon && (
+                                        <span className="text-[7px] bg-amber-500/20 text-amber-500 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-tighter animate-pulse border border-amber-500/20">
+                                            Soon
+                                        </span>
+                                    )}
                                 </TabsTrigger>
                             ))}
                         </TabsList>
                     </div>
 
                     <TabsContent value={activeTab} className="mt-0 outline-none">
-                        {isDesignsLoading ? (
+                        {activeTab === 'earnings' ? (
+                            <div className="flex flex-col items-center justify-center py-20 glass-card border-white/10 bg-black/40 rounded-2xl relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+                                <div className="relative z-10 flex flex-col items-center text-center px-6">
+                                    <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 animate-pulse shadow-[0_0_30px_rgba(245,158,11,0.2)] border border-amber-500/20">
+                                        <Sparkles className="w-8 h-8 text-amber-500" />
+                                    </div>
+                                    <h3 className="text-2xl font-display font-light text-white mb-3 tracking-tight">Earnings Portal</h3>
+                                    <p className="text-white/50 text-sm max-w-sm leading-relaxed mb-8">
+                                        A dedicated space to track your creative revenue, view transaction history, and manage your payouts.
+                                    </p>
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-px w-8 bg-gradient-to-r from-transparent to-amber-500/30" />
+                                        <div className="px-6 py-2 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-[0.3em] animate-bounce shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                            Coming Soon
+                                        </div>
+                                        <div className="h-px w-8 bg-gradient-to-l from-transparent to-amber-500/30" />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : isDesignsLoading ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {Array.from({ length: 4 }).map((_, i) => (
                                     <div key={i} className="aspect-square rounded-2xl bg-white/[0.02] animate-pulse" />
@@ -307,9 +332,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         ) : sortedDesigns.length === 0 ? (
                             <div className="flex flex-col items-center justify-center animate-in fade-in duration-700">
-                                {/* Cinematic Empty State Card */}
                                 <div className="w-full max-w-2xl bg-[#0F1419]/40 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden group">
-                                    {/* Lighting Effects */}
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-amber-500/30 blur-sm" />
                                     
                                     <div className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 text-white">
@@ -331,10 +354,8 @@ export function ProfileView({ user }: ProfileViewProps) {
                                         </div>
                                         
                                         <div className="relative flex flex-col items-center">
-                                            {/* Glow effect */}
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-amber-500/10 blur-[60px] rounded-full animate-pulse" />
                                             
-                                            {/* Floating T-Shirt Pedestal Look */}
                                             <div className="relative w-40 h-40 mb-[-15px] z-10">
                                                 <Image 
                                                     src={studioMockup}
@@ -345,18 +366,10 @@ export function ProfileView({ user }: ProfileViewProps) {
                                                 />
                                             </div>
                                             
-                                            {/* Pedestal Base */}
                                             <div className="w-28 h-4 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 rounded-[100%] border-t border-white/20 shadow-2xl relative z-0" />
                                             <div className="w-20 h-2 bg-black/60 blur-md rounded-full mt-1 opacity-80" />
                                         </div>
                                     </div>
-                                </div>
-                                
-                                {/* Encouraging Footer Text */}
-                                <div className="mt-12 text-center space-y-2 max-w-lg">
-                                    <p className="text-white/60 text-sm">
-                                        <span className="text-white font-medium">Your studio</span> is set up and ready. Upload your first design to start selling worldwide.
-                                    </p>
                                 </div>
                             </div>
                         ) : (
