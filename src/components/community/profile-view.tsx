@@ -342,7 +342,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent flex items-center gap-1"
                                         onClick={() => setIsEditingName(true)}
                                     >
                                         <Pencil className="w-3 h-3" /> Edit
@@ -373,7 +373,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                                        className="h-6 px-2 text-[10px] text-blue-400 hover:text-blue-400 hover:bg-transparent flex items-center gap-1"
                                         onClick={() => setIsEditingUsername(true)}
                                     >
                                         <Pencil className="w-3 h-3" /> Edit
