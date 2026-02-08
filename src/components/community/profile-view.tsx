@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck, LogOut } from 'lucide-react';
+import { Camera, Share2, Loader2, UploadCloud, Check, X, Pencil, UserPen, Mail, Phone, Lock, ShieldCheck, LogOut, Shirt, Sparkles } from 'lucide-react';
 import { useAuth, useFirestore, useDoc, useCollection, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
@@ -35,7 +35,7 @@ export function ProfileView({ user }: ProfileViewProps) {
     
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('designs');
+    const [activeTab, setActiveTab] = useState('studio');
     const [isEditingDescription, setIsEditingDescription] = useState(false);
     const [tempDescription, setTempDescription] = useState('');
     
@@ -84,14 +84,6 @@ export function ProfileView({ user }: ProfileViewProps) {
             setTempDescription(designer.description || '');
         }
     }, [designer, isEditProfileOpen, isEditingName, isEditingUsername]);
-
-    // Reset editing states when modal closes
-    useEffect(() => {
-        if (!isEditProfileOpen) {
-            setIsEditingName(false);
-            setIsEditingUsername(false);
-        }
-    }, [isEditProfileOpen]);
 
     const handleUpdateDescription = () => {
         updateDocumentNonBlocking(designerRef, {
@@ -156,9 +148,9 @@ export function ProfileView({ user }: ProfileViewProps) {
     }) : [];
 
     const filteredDesigns = sortedDesigns.filter(d => {
-        if (activeTab === 'designs') return true;
-        if (activeTab === 'approved') return d.status === 'approved';
-        if (activeTab === 'pending') return d.status === 'pending';
+        if (activeTab === 'studio') return true;
+        if (activeTab === 'live') return d.status === 'approved';
+        if (activeTab === 'review') return d.status === 'pending';
         return true;
     });
 
@@ -173,7 +165,7 @@ export function ProfileView({ user }: ProfileViewProps) {
     return (
         <div className="min-h-screen text-slate-200">
             <div className="container mx-auto px-4 pb-8 max-w-5xl">
-                {/* Profile Banner-style Header - Compacted */}
+                {/* Profile Header */}
                 <div className="glass-card p-6 md:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] pointer-events-none" />
                     
@@ -220,7 +212,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         </div>
 
-                        {/* Stats Section - More Compact & Four Columns */}
                         <div className="grid grid-cols-4 gap-2 md:gap-4 py-4 border-y border-white/5">
                             <div className="space-y-0.5">
                                 <span className="block text-xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
@@ -240,7 +231,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         </div>
 
-                        {/* Bio Section - Refined */}
                         <div className="max-w-2xl text-white/60 leading-relaxed text-xs group relative">
                             {isEditingDescription ? (
                                 <div className="space-y-2 mt-2">
@@ -278,55 +268,89 @@ export function ProfileView({ user }: ProfileViewProps) {
                     </div>
                 </div>
 
-                {/* Designs Navigation & Upload */}
-                <Tabs defaultValue="designs" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-                        <TabsList className="bg-white/5 border border-white/10 p-0.5 h-10 rounded-full px-1.5">
-                            {['designs', 'approved', 'pending'].map((tab) => (
+                {/* Designs Navigation */}
+                <Tabs defaultValue="studio" value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-12">
+                        <TabsList className="bg-transparent border-0 p-0 h-auto gap-8">
+                            {[
+                                { id: 'studio', label: 'Studio' },
+                                { id: 'live', label: 'Live Designs' },
+                                { id: 'review', label: 'In Review' },
+                                { id: 'earnings', label: 'Earnings' }
+                            ].map((tab) => (
                                 <TabsTrigger
-                                    key={tab}
-                                    value={tab}
+                                    key={tab.id}
+                                    value={tab.id}
                                     className={cn(
-                                        "rounded-full px-6 py-1.5 text-[9px] uppercase tracking-widest font-bold transition-all",
-                                        "data-[state=active]:bg-amber-500 data-[state=active]:text-black"
+                                        "relative bg-transparent p-0 pb-2 text-sm font-medium transition-all rounded-none",
+                                        "text-white/40 data-[state=active]:text-white",
+                                        "data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-0.5 data-[state=active]:after:bg-amber-500 data-[state=active]:after:shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                                     )}
                                 >
-                                    {tab === 'designs' ? 'All Portfolio' : tab}
+                                    {tab.label}
                                 </TabsTrigger>
                             ))}
                         </TabsList>
-                        
-                        <Button 
-                            onClick={() => setIsUploadOpen(true)}
-                            className="bg-white/10 hover:bg-amber-500 hover:text-black border border-white/10 text-white rounded-full px-6 h-10 transition-all duration-300 font-bold uppercase text-[9px] tracking-widest"
-                        >
-                            <UploadCloud className="w-3.5 h-3.5 mr-2" />
-                            New Design
-                        </Button>
                     </div>
 
                     <TabsContent value={activeTab} className="mt-0 outline-none">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {/* Empty State / Prompt */}
-                            {filteredDesigns.length === 0 && !isDesignsLoading && (
-                                <div
-                                    onClick={() => setIsUploadOpen(true)}
-                                    className="aspect-square rounded-2xl border-2 border-dashed border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-amber-500/30 transition-all cursor-pointer flex flex-col items-center justify-center group"
-                                >
-                                    <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center mb-4 transition-all">
-                                        <UploadCloud className="w-8 h-8 text-white/20 group-hover:text-amber-500" />
-                                    </div>
-                                    <h3 className="font-display text-lg text-white/40 group-hover:text-white mb-1">Build Your Studio</h3>
-                                    <p className="text-[9px] uppercase tracking-widest text-white/20">Click to upload your first design</p>
-                                </div>
-                            )}
-
-                            {isDesignsLoading ? (
-                                Array.from({ length: 4 }).map((_, i) => (
+                        {isDesignsLoading ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {Array.from({ length: 4 }).map((_, i) => (
                                     <div key={i} className="aspect-square rounded-2xl bg-white/[0.02] animate-pulse" />
-                                ))
-                            ) : (
-                                filteredDesigns.map((design) => (
+                                ))}
+                            </div>
+                        ) : sortedDesigns.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center animate-in fade-in duration-700">
+                                {/* Cinematic Empty State Card */}
+                                <div className="w-full max-w-2xl bg-stone-200 rounded-2xl shadow-2xl relative overflow-hidden group">
+                                    {/* Lighting Effects */}
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-amber-500/30 blur-sm" />
+                                    
+                                    <div className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 text-zinc-900">
+                                        <div className="flex-1 space-y-6 text-center md:text-left">
+                                            <div className="space-y-2">
+                                                <h2 className="text-3xl font-display font-light tracking-tight">Upload Your First Design</h2>
+                                                <p className="text-sm text-zinc-500 font-medium">PNG or PSD • 300 DPI • Transparent background</p>
+                                            </div>
+                                            
+                                            <p className="text-zinc-600 text-sm leading-relaxed max-w-xs">
+                                                We'll automatically create mockups and handle printing.
+                                            </p>
+                                            
+                                            <Button 
+                                                onClick={() => setIsUploadOpen(true)}
+                                                className="bg-zinc-900 hover:bg-zinc-800 text-white px-10 h-12 rounded-lg font-bold transition-all shadow-xl"
+                                            >
+                                                Upload Design
+                                            </Button>
+                                        </div>
+                                        
+                                        <div className="relative">
+                                            <div className="absolute inset-0 bg-amber-500/20 blur-[40px] rounded-full scale-125 animate-pulse" />
+                                            <div className="relative z-10 p-6 rounded-full bg-stone-100 shadow-inner">
+                                                <div className="relative">
+                                                   <Shirt className="w-24 h-24 text-zinc-300 stroke-[1.5]" />
+                                                   <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-amber-500/60" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Encouraging Footer Text */}
+                                <div className="mt-12 text-center space-y-2 max-w-lg">
+                                    <p className="text-white/60 text-sm">
+                                        <span className="text-white font-medium">Your studio</span> is set up and ready. Upload your first design to start selling worldwide.
+                                    </p>
+                                    <p className="text-white/40 text-xs italic">
+                                        We'll review it, print it, ship it — and <span className="text-white font-bold not-italic">you earn on every sale.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {filteredDesigns.map((design) => (
                                     <div key={design.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                                         <DesignCard
                                             design={design as any}
@@ -335,9 +359,9 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             onReupload={() => {}}
                                         />
                                     </div>
-                                ))
-                            )}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </TabsContent>
                 </Tabs>
             </div>
@@ -348,7 +372,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                 userId={user.uid}
             />
 
-            {/* Edit Profile Modal - Redesigned & Themed */}
+            {/* Edit Profile Modal */}
             <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
                 <DialogContent className="sm:max-w-[400px] bg-[#0F1419]/90 backdrop-blur-3xl border border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden group p-0">
                     <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
