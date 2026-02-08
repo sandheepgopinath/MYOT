@@ -346,29 +346,32 @@ export function ProfileView({ user }: ProfileViewProps) {
 
             {/* Edit Profile Modal */}
             <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-                <DialogContent className="sm:max-w-[425px] bg-[#0F1419]/95 backdrop-blur-2xl border-white/10 text-white rounded-2xl">
-                    <DialogHeader>
-                        <DialogTitle className="font-display text-2xl font-light">Designer Identity</DialogTitle>
+                <DialogContent className="sm:max-w-[425px] bg-[#0F1419]/90 backdrop-blur-3xl border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+                    
+                    <DialogHeader className="relative z-10 pb-4 border-b border-white/5">
+                        <DialogTitle className="font-display text-3xl font-light tracking-tight">Edit Profile</DialogTitle>
                     </DialogHeader>
-                    <div className="grid gap-6 py-6">
-                        <div className="grid gap-2">
+
+                    <div className="relative z-10 grid gap-8 py-8">
+                        <div className="grid gap-3">
                             <Label htmlFor="name" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Full Name</Label>
-                            <div className="relative">
+                            <div className="relative flex items-center">
                                 <Input 
                                     id="name" 
                                     value={editName} 
                                     onChange={(e) => setEditName(e.target.value)} 
                                     disabled={!isEditingName}
                                     className={cn(
-                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50",
-                                        !isEditingName && "opacity-60 cursor-not-allowed"
+                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50 rounded-lg pr-12 transition-all",
+                                        !isEditingName && "opacity-50 cursor-not-allowed border-transparent"
                                     )}
                                 />
                                 {!isEditingName && (
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500 h-8 hover:bg-transparent"
+                                        className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors"
                                         onClick={() => setIsEditingName(true)}
                                     >
                                         Edit
@@ -377,24 +380,25 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="username" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Handle</Label>
-                            <div className="relative">
+                        <div className="grid gap-3">
+                            <Label htmlFor="username" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Designer Handle</Label>
+                            <div className="relative flex items-center">
+                                <span className="absolute left-4 text-white/20 font-medium">@</span>
                                 <Input 
                                     id="username" 
                                     value={editUsername} 
                                     onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
                                     disabled={!isEditingUsername}
                                     className={cn(
-                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50",
-                                        !isEditingUsername && "opacity-60 cursor-not-allowed"
+                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50 rounded-lg pl-9 pr-12 transition-all",
+                                        !isEditingUsername && "opacity-50 cursor-not-allowed border-transparent"
                                     )}
                                 />
                                 {!isEditingUsername && (
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500 h-8 hover:bg-transparent"
+                                        className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors"
                                         onClick={() => setIsEditingUsername(true)}
                                     >
                                         Edit
@@ -403,20 +407,21 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         </div>
 
-                        <div className="pt-4 border-t border-white/5 space-y-4">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/20 block">Protected Information</Label>
-                            <div className="flex items-center justify-between text-xs text-white/40">
-                                <span className="flex items-center gap-2"><Mail className="w-3 h-3" /> Email</span>
-                                <span>{designer?.email || user?.email || '—'}</span>
+                        <div className="pt-6 border-t border-white/5 space-y-4">
+                            <Label className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/20 block">Studio Access Info</Label>
+                            <div className="flex items-center justify-between text-[11px] text-white/40 bg-white/[0.02] p-3 rounded-lg border border-white/5">
+                                <span className="flex items-center gap-2 font-medium tracking-wide"><Mail className="w-3 h-3 text-amber-500/40" /> EMAIL</span>
+                                <span className="font-mono text-white/30">{designer?.email || user?.email || '—'}</span>
                             </div>
                         </div>
                     </div>
-                    <DialogFooter>
+
+                    <DialogFooter className="relative z-10 sm:justify-center">
                         <Button 
                             type="submit" 
                             onClick={handleSaveProfile} 
                             disabled={isSavingProfile || (!isEditingName && !isEditingUsername)}
-                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold w-full h-12 rounded-lg"
+                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold w-full h-12 rounded-lg transition-all duration-300 shadow-lg shadow-black/40 disabled:bg-white/5 disabled:text-white/20"
                         >
                             {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Profile Update'}
                         </Button>
