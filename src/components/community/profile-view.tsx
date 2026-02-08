@@ -314,7 +314,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             </div>
                                             
                                             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
-                                                We'll automatically create mockups and handle printing.
+                                                We'll review it, print it, ship it — and you earn on every sale.
                                             </p>
                                             
                                             <Button 
