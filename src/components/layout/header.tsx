@@ -28,7 +28,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
   return (
     <header className={cn(
       "w-full z-20 relative",
-      isCommunityPage ? "py-0 px-4 sm:px-6 lg:px-8" : "py-4 px-4 sm:px-6 lg:px-8 sticky top-0"
+      isCommunityPage ? "py-4 px-4 sm:px-6 lg:px-8" : "py-4 px-4 sm:px-6 lg:px-8 sticky top-0"
     )}>
       <div className={cn(
         "flex items-center justify-between text-text-primary glass-card p-4 h-[72px] border-white/10",
