@@ -464,7 +464,7 @@ export function AuthForms() {
                     </Tabs>
 
                     {/* Method Toggle / Mobile Switcher */}
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center pt-2">
                         <Separator className="bg-white/10" />
                         <div className="absolute flex justify-center w-full">
                             <button 
@@ -473,7 +473,7 @@ export function AuthForms() {
                                     setMethod(method === 'email' ? 'phone' : 'email');
                                     setPhoneStep('request');
                                 }}
-                                className="bg-[#0F1419]/80 backdrop-blur-md px-4 text-[10px] uppercase tracking-[0.2em] text-white/40 hover:text-amber-500 transition-colors font-bold whitespace-nowrap"
+                                className="bg-[#0F1419]/80 backdrop-blur-md px-6 py-2 text-[10px] uppercase tracking-[0.2em] text-amber-500/80 hover:text-amber-500 border border-amber-500/30 hover:border-amber-500/60 transition-all font-bold whitespace-nowrap rounded-full shadow-[0_0_15px_-5px_rgba(245,158,11,0.4)]"
                             >
                                 {method === 'email' ? 'Use mobile instead' : 'Use email instead'}
                             </button>
@@ -481,15 +481,17 @@ export function AuthForms() {
                     </div>
 
                     {/* Social Auth */}
-                    <Button 
-                        variant="outline" 
-                        type="button" 
-                        className="w-full h-12 bg-white/5 hover:bg-white/10 border-white/10 text-white font-medium flex items-center justify-center gap-3 transition-all rounded-lg shadow-lg"
-                        onClick={handleGoogleSignIn}
-                    >
-                        <Chrome className="w-5 h-5 text-white/80" />
-                        Google Account
-                    </Button>
+                    <div className="pt-4">
+                        <Button 
+                            variant="outline" 
+                            type="button" 
+                            className="w-full h-12 bg-white/5 hover:bg-white/10 border-white/10 text-white font-medium flex items-center justify-center gap-3 transition-all rounded-lg shadow-lg"
+                            onClick={handleGoogleSignIn}
+                        >
+                            <Chrome className="w-5 h-5 text-white/80" />
+                            Google Account
+                        </Button>
+                    </div>
 
                     {/* Footer Attribution Section */}
                     <div className="text-center mt-10 space-y-4">
