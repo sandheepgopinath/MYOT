@@ -39,6 +39,12 @@ export function DesignCard({ design, onDelete, onView, onReupload }: DesignCardP
         rejected: 'bg-red-500',
     };
 
+    const statusLabel = {
+        pending: 'In Review',
+        approved: 'Approved',
+        rejected: 'Rejected',
+    };
+
     return (
         <div className="group relative bg-[#1C252E] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
             {/* Image Area */}
@@ -53,7 +59,7 @@ export function DesignCard({ design, onDelete, onView, onReupload }: DesignCardP
                 {/* Floating Badge */}
                 <div className="absolute top-3 left-3">
                     <Badge className={`${statusColor[design.status]} text-white border-0 px-3 uppercase text-[10px] tracking-wider font-bold shadow-md`}>
-                        {design.status}
+                        {statusLabel[design.status]}
                     </Badge>
                 </div>
             </div>

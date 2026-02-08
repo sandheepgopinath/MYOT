@@ -18,7 +18,6 @@ import { UploadModal } from './upload-modal';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { getImageById } from '@/lib/placeholder-images';
 import {
     Dialog,
     DialogContent,
@@ -157,8 +156,6 @@ export function ProfileView({ user }: ProfileViewProps) {
         return true;
     });
 
-    const studioMockup = "/sell.png";
-
     if (isDesignerLoading) {
         return (
             <div className="flex h-[70vh] items-center justify-center">
@@ -170,7 +167,7 @@ export function ProfileView({ user }: ProfileViewProps) {
     return (
         <div className="min-h-screen text-slate-200">
             <div className="container mx-auto px-4 pb-8 max-w-5xl">
-                {/* Profile Header */}
+                {/* Profile Header - Compact */}
                 <div className="glass-card p-4 md:p-6 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                     
@@ -358,7 +355,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             
                                             <div className="relative w-40 h-40 mb-[-15px] z-10">
                                                 <Image 
-                                                    src={studioMockup}
+                                                    src="/sell.png"
                                                     alt="Design Studio Mockup"
                                                     fill
                                                     className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
