@@ -40,19 +40,16 @@ export default function CommunityPage() {
 
     return (
         <div className="min-h-screen bg-[#0B1116] flex flex-col relative overflow-hidden">
-            {/* Cinematic Background Layer */}
+            {/* Cinematic Background Layer - Effects removed as requested */}
             {!currentUser && (
                 <div className="absolute inset-0 z-0">
                     <Image 
                         src="/admin-background.png" 
                         alt="Studio Background" 
                         fill 
-                        className="object-cover opacity-80"
+                        className="object-cover"
                         priority
                     />
-                    {/* Atmospheric Overlays */}
-                    <div className="absolute inset-0 bg-[#0B1116]/40" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B1116]/20 to-[#0B1116]" />
                 </div>
             )}
 
