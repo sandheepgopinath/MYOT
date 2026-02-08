@@ -220,11 +220,15 @@ export function ProfileView({ user }: ProfileViewProps) {
                             </div>
                         </div>
 
-                        {/* Stats Section - More Compact */}
-                        <div className="grid grid-cols-3 gap-4 md:gap-8 py-4 border-y border-white/5">
+                        {/* Stats Section - More Compact & Four Columns */}
+                        <div className="grid grid-cols-4 gap-2 md:gap-4 py-4 border-y border-white/5">
                             <div className="space-y-0.5">
                                 <span className="block text-xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
                                 <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Uploaded</span>
+                            </div>
+                            <div className="space-y-0.5">
+                                <span className="block text-xl font-brand text-white">{designer?.designsApprovedCount || 0}</span>
+                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Approved</span>
                             </div>
                             <div className="space-y-0.5">
                                 <span className="block text-xl font-brand text-white">{designer?.salesCount || 0}</span>
