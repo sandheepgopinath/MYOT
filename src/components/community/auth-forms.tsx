@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -18,7 +17,6 @@ import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -39,7 +37,7 @@ import {
     ConfirmationResult,
 } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs, limit, serverTimestamp } from 'firebase/firestore';
-import { Loader2, Phone, Mail, Chrome, ShieldCheck } from 'lucide-react';
+import { Loader2, Chrome, Mail, Phone } from 'lucide-react';
 
 const signupSchema = z.object({
     email: z.string().email('Invalid email address'),
@@ -176,10 +174,10 @@ export function AuthForms() {
                 bio: values.bio 
             });
             
-            toast({ title: 'Account Created', description: 'Welcome to the community!' });
+            toast({ title: 'Legacy Created', description: 'Welcome to the designer community.' });
         } catch (error) {
             const authError = error as AuthError;
-            toast({ variant: 'destructive', title: 'Sign Up Failed', description: authError.message });
+            toast({ variant: 'destructive', title: 'Registration Failed', description: authError.message });
         }
     };
 
@@ -203,7 +201,7 @@ export function AuthForms() {
                 bio: values.bio
             });
             setPhoneStep('verify');
-            toast({ title: 'Verification Sent', description: `Check your phone for a 6-digit code.` });
+            toast({ title: 'Verification Sent', description: `Check your device for the legacy access code.` });
         } catch (error: any) {
             toast({ variant: 'destructive', title: 'Failed to send code', description: error.message });
         }
@@ -212,7 +210,7 @@ export function AuthForms() {
     const onSigninSubmit = async (values: z.infer<typeof signinSchema>) => {
         try {
             await signInWithEmailAndPassword(auth, values.email, values.password);
-            toast({ title: 'Welcome Back', description: 'Successfully signed in.' });
+            toast({ title: 'Welcome Back', description: 'Accessing your designer studio...' });
         } catch (error) {
             const authError = error as AuthError;
             toast({ variant: 'destructive', title: 'Login Failed', description: authError.message });
@@ -227,7 +225,7 @@ export function AuthForms() {
             const result = await signInWithPhoneNumber(auth, fullNumber, verifier);
             setConfirmationResult(result);
             setPhoneStep('verify');
-            toast({ title: 'OTP Sent', description: `Please enter the OTP sent to ${fullNumber}` });
+            toast({ title: 'OTP Sent', description: `Verification code sent to ${fullNumber}` });
         } catch (error: any) {
             toast({ variant: 'destructive', title: 'Failed to send OTP', description: error.message });
         }
@@ -238,7 +236,7 @@ export function AuthForms() {
             if (!confirmationResult) return;
             const result = await confirmationResult.confirm(values.code);
             await handleSyncUserDoc(result.user, pendingProfile);
-            toast({ title: 'Success', description: 'Verified and signed in!' });
+            toast({ title: 'Verified', description: 'Studio access granted.' });
         } catch (error: any) {
             toast({ variant: 'destructive', title: 'Verification Failed', description: 'Invalid code provided.' });
         }
@@ -257,58 +255,37 @@ export function AuthForms() {
 
     return (
         <div className="w-full max-w-md mx-auto">
-            <Card className="glass-card border-white/10 shadow-2xl bg-black/40 backdrop-blur-xl">
-                <CardHeader>
-                    <CardTitle className="text-2xl text-center text-white font-bold">Designer Community</CardTitle>
-                    <CardDescription className="text-center text-white/60">
-                        {activeTab === 'signup' ? 'Create your profile to start selling' : 'Sign in to manage your designs'}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <Tabs
-                        value={activeTab}
-                        onValueChange={(v) => {
-                            setActiveTab(v as AuthTab);
-                            setPhoneStep('request');
-                        }}
-                        className="w-full"
-                    >
-                        <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/5 border border-white/10 p-1">
-                            <TabsTrigger value="signin">Sign In</TabsTrigger>
-                            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <Card className="bg-[#0F1419]/60 backdrop-blur-3xl border border-amber-500/20 shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)] rounded-2xl overflow-hidden relative group">
+                {/* Inner Glow Decorative Layer */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+                
+                <div className="p-8 md:p-10 relative z-10 space-y-8">
+                    <div className="text-center space-y-2">
+                        <h2 className="text-2xl md:text-3xl font-display text-white tracking-wide">Designer Community</h2>
+                        <p className="text-sm text-white/40 font-tagline italic">
+                            {activeTab === 'signin' ? 'Sign in to manage your designs' : 'Register your creative legacy'}
+                        </p>
+                    </div>
+
+                    <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as AuthTab); setPhoneStep('request'); }} className="w-full">
+                        {/* Styled Tabs List */}
+                        <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/5 border border-white/10 p-1 h-11 rounded-lg">
+                            <TabsTrigger value="signin" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign In</TabsTrigger>
+                            <TabsTrigger value="signup" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-500 rounded-md transition-all duration-300">Sign Up</TabsTrigger>
                         </TabsList>
 
-                        {/* SIGN IN TAB */}
-                        <TabsContent value="signin" className="mt-0">
-                            <div className="flex gap-2 mb-4">
-                                <Button 
-                                    variant={method === 'email' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
-                                    className="flex-1"
-                                    onClick={() => { setMethod('email'); setPhoneStep('request'); }}
-                                >
-                                    <Mail className="w-4 h-4 mr-2" /> Email
-                                </Button>
-                                <Button 
-                                    variant={method === 'phone' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
-                                    className="flex-1"
-                                    onClick={() => { setMethod('phone'); setPhoneStep('request'); }}
-                                >
-                                    <Phone className="w-4 h-4 mr-2" /> Mobile
-                                </Button>
-                            </div>
-
+                        {/* SIGN IN VIEW */}
+                        <TabsContent value="signin" className="mt-0 space-y-6">
                             {method === 'email' ? (
                                 <Form {...signinForm}>
-                                    <form onSubmit={signinForm.handleSubmit(onSigninSubmit)} className="space-y-4">
+                                    <form onSubmit={signinForm.handleSubmit(onSigninSubmit)} className="space-y-5">
                                         <FormField
                                             control={signinForm.control}
                                             name="email"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white">Email</FormLabel>
-                                                    <FormControl><Input placeholder="name@example.com" {...field} className="input-glass" /></FormControl>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Email</FormLabel>
+                                                    <FormControl><Input placeholder="name@example.com" {...field} className="bg-white/5 border-white/10 text-white focus:border-amber-500/50 h-12 rounded-lg transition-all" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -318,60 +295,57 @@ export function AuthForms() {
                                             name="password"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white">Password</FormLabel>
-                                                    <FormControl><Input type="password" {...field} className="input-glass" /></FormControl>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Password</FormLabel>
+                                                    <FormControl><Input type="password" placeholder="••••••••" {...field} className="bg-white/5 border-white/10 text-white focus:border-amber-500/50 h-12 rounded-lg transition-all" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button type="submit" className="w-full btn-login-glow" disabled={signinForm.formState.isSubmitting}>
-                                            {signinForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            Sign In
+                                        <Button type="submit" className="w-full h-12 bg-white/5 border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/5 text-white font-medium tracking-wide transition-all duration-500 shadow-lg shadow-black/40" disabled={signinForm.formState.isSubmitting}>
+                                            {signinForm.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Enter Studio'}
                                         </Button>
                                     </form>
                                 </Form>
                             ) : (
                                 phoneStep === 'request' ? (
                                     <Form {...phoneSigninForm}>
-                                        <form onSubmit={phoneSigninForm.handleSubmit(onPhoneSigninSubmit)} className="space-y-4">
+                                        <form onSubmit={phoneSigninForm.handleSubmit(onPhoneSigninSubmit)} className="space-y-5">
                                             <FormField
                                                 control={phoneSigninForm.control}
                                                 name="phoneNumber"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="text-white">Phone Number</FormLabel>
+                                                        <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Phone Number</FormLabel>
                                                         <div className="relative flex items-center">
-                                                            <span className="absolute left-3 text-white/50 font-medium">+91</span>
-                                                            <FormControl><Input placeholder="9876543210" {...field} className="input-glass pl-12" maxLength={10} /></FormControl>
+                                                            <span className="absolute left-4 text-white/30 font-medium">+91</span>
+                                                            <FormControl><Input placeholder="9876543210" {...field} className="bg-white/5 border-white/10 text-white focus:border-amber-500/50 h-12 pl-14 rounded-lg" maxLength={10} /></FormControl>
                                                         </div>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}
                                             />
-                                            <Button type="submit" className="w-full btn-login-glow" disabled={phoneSigninForm.formState.isSubmitting}>
-                                                {phoneSigninForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                                Send OTP
+                                            <Button type="submit" className="w-full h-12 bg-white/5 border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/5 text-white font-medium tracking-wide transition-all duration-500 shadow-lg shadow-black/40" disabled={phoneSigninForm.formState.isSubmitting}>
+                                                {phoneSigninForm.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Request Code'}
                                             </Button>
                                             <div id="recaptcha-container"></div>
                                         </form>
                                     </Form>
                                 ) : (
-                                    <Form {...codeForm} key="verify-otp-signin">
-                                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-4">
+                                    <Form {...codeForm}>
+                                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-5">
                                             <FormField
                                                 control={codeForm.control}
                                                 name="code"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="text-white text-center block w-full">Enter 6-digit OTP</FormLabel>
-                                                        <FormControl><Input placeholder="123456" {...field} className="input-glass text-center tracking-[0.5em] font-bold" maxLength={6} /></FormControl>
+                                                        <FormLabel className="text-white/60 text-center block text-[10px] uppercase tracking-[0.2em] font-bold">Verify Access Code</FormLabel>
+                                                        <FormControl><Input placeholder="123456" {...field} className="bg-white/5 border-white/10 text-white h-14 text-center tracking-[0.8em] font-bold text-xl rounded-lg" maxLength={6} /></FormControl>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}
                                             />
-                                            <Button type="submit" className="w-full btn-login-glow" disabled={codeForm.formState.isSubmitting}>
-                                                {codeForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                                Verify & Sign In
+                                            <Button type="submit" className="w-full h-12 bg-amber-500/80 hover:bg-amber-500 text-black font-bold tracking-widest rounded-lg transition-all" disabled={codeForm.formState.isSubmitting}>
+                                                {codeForm.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Confirm Identity'}
                                             </Button>
                                         </form>
                                     </Form>
@@ -379,59 +353,42 @@ export function AuthForms() {
                             )}
                         </TabsContent>
 
-                        {/* SIGN UP TAB */}
-                        <TabsContent value="signup" className="mt-0">
-                            <div className="flex gap-2 mb-4">
-                                <Button 
-                                    variant={method === 'email' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
-                                    className="flex-1"
-                                    onClick={() => { setMethod('email'); setPhoneStep('request'); }}
-                                >
-                                    <Mail className="w-4 h-4 mr-2" /> Email
-                                </Button>
-                                <Button 
-                                    variant={method === 'phone' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
-                                    className="flex-1"
-                                    onClick={() => { setMethod('phone'); setPhoneStep('request'); }}
-                                >
-                                    <Phone className="w-4 h-4 mr-2" /> Mobile
-                                </Button>
-                            </div>
-
+                        {/* SIGN UP VIEW */}
+                        <TabsContent value="signup" className="mt-0 space-y-6">
                             {method === 'email' ? (
                                 <Form {...signupForm}>
-                                    <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-3">
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white text-xs">Full Name *</FormLabel>
-                                                    <FormControl><Input placeholder="John Doe" {...field} className="input-glass h-9" /></FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="username"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white text-xs">Username *</FormLabel>
-                                                    <FormControl><Input placeholder="johndoe_art" {...field} className="input-glass h-9" /></FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                    <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <FormField
+                                                control={signupForm.control}
+                                                name="name"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Full Name</FormLabel>
+                                                        <FormControl><Input placeholder="Artist Name" {...field} className="bg-white/5 border-white/10 text-white h-11 rounded-lg" /></FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={signupForm.control}
+                                                name="username"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Username</FormLabel>
+                                                        <FormControl><Input placeholder="handle" {...field} className="bg-white/5 border-white/10 text-white h-11 rounded-lg" /></FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
                                         <FormField
                                             control={signupForm.control}
                                             name="email"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white text-xs">Email *</FormLabel>
-                                                    <FormControl><Input placeholder="name@example.com" {...field} className="input-glass h-9" /></FormControl>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Email</FormLabel>
+                                                    <FormControl><Input placeholder="name@example.com" {...field} className="bg-white/5 border-white/10 text-white h-11 rounded-lg" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -441,8 +398,8 @@ export function AuthForms() {
                                             name="password"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white text-xs">Password *</FormLabel>
-                                                    <FormControl><Input type="password" {...field} className="input-glass h-9" /></FormControl>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Secret Key</FormLabel>
+                                                    <FormControl><Input type="password" placeholder="••••••••" {...field} className="bg-white/5 border-white/10 text-white h-11 rounded-lg" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -452,97 +409,49 @@ export function AuthForms() {
                                             name="bio"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-white text-xs">Bio (Optional)</FormLabel>
-                                                    <FormControl><Textarea placeholder="Tell us about your style..." {...field} className="input-glass min-h-[60px]" /></FormControl>
+                                                    <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Creative Bio</FormLabel>
+                                                    <FormControl><Textarea placeholder="Share your style..." {...field} className="bg-white/5 border-white/10 text-white min-h-[80px] rounded-lg resize-none" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button type="submit" className="w-full btn-login-glow mt-4" disabled={signupForm.formState.isSubmitting}>
-                                            {signupForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            Create Account
+                                        <Button type="submit" className="w-full h-12 bg-amber-500/80 hover:bg-amber-500 text-black font-bold tracking-widest rounded-lg transition-all mt-4" disabled={signupForm.formState.isSubmitting}>
+                                            {signupForm.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Begin Legacy'}
                                         </Button>
                                     </form>
                                 </Form>
                             ) : (
+                                // Phone signup steps (Same style as Sign In but with additional fields)
                                 phoneStep === 'request' ? (
                                     <Form {...phoneSignupForm}>
-                                        <form onSubmit={phoneSignupForm.handleSubmit(onPhoneSignupSubmit)} className="space-y-3">
-                                            <FormField
-                                                control={phoneSignupForm.control}
-                                                name="name"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white text-xs">Full Name *</FormLabel>
-                                                        <FormControl><Input placeholder="John Doe" {...field} className="input-glass h-9" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={phoneSignupForm.control}
-                                                name="username"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white text-xs">Username *</FormLabel>
-                                                        <FormControl><Input placeholder="johndoe_art" {...field} className="input-glass h-9" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={phoneSignupForm.control}
-                                                name="phoneNumber"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white text-xs">Phone Number *</FormLabel>
-                                                        <div className="relative flex items-center">
-                                                            <span className="absolute left-3 text-white/50 font-medium">+91</span>
-                                                            <FormControl><Input placeholder="9876543210" {...field} className="input-glass pl-12 h-9" maxLength={10} /></FormControl>
-                                                        </div>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={phoneSignupForm.control}
-                                                name="bio"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white text-xs">Bio (Optional)</FormLabel>
-                                                        <FormControl><Textarea placeholder="Tell us about your style..." {...field} className="input-glass min-h-[60px]" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <Button type="submit" className="w-full btn-login-glow mt-4" disabled={phoneSignupForm.formState.isSubmitting}>
-                                                {phoneSignupForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                                Get Verification Code
+                                        <form onSubmit={phoneSignupForm.handleSubmit(onPhoneSignupSubmit)} className="space-y-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <FormField control={phoneSignupForm.control} name="name" render={({ field }) => (
+                                                    <FormItem><FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Full Name</FormLabel><FormControl><Input placeholder="Artist Name" {...field} className="bg-white/5 border-white/10 h-11 rounded-lg text-white" /></FormControl><FormMessage /></FormItem>
+                                                )} />
+                                                <FormField control={phoneSignupForm.control} name="username" render={({ field }) => (
+                                                    <FormItem><FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Username</FormLabel><FormControl><Input placeholder="handle" {...field} className="bg-white/5 border-white/10 h-11 rounded-lg text-white" /></FormControl><FormMessage /></FormItem>
+                                                )} />
+                                            </div>
+                                            <FormField control={phoneSignupForm.control} name="phoneNumber" render={({ field }) => (
+                                                <FormItem><FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Mobile</FormLabel><div className="relative flex items-center"><span className="absolute left-4 text-white/30 font-medium">+91</span><FormControl><Input placeholder="9876543210" {...field} className="bg-white/5 border-white/10 h-11 pl-14 rounded-lg text-white" maxLength={10} /></FormControl></div><FormMessage /></FormItem>
+                                            )} />
+                                            <FormField control={phoneSignupForm.control} name="bio" render={({ field }) => (
+                                                <FormItem><FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Bio</FormLabel><FormControl><Textarea placeholder="Share your style..." {...field} className="bg-white/5 border-white/10 min-h-[80px] rounded-lg text-white resize-none" /></FormControl><FormMessage /></FormItem>
+                                            )} />
+                                            <Button type="submit" className="w-full h-12 bg-amber-500/80 hover:bg-amber-500 text-black font-bold tracking-widest rounded-lg mt-4" disabled={phoneSignupForm.formState.isSubmitting}>
+                                                {phoneSignupForm.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Get Legacy Code'}
                                             </Button>
                                             <div id="recaptcha-container"></div>
                                         </form>
                                     </Form>
                                 ) : (
-                                    <Form {...codeForm} key="verify-otp-signup">
-                                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-4">
-                                            <FormField
-                                                control={codeForm.control}
-                                                name="code"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white text-center block w-full">Enter 6-digit Code</FormLabel>
-                                                        <FormControl><Input placeholder="123456" {...field} className="input-glass text-center tracking-[0.5em] font-bold" maxLength={6} /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <Button type="submit" className="w-full btn-login-glow" disabled={codeForm.formState.isSubmitting}>
-                                                {codeForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                                Verify & Create Account
-                                            </Button>
-                                            <Button variant="ghost" onClick={() => setPhoneStep('request')} className="w-full text-white/40 text-xs">
-                                                Change details
-                                            </Button>
+                                    <Form {...codeForm}>
+                                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-5">
+                                            <FormField control={codeForm.control} name="code" render={({ field }) => (
+                                                <FormItem><FormLabel className="text-white/60 text-center block text-[10px] uppercase tracking-[0.2em] font-bold">Verify Access Code</FormLabel><FormControl><Input placeholder="123456" {...field} className="bg-white/5 border-white/10 text-white h-14 text-center tracking-[0.8em] font-bold text-xl rounded-lg" maxLength={6} /></FormControl><FormMessage /></FormItem>
+                                            )} />
+                                            <Button type="submit" className="w-full h-12 bg-amber-500/80 hover:bg-amber-500 text-black font-bold tracking-widest rounded-lg" disabled={codeForm.formState.isSubmitting}>Confirm Identity</Button>
                                         </form>
                                     </Form>
                                 )
@@ -550,21 +459,42 @@ export function AuthForms() {
                         </TabsContent>
                     </Tabs>
 
-                    <div className="relative">
-                        <div className="absolute inset-0 flex items-center"><Separator className="bg-white/10" /></div>
-                        <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#0B1116] px-2 text-white/30">Or fast access with</span></div>
+                    {/* Method Toggle / Mobile Switcher */}
+                    <div className="relative flex items-center justify-center">
+                        <Separator className="bg-white/10" />
+                        <div className="absolute flex justify-center w-full">
+                            <button 
+                                type="button"
+                                onClick={() => {
+                                    setMethod(method === 'email' ? 'phone' : 'email');
+                                    setPhoneStep('request');
+                                }}
+                                className="bg-[#0F1419]/80 backdrop-blur-md px-4 text-[10px] uppercase tracking-[0.2em] text-white/40 hover:text-amber-500 transition-colors font-bold whitespace-nowrap"
+                            >
+                                {method === 'email' ? 'Use mobile instead' : 'Use email instead'}
+                            </button>
+                        </div>
                     </div>
 
+                    {/* Social Auth */}
                     <Button 
                         variant="outline" 
                         type="button" 
-                        className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white font-semibold"
+                        className="w-full h-12 bg-white/5 hover:bg-white/10 border-white/10 text-white font-medium flex items-center justify-center gap-3 transition-all rounded-lg shadow-lg"
                         onClick={handleGoogleSignIn}
                     >
-                        <Chrome className="mr-2 h-4 w-4" />
+                        <Chrome className="w-5 h-5 text-white/80" />
                         Google Account
                     </Button>
-                </CardContent>
+
+                    {/* Footer Attribution Section */}
+                    <div className="text-center mt-10 space-y-4">
+                        <p className="text-[10px] md:text-[11px] text-white/20 uppercase tracking-[0.2em] leading-relaxed font-tagline font-bold">
+                            We handle printing, shipping, and support—<br />
+                            so you can focus on creating.
+                        </p>
+                    </div>
+                </div>
             </Card>
         </div>
     );
