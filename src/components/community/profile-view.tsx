@@ -158,7 +158,7 @@ export function ProfileView({ user }: ProfileViewProps) {
     });
 
     // Use a reliable path or placeholder
-    const studioMockup = getImageById('jersey_mockup')?.imageUrl || "/studio_mockup.png";
+    const studioMockup = "/sell.png";
 
     if (isDesignerLoading) {
         return (
