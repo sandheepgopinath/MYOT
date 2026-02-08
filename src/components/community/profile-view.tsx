@@ -198,14 +198,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                             <div className="flex flex-wrap justify-center md:justify-end gap-2">
                                 <Button 
                                     size="sm" 
-                                    className="bg-amber-500 hover:bg-amber-400 text-black rounded-full px-4 h-7 text-[9px] uppercase tracking-[0.15em] font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all"
-                                    onClick={() => setIsUploadOpen(true)}
-                                >
-                                    <Sparkles className="w-3 h-3 mr-1.5" />
-                                    New Design
-                                </Button>
-                                <Button 
-                                    size="sm" 
                                     variant="outline" 
                                     className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-3 h-7 text-[9px] uppercase tracking-wider"
                                     onClick={() => setIsEditProfileOpen(true)}
@@ -274,6 +266,17 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     </Button>
                                 </div>
                             )}
+                        </div>
+
+                        <div className="pt-3">
+                            <Button 
+                                size="sm" 
+                                className="bg-amber-500 hover:bg-amber-400 text-black rounded-full px-6 h-8 text-[10px] uppercase tracking-[0.15em] font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all"
+                                onClick={() => setIsUploadOpen(true)}
+                            >
+                                <Sparkles className="w-3.5 h-3.5 mr-2" />
+                                Upload design
+                            </Button>
                         </div>
                     </div>
                 </div>
