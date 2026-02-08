@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils';
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogFooter,
@@ -173,9 +172,9 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen bg-[#0B1116] text-slate-200 font-sans">
-            <div className="container mx-auto px-4 pb-8 max-w-7xl pt-0">
+            <div className="container mx-auto px-4 pb-8 max-w-7xl">
                 {/* Profile Header */}
-                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-0">
+                <div className="flex flex-col md:flex-row gap-8 mb-16 items-start pt-8">
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl overflow-hidden relative">
                             <Avatar className="w-full h-full border-4 border-[#0B1116]">
@@ -329,9 +328,6 @@ export function ProfileView({ user }: ProfileViewProps) {
                 <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-700 text-white">
                     <DialogHeader>
                         <DialogTitle>Edit Profile</DialogTitle>
-                        <DialogDescription className="text-slate-400">
-                            Update your public information. Fields are locked by default; click edit to change.
-                        </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-6 py-4">
                         {/* Name Field */}
@@ -356,7 +352,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditName(e.target.value)} 
                                     disabled={!isEditingName}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
+                                        "bg-slate-800 border-slate-700 text-white pr-10",
                                         !isEditingName && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="Your Name"
@@ -387,7 +383,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
                                     disabled={!isEditingUsername}
                                     className={cn(
-                                        "bg-slate-800 border-slate-700 text-white pr-10 focus:ring-blue-500",
+                                        "bg-slate-800 border-slate-700 text-white pr-10",
                                         !isEditingUsername && "opacity-60 cursor-not-allowed select-none"
                                     )}
                                     placeholder="unique_username"
