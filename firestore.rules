@@ -23,11 +23,13 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if true;
-      allow write: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow create, delete: if isOwner(userId);
 
       match /designs/{designId} {
         allow read: if true;
-        allow write: if isOwner(userId);
+        allow update: if isOwner(userId) || isAdmin();
+        allow create, delete: if isOwner(userId);
       }
     }
 

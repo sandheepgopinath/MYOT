@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -22,12 +23,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { useFirestore, useStorage, addDocumentNonBlocking, setDocumentNonBlocking, useFirebase } from '@/firebase';
+import { useFirestore, useStorage, setDocumentNonBlocking, useFirebase } from '@/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, doc, serverTimestamp, increment } from 'firebase/firestore';
 import { Loader2, Sparkles, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 const uploadSchema = z.object({
     name: z.string().min(3, 'Give your creation a title (min 3 chars)'),
@@ -68,8 +68,12 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
             const snapshot = await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(snapshot.ref);
 
-            // 2. Save design data
+            // 2. Generate a single ID for both sub-collection and mirror
+            const designRef = doc(collection(firestore, 'users', userId, 'designs'));
+            const designId = designRef.id;
+
             const designData = {
+                id: designId,
                 name: values.name,
                 description: values.description,
                 imageUrl: downloadURL,
@@ -83,12 +87,11 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
             };
 
             // Save to Designer's Sub-collection
-            const designsSubRef = collection(firestore, 'users', userId, 'designs');
-            addDocumentNonBlocking(designsSubRef, designData);
+            setDocumentNonBlocking(designRef, designData, { merge: true });
 
             // Add to global collection for Admin moderation
-            const globalDesignsRef = collection(firestore, 'community_designs');
-            addDocumentNonBlocking(globalDesignsRef, designData);
+            const globalDesignRef = doc(firestore, 'community_designs', designId);
+            setDocumentNonBlocking(globalDesignRef, designData, { merge: true });
 
             // 3. Update Aggregate Count in Profile
             const profileRef = doc(firestore, 'users', userId);
@@ -173,15 +176,13 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                     <FormItem>
                                         <FormLabel className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-bold">Artwork Source</FormLabel>
                                         <FormControl>
-                                            <div className="relative group/upload">
-                                                <Input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => onChange(e.target.files)}
-                                                    className="bg-white/5 border-white/10 text-white h-11 rounded-lg file:bg-amber-500/10 file:text-amber-500 file:border-0 file:rounded-md file:px-3 file:py-1 file:mr-4 file:text-xs file:font-bold file:uppercase file:tracking-widest cursor-pointer hover:border-amber-500/30 transition-all"
-                                                    {...field}
-                                                />
-                                            </div>
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => onChange(e.target.files)}
+                                                className="bg-white/5 border-white/10 text-white h-11 rounded-lg file:bg-amber-500/10 file:text-amber-500 file:border-0 file:rounded-md file:px-3 file:py-1 file:mr-4 file:text-xs file:font-bold file:uppercase file:tracking-widest cursor-pointer hover:border-amber-500/30 transition-all"
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage className="text-[10px]" />
                                     </FormItem>
@@ -197,7 +198,7 @@ export function UploadModal({ open, onOpenChange, userId }: UploadModalProps) {
                                     {isUploading ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            SECURIING IN STUDIO...
+                                            SECURING IN STUDIO...
                                         </>
                                     ) : (
                                         <>

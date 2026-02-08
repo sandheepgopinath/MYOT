@@ -29,13 +29,17 @@
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
+        "description": { "type": "string" },
         "imageUrl": { "type": "string" },
-        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "not approved"] },
+        "moderationComment": { "type": "string" },
         "isActive": { "type": "boolean", "default": true },
         "salesCount": { "type": "number", "default": 0 },
         "profit": { "type": "number", "default": 0 },
         "uploadedAt": { "type": "string", "format": "date-time" },
-        "approvedAt": { "type": "string", "format": "date-time" }
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" }
       },
       "required": ["name", "imageUrl", "status"]
     }

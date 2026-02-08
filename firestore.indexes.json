@@ -1,3 +1,4 @@
+
 {
     "indexes": [
         {
@@ -10,6 +11,20 @@
                 },
                 {
                     "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "designs",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "status",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "uploadedAt",
                     "order": "DESCENDING"
                 }
             ]
