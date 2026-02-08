@@ -265,7 +265,7 @@ export function AuthForms() {
                 
                 <div className="p-8 md:p-10 relative z-10 space-y-8">
                     <div className="text-center space-y-2">
-                        <h2 className="text-2xl md:text-3xl font-display text-white tracking-wide">Designer Community</h2>
+                        <h2 className="text-2xl md:text-3xl font-display text-white tracking-wide">Join Community</h2>
                         <p className="text-sm text-white/40 font-tagline italic">
                             {activeTab === 'signin' ? 'Sign in to manage your designs' : 'Register your creative legacy'}
                         </p>
@@ -489,7 +489,7 @@ export function AuthForms() {
                             onClick={handleGoogleSignIn}
                         >
                             <Chrome className="w-5 h-5 text-white/80" />
-                            Google Account
+                            Sign in with Google
                         </Button>
                     </div>
 

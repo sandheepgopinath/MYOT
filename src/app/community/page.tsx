@@ -55,7 +55,7 @@ export default function CommunityPage() {
                             {/* Headline with font-light weight */}
                             <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
                                 <h1 className="text-xl md:text-2xl lg:text-4xl font-display font-light text-stone-200 leading-tight tracking-tight">
-                                    Where independent designers build their legacy.
+                                    Where designers build their legacy.
                                 </h1>
                             </div>
 
