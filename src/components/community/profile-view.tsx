@@ -172,101 +172,101 @@ export function ProfileView({ user }: ProfileViewProps) {
 
     return (
         <div className="min-h-screen text-slate-200">
-            <div className="container mx-auto px-4 pb-12 max-w-6xl">
-                {/* Profile Banner-style Header */}
-                <div className="glass-card p-8 md:p-12 mb-12 flex flex-col md:flex-row gap-10 items-center md:items-start relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
+            <div className="container mx-auto px-4 pb-8 max-w-5xl">
+                {/* Profile Banner-style Header - Compacted */}
+                <div className="glass-card p-6 md:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] pointer-events-none" />
                     
                     <div className="relative">
-                        <div className="w-36 h-36 md:w-44 md:h-44 rounded-full p-1 bg-gradient-to-br from-amber-500/40 to-transparent shadow-2xl overflow-hidden relative group">
-                            <Avatar className="w-full h-full border-4 border-black/40">
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
+                            <Avatar className="w-full h-full border-2 border-black/40">
                                 <AvatarImage src={designer?.profilePhotoUrl || user.photoURL || ''} className="object-cover" />
-                                <AvatarFallback className="text-4xl bg-zinc-900 text-amber-500/50">
+                                <AvatarFallback className="text-2xl bg-zinc-900 text-amber-500/50">
                                     {designer?.name?.charAt(0) || user.displayName?.charAt(0) || 'D'}
                                 </AvatarFallback>
                             </Avatar>
                             <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <Camera className="w-6 h-6 text-white" />
+                                <Camera className="w-5 h-5 text-white" />
                                 <input type="file" className="hidden" accept="image/*" />
                             </label>
                         </div>
                     </div>
 
-                    <div className="flex-1 text-center md:text-left space-y-6">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                            <div className="space-y-1">
-                                <h1 className="text-4xl md:text-5xl font-display font-light text-white tracking-tight">
+                    <div className="flex-1 text-center md:text-left space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="space-y-0.5">
+                                <h1 className="text-2xl md:text-3xl font-display font-light text-white tracking-tight">
                                     {designer?.name || user.displayName || 'Designer'}
                                 </h1>
-                                <p className="text-amber-500/80 font-medium tracking-wide">@{designer?.username || 'username'}</p>
+                                <p className="text-amber-500/80 text-sm font-medium tracking-wide">@{designer?.username || 'username'}</p>
                             </div>
                             
-                            <div className="flex flex-wrap justify-center md:justify-end gap-3">
+                            <div className="flex flex-wrap justify-center md:justify-end gap-2">
                                 <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-6"
+                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-4 h-9 text-xs"
                                     onClick={() => setIsEditProfileOpen(true)}
                                 >
-                                    <UserPen className="w-4 h-4 mr-2" />
+                                    <UserPen className="w-3.5 h-3.5 mr-1.5" />
                                     Edit Profile
                                 </Button>
                                 <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-9 h-9">
-                                    <Share2 className="w-4 h-4" />
+                                    <Share2 className="w-3.5 h-3.5" />
                                 </Button>
                                 <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-9 h-9">
-                                    <LogOut className="w-4 h-4" />
+                                    <LogOut className="w-3.5 h-3.5" />
                                 </Button>
                             </div>
                         </div>
 
-                        {/* Stats Section */}
-                        <div className="grid grid-cols-3 gap-6 md:gap-12 py-6 border-y border-white/5">
-                            <div className="space-y-1">
-                                <span className="block text-3xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
-                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Uploaded</span>
+                        {/* Stats Section - More Compact */}
+                        <div className="grid grid-cols-3 gap-4 md:gap-8 py-4 border-y border-white/5">
+                            <div className="space-y-0.5">
+                                <span className="block text-xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
+                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Uploaded</span>
                             </div>
-                            <div className="space-y-1">
-                                <span className="block text-3xl font-brand text-white">{designer?.salesCount || 0}</span>
-                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Total Sales</span>
+                            <div className="space-y-0.5">
+                                <span className="block text-xl font-brand text-white">{designer?.salesCount || 0}</span>
+                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Total Sales</span>
                             </div>
-                            <div className="space-y-1">
-                                <span className="block text-3xl font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
-                                <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Revenue</span>
+                            <div className="space-y-0.5">
+                                <span className="block text-xl font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
+                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Revenue</span>
                             </div>
                         </div>
 
-                        {/* Bio Section */}
-                        <div className="max-w-2xl text-white/60 leading-relaxed text-sm group relative">
+                        {/* Bio Section - Refined */}
+                        <div className="max-w-2xl text-white/60 leading-relaxed text-xs group relative">
                             {isEditingDescription ? (
-                                <div className="space-y-3 mt-4">
+                                <div className="space-y-2 mt-2">
                                     <Textarea 
                                         value={tempDescription} 
                                         onChange={(e) => setTempDescription(e.target.value)}
-                                        className="bg-black/40 border-white/10 text-white min-h-[100px] focus:border-amber-500/50"
+                                        className="bg-black/40 border-white/10 text-white min-h-[80px] text-xs focus:border-amber-500/50"
                                         placeholder="Write about your design style..."
                                     />
                                     <div className="flex gap-2">
-                                        <Button size="sm" onClick={handleUpdateDescription} className="bg-amber-600 hover:bg-amber-500 text-white">
-                                            <Check className="w-4 h-4 mr-1" /> Save
+                                        <Button size="sm" onClick={handleUpdateDescription} className="h-8 text-xs bg-amber-600 hover:bg-amber-500 text-white">
+                                            <Check className="w-3 h-3 mr-1" /> Save
                                         </Button>
-                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="text-white/60">
+                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-8 text-xs text-white/60">
                                             Cancel
                                         </Button>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="flex items-start gap-4">
-                                    <p className="italic font-tagline text-base leading-relaxed">
+                                <div className="flex items-start gap-2">
+                                    <p className="italic font-tagline text-sm leading-snug">
                                         "{designer?.description || 'No description yet. Add a few words about your creative style.'}"
                                     </p>
                                     <Button 
                                         size="icon" 
                                         variant="ghost" 
                                         onClick={() => setIsEditingDescription(true)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 text-white/40 hover:text-white"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 text-white/40 hover:text-white"
                                     >
-                                        <Pencil className="w-4 h-4" />
+                                        <Pencil className="w-3 h-3" />
                                     </Button>
                                 </div>
                             )}
@@ -276,14 +276,14 @@ export function ProfileView({ user }: ProfileViewProps) {
 
                 {/* Designs Navigation & Upload */}
                 <Tabs defaultValue="designs" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
-                        <TabsList className="bg-white/5 border border-white/10 p-1 h-12 rounded-full px-2">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+                        <TabsList className="bg-white/5 border border-white/10 p-0.5 h-10 rounded-full px-1.5">
                             {['designs', 'approved', 'pending'].map((tab) => (
                                 <TabsTrigger
                                     key={tab}
                                     value={tab}
                                     className={cn(
-                                        "rounded-full px-8 py-2 text-[10px] uppercase tracking-widest font-bold transition-all",
+                                        "rounded-full px-6 py-1.5 text-[9px] uppercase tracking-widest font-bold transition-all",
                                         "data-[state=active]:bg-amber-500 data-[state=active]:text-black"
                                     )}
                                 >
@@ -294,32 +294,32 @@ export function ProfileView({ user }: ProfileViewProps) {
                         
                         <Button 
                             onClick={() => setIsUploadOpen(true)}
-                            className="bg-white/10 hover:bg-amber-500 hover:text-black border border-white/10 text-white rounded-full px-8 h-12 transition-all duration-300 font-bold uppercase text-[10px] tracking-widest"
+                            className="bg-white/10 hover:bg-amber-500 hover:text-black border border-white/10 text-white rounded-full px-6 h-10 transition-all duration-300 font-bold uppercase text-[9px] tracking-widest"
                         >
-                            <UploadCloud className="w-4 h-4 mr-2" />
+                            <UploadCloud className="w-3.5 h-3.5 mr-2" />
                             New Design
                         </Button>
                     </div>
 
                     <TabsContent value={activeTab} className="mt-0 outline-none">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {/* Empty State / Prompt */}
                             {filteredDesigns.length === 0 && !isDesignsLoading && (
                                 <div
                                     onClick={() => setIsUploadOpen(true)}
-                                    className="aspect-square rounded-3xl border-2 border-dashed border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-amber-500/30 transition-all cursor-pointer flex flex-col items-center justify-center group"
+                                    className="aspect-square rounded-2xl border-2 border-dashed border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-amber-500/30 transition-all cursor-pointer flex flex-col items-center justify-center group"
                                 >
-                                    <div className="w-20 h-20 rounded-full bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center mb-6 transition-all">
-                                        <UploadCloud className="w-10 h-10 text-white/20 group-hover:text-amber-500" />
+                                    <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center mb-4 transition-all">
+                                        <UploadCloud className="w-8 h-8 text-white/20 group-hover:text-amber-500" />
                                     </div>
-                                    <h3 className="font-display text-xl text-white/40 group-hover:text-white mb-2">Build Your Studio</h3>
-                                    <p className="text-[10px] uppercase tracking-widest text-white/20">Click to upload your first design</p>
+                                    <h3 className="font-display text-lg text-white/40 group-hover:text-white mb-1">Build Your Studio</h3>
+                                    <p className="text-[9px] uppercase tracking-widest text-white/20">Click to upload your first design</p>
                                 </div>
                             )}
 
                             {isDesignsLoading ? (
                                 Array.from({ length: 4 }).map((_, i) => (
-                                    <div key={i} className="aspect-square rounded-3xl bg-white/[0.02] animate-pulse" />
+                                    <div key={i} className="aspect-square rounded-2xl bg-white/[0.02] animate-pulse" />
                                 ))
                             ) : (
                                 filteredDesigns.map((design) => (
@@ -344,88 +344,90 @@ export function ProfileView({ user }: ProfileViewProps) {
                 userId={user.uid}
             />
 
-            {/* Edit Profile Modal */}
+            {/* Edit Profile Modal - Redesigned & Themed */}
             <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-                <DialogContent className="sm:max-w-[425px] bg-[#0F1419]/90 backdrop-blur-3xl border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden group">
+                <DialogContent className="sm:max-w-[400px] bg-[#0F1419]/90 backdrop-blur-3xl border border-amber-500/20 text-white rounded-2xl shadow-2xl overflow-hidden group p-0">
                     <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none" />
                     
-                    <DialogHeader className="relative z-10 pb-4 border-b border-white/5">
-                        <DialogTitle className="font-display text-3xl font-light tracking-tight">Edit Profile</DialogTitle>
-                    </DialogHeader>
+                    <div className="p-6 space-y-6 relative z-10">
+                        <DialogHeader>
+                            <DialogTitle className="font-display text-2xl font-light tracking-tight text-white">Edit Profile</DialogTitle>
+                        </DialogHeader>
 
-                    <div className="relative z-10 grid gap-8 py-8">
-                        <div className="grid gap-3">
-                            <Label htmlFor="name" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Full Name</Label>
-                            <div className="relative flex items-center">
-                                <Input 
-                                    id="name" 
-                                    value={editName} 
-                                    onChange={(e) => setEditName(e.target.value)} 
-                                    disabled={!isEditingName}
-                                    className={cn(
-                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50 rounded-lg pr-12 transition-all",
-                                        !isEditingName && "opacity-50 cursor-not-allowed border-transparent"
+                        <div className="grid gap-5">
+                            <div className="grid gap-2">
+                                <Label htmlFor="name" className="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40">Full Name</Label>
+                                <div className="relative flex items-center">
+                                    <Input 
+                                        id="name" 
+                                        value={editName} 
+                                        onChange={(e) => setEditName(e.target.value)} 
+                                        disabled={!isEditingName}
+                                        className={cn(
+                                            "bg-white/5 border-white/10 text-white h-11 text-sm focus:border-amber-500/50 rounded-lg pr-12 transition-all",
+                                            !isEditingName && "opacity-50 cursor-not-allowed border-transparent"
+                                        )}
+                                    />
+                                    {!isEditingName && (
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors text-[10px]"
+                                            onClick={() => setIsEditingName(true)}
+                                        >
+                                            Edit
+                                        </Button>
                                     )}
-                                />
-                                {!isEditingName && (
-                                    <Button 
-                                        variant="ghost" 
-                                        size="sm" 
-                                        className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors"
-                                        onClick={() => setIsEditingName(true)}
-                                    >
-                                        Edit
-                                    </Button>
-                                )}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="grid gap-3">
-                            <Label htmlFor="username" className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Designer Handle</Label>
-                            <div className="relative flex items-center">
-                                <span className="absolute left-4 text-white/20 font-medium">@</span>
-                                <Input 
-                                    id="username" 
-                                    value={editUsername} 
-                                    onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
-                                    disabled={!isEditingUsername}
-                                    className={cn(
-                                        "bg-white/5 border-white/10 text-white h-12 focus:border-amber-500/50 rounded-lg pl-9 pr-12 transition-all",
-                                        !isEditingUsername && "opacity-50 cursor-not-allowed border-transparent"
+                            <div className="grid gap-2">
+                                <Label htmlFor="username" className="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40">Designer Handle</Label>
+                                <div className="relative flex items-center">
+                                    <span className="absolute left-4 text-white/20 font-medium text-sm">@</span>
+                                    <Input 
+                                        id="username" 
+                                        value={editUsername} 
+                                        onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))} 
+                                        disabled={!isEditingUsername}
+                                        className={cn(
+                                            "bg-white/5 border-white/10 text-white h-11 text-sm focus:border-amber-500/50 rounded-lg pl-9 pr-12 transition-all",
+                                            !isEditingUsername && "opacity-50 cursor-not-allowed border-transparent"
+                                        )}
+                                    />
+                                    {!isEditingUsername && (
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors text-[10px]"
+                                            onClick={() => setIsEditingUsername(true)}
+                                        >
+                                            Edit
+                                        </Button>
                                     )}
-                                />
-                                {!isEditingUsername && (
-                                    <Button 
-                                        variant="ghost" 
-                                        size="sm" 
-                                        className="absolute right-2 text-amber-500/60 hover:text-amber-500 h-8 hover:bg-transparent transition-colors"
-                                        onClick={() => setIsEditingUsername(true)}
-                                    >
-                                        Edit
-                                    </Button>
-                                )}
+                                </div>
+                            </div>
+
+                            <div className="pt-4 border-t border-white/5 space-y-3">
+                                <Label className="text-[9px] uppercase tracking-[0.2em] font-bold text-white/20 block">Studio Access Info</Label>
+                                <div className="flex items-center justify-between text-[10px] text-white/40 bg-white/[0.02] p-2.5 rounded-lg border border-white/5">
+                                    <span className="flex items-center gap-2 font-medium tracking-wide"><Mail className="w-3 h-3 text-amber-500/40" /> EMAIL</span>
+                                    <span className="font-mono text-white/30">{designer?.email || user?.email || '—'}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="pt-6 border-t border-white/5 space-y-4">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/20 block">Studio Access Info</Label>
-                            <div className="flex items-center justify-between text-[11px] text-white/40 bg-white/[0.02] p-3 rounded-lg border border-white/5">
-                                <span className="flex items-center gap-2 font-medium tracking-wide"><Mail className="w-3 h-3 text-amber-500/40" /> EMAIL</span>
-                                <span className="font-mono text-white/30">{designer?.email || user?.email || '—'}</span>
-                            </div>
-                        </div>
+                        <DialogFooter className="sm:justify-center pt-2">
+                            <Button 
+                                type="submit" 
+                                onClick={handleSaveProfile} 
+                                disabled={isSavingProfile || (!isEditingName && !isEditingUsername)}
+                                className="bg-amber-500 hover:bg-amber-400 text-black font-bold w-full h-11 rounded-lg transition-all duration-300 shadow-lg shadow-black/40 disabled:bg-white/5 disabled:text-white/20 text-xs uppercase tracking-widest"
+                            >
+                                {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Profile Update'}
+                            </Button>
+                        </DialogFooter>
                     </div>
-
-                    <DialogFooter className="relative z-10 sm:justify-center">
-                        <Button 
-                            type="submit" 
-                            onClick={handleSaveProfile} 
-                            disabled={isSavingProfile || (!isEditingName && !isEditingUsername)}
-                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold w-full h-12 rounded-lg transition-all duration-300 shadow-lg shadow-black/40 disabled:bg-white/5 disabled:text-white/20"
-                        >
-                            {isSavingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Profile Update'}
-                        </Button>
-                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>
