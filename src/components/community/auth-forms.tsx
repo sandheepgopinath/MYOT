@@ -137,7 +137,7 @@ export function AuthForms() {
     const handleSyncUserDoc = async (user: any, details?: { name: string; username: string; bio?: string }) => {
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
-        
+
         if (!userDocSnap.exists()) {
             const initialProfile = {
                 uid: user.uid,
@@ -169,13 +169,13 @@ export function AuthForms() {
             const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
             const user = userCredential.user;
             await updateProfile(user, { displayName: values.name });
-            
-            await handleSyncUserDoc(user, { 
-                name: values.name, 
-                username: values.username.toLowerCase(), 
-                bio: values.bio 
+
+            await handleSyncUserDoc(user, {
+                name: values.name,
+                username: values.username.toLowerCase(),
+                bio: values.bio
             });
-            
+
             toast({ title: 'Account Created', description: 'Welcome to the community!' });
         } catch (error) {
             const authError = error as AuthError;
@@ -195,7 +195,7 @@ export function AuthForms() {
             const verifier = (window as any).recaptchaVerifier;
             const fullNumber = `+91${values.phoneNumber}`;
             const result = await signInWithPhoneNumber(auth, fullNumber, verifier);
-            
+
             setConfirmationResult(result);
             setPendingProfile({
                 name: values.name,
@@ -281,17 +281,17 @@ export function AuthForms() {
                         {/* SIGN IN TAB */}
                         <TabsContent value="signin" className="mt-0">
                             <div className="flex gap-2 mb-4">
-                                <Button 
-                                    variant={method === 'email' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
+                                <Button
+                                    variant={method === 'email' ? 'secondary' : 'ghost'}
+                                    size="sm"
                                     className="flex-1"
                                     onClick={() => { setMethod('email'); setPhoneStep('request'); }}
                                 >
                                     <Mail className="w-4 h-4 mr-2" /> Email
                                 </Button>
-                                <Button 
-                                    variant={method === 'phone' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
+                                <Button
+                                    variant={method === 'phone' ? 'secondary' : 'ghost'}
+                                    size="sm"
                                     className="flex-1"
                                     onClick={() => { setMethod('phone'); setPhoneStep('request'); }}
                                 >
@@ -300,7 +300,7 @@ export function AuthForms() {
                             </div>
 
                             {method === 'email' ? (
-                                <Form {...signinForm}>
+                                <Form {...signinForm} key="signin-email-form">
                                     <form onSubmit={signinForm.handleSubmit(onSigninSubmit)} className="space-y-4">
                                         <FormField
                                             control={signinForm.control}
@@ -332,7 +332,7 @@ export function AuthForms() {
                                 </Form>
                             ) : (
                                 phoneStep === 'request' ? (
-                                    <Form {...phoneSigninForm}>
+                                    <Form {...phoneSigninForm} key="signin-phone-form">
                                         <form onSubmit={phoneSigninForm.handleSubmit(onPhoneSigninSubmit)} className="space-y-4">
                                             <FormField
                                                 control={phoneSigninForm.control}
@@ -382,17 +382,17 @@ export function AuthForms() {
                         {/* SIGN UP TAB */}
                         <TabsContent value="signup" className="mt-0">
                             <div className="flex gap-2 mb-4">
-                                <Button 
-                                    variant={method === 'email' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
+                                <Button
+                                    variant={method === 'email' ? 'secondary' : 'ghost'}
+                                    size="sm"
                                     className="flex-1"
                                     onClick={() => { setMethod('email'); setPhoneStep('request'); }}
                                 >
                                     <Mail className="w-4 h-4 mr-2" /> Email
                                 </Button>
-                                <Button 
-                                    variant={method === 'phone' ? 'secondary' : 'ghost'} 
-                                    size="sm" 
+                                <Button
+                                    variant={method === 'phone' ? 'secondary' : 'ghost'}
+                                    size="sm"
                                     className="flex-1"
                                     onClick={() => { setMethod('phone'); setPhoneStep('request'); }}
                                 >
@@ -401,7 +401,7 @@ export function AuthForms() {
                             </div>
 
                             {method === 'email' ? (
-                                <Form {...signupForm}>
+                                <Form {...signupForm} key="signup-email-form">
                                     <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-3">
                                         <FormField
                                             control={signupForm.control}
@@ -466,7 +466,7 @@ export function AuthForms() {
                                 </Form>
                             ) : (
                                 phoneStep === 'request' ? (
-                                    <Form {...phoneSignupForm}>
+                                    <Form {...phoneSignupForm} key="signup-phone-form">
                                         <form onSubmit={phoneSignupForm.handleSubmit(onPhoneSignupSubmit)} className="space-y-3">
                                             <FormField
                                                 control={phoneSignupForm.control}
@@ -555,9 +555,9 @@ export function AuthForms() {
                         <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#0B1116] px-2 text-white/30">Or fast access with</span></div>
                     </div>
 
-                    <Button 
-                        variant="outline" 
-                        type="button" 
+                    <Button
+                        variant="outline"
+                        type="button"
                         className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white font-semibold"
                         onClick={handleGoogleSignIn}
                     >
