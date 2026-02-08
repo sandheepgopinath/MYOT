@@ -13,6 +13,7 @@
         "phone": { "type": "string" },
         "profilePhotoUrl": { "type": "string" },
         "description": { "type": "string" },
+        "privilege": { "type": "string", "description": "User access level, e.g., 'designer'" },
         "designsUploadedCount": { "type": "number", "default": 0 },
         "designsApprovedCount": { "type": "number", "default": 0 },
         "salesCount": { "type": "number", "default": 0 },

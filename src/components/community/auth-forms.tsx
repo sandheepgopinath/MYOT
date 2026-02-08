@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -145,6 +146,7 @@ export function AuthForms() {
                 phone: user.phoneNumber || null,
                 profilePhotoUrl: user.photoURL || null,
                 description: details?.bio || "Passionate about creating unique t-shirt designs.",
+                privilege: 'designer',
                 designsUploadedCount: 0,
                 designsApprovedCount: 0,
                 salesCount: 0,

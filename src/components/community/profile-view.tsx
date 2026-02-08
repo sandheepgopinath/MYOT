@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -62,6 +63,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                 phone: user.phoneNumber || null,
                 profilePhotoUrl: user.photoURL || null,
                 description: "Passionate about creating unique t-shirt designs.",
+                privilege: 'designer',
                 designsUploadedCount: 0,
                 designsApprovedCount: 0,
                 salesCount: 0,
