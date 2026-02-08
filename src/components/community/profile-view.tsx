@@ -16,6 +16,8 @@ import { DesignCard } from './design-card';
 import { UploadModal } from './upload-modal';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { getImageById } from '@/lib/placeholder-images';
 import {
     Dialog,
     DialogContent,
@@ -154,6 +156,8 @@ export function ProfileView({ user }: ProfileViewProps) {
         return true;
     });
 
+    const studioMockup = getImageById('jersey_mockup');
+
     if (isDesignerLoading) {
         return (
             <div className="flex h-[70vh] items-center justify-center">
@@ -166,101 +170,101 @@ export function ProfileView({ user }: ProfileViewProps) {
         <div className="min-h-screen text-slate-200">
             <div className="container mx-auto px-4 pb-8 max-w-5xl">
                 {/* Profile Header */}
-                <div className="glass-card p-6 md:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
+                <div className="glass-card p-4 md:p-6 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] pointer-events-none" />
                     
                     <div className="relative">
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
+                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-0.5 bg-gradient-to-br from-amber-500/40 to-transparent shadow-xl overflow-hidden relative group">
                             <Avatar className="w-full h-full border-2 border-black/40">
                                 <AvatarImage src={designer?.profilePhotoUrl || user.photoURL || ''} className="object-cover" />
-                                <AvatarFallback className="text-2xl bg-zinc-900 text-amber-500/50">
+                                <AvatarFallback className="text-xl bg-zinc-900 text-amber-500/50">
                                     {designer?.name?.charAt(0) || user.displayName?.charAt(0) || 'D'}
                                 </AvatarFallback>
                             </Avatar>
                             <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <Camera className="w-5 h-5 text-white" />
+                                <Camera className="w-4 h-4 text-white" />
                                 <input type="file" className="hidden" accept="image/*" />
                             </label>
                         </div>
                     </div>
 
-                    <div className="flex-1 text-center md:text-left space-y-4">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex-1 text-center md:text-left space-y-3">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                             <div className="space-y-0.5">
-                                <h1 className="text-2xl md:text-3xl font-display font-light text-white tracking-tight">
+                                <h1 className="text-xl md:text-2xl font-display font-light text-white tracking-tight">
                                     {designer?.name || user.displayName || 'Designer'}
                                 </h1>
-                                <p className="text-amber-500/80 text-sm font-medium tracking-wide">@{designer?.username || 'username'}</p>
+                                <p className="text-amber-500/80 text-xs font-medium tracking-wide">@{designer?.username || 'username'}</p>
                             </div>
                             
                             <div className="flex flex-wrap justify-center md:justify-end gap-2">
                                 <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-4 h-9 text-xs"
+                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-3 h-8 text-[10px]"
                                     onClick={() => setIsEditProfileOpen(true)}
                                 >
-                                    <UserPen className="w-3.5 h-3.5 mr-1.5" />
+                                    <UserPen className="w-3 h-3 mr-1.5" />
                                     Edit Profile
                                 </Button>
-                                <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-9 h-9">
-                                    <Share2 className="w-3.5 h-3.5" />
+                                <Button size="icon" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full w-8 h-8">
+                                    <Share2 className="w-3 h-3" />
                                 </Button>
-                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-9 h-9">
-                                    <LogOut className="w-3.5 h-3.5" />
+                                <Button size="icon" variant="ghost" onClick={handleSignOut} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full w-8 h-8">
+                                    <LogOut className="w-3 h-3" />
                                 </Button>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-4 gap-2 md:gap-4 py-4 border-y border-white/5">
+                        <div className="grid grid-cols-4 gap-2 md:gap-4 py-3 border-y border-white/5">
                             <div className="space-y-0.5">
-                                <span className="block text-xl font-brand text-white">{designer?.designsUploadedCount || 0}</span>
-                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Uploaded</span>
+                                <span className="block text-lg font-brand text-white">{designer?.designsUploadedCount || 0}</span>
+                                <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Uploaded</span>
                             </div>
                             <div className="space-y-0.5">
-                                <span className="block text-xl font-brand text-white">{designer?.designsApprovedCount || 0}</span>
-                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Approved</span>
+                                <span className="block text-lg font-brand text-white">{designer?.designsApprovedCount || 0}</span>
+                                <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Approved</span>
                             </div>
                             <div className="space-y-0.5">
-                                <span className="block text-xl font-brand text-white">{designer?.salesCount || 0}</span>
-                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Total Sales</span>
+                                <span className="block text-lg font-brand text-white">{designer?.salesCount || 0}</span>
+                                <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Total Sales</span>
                             </div>
                             <div className="space-y-0.5">
-                                <span className="block text-xl font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
-                                <span className="text-[9px] font-bold tracking-[0.1em] text-white/30 uppercase">Revenue</span>
+                                <span className="block text-lg font-brand gold-gradient">₹{designer?.totalRevenue || 0}</span>
+                                <span className="text-[8px] font-bold tracking-[0.1em] text-white/30 uppercase">Revenue</span>
                             </div>
                         </div>
 
-                        <div className="max-w-2xl text-white/60 leading-relaxed text-xs group relative">
+                        <div className="max-w-2xl text-white/60 leading-relaxed text-[11px] group relative">
                             {isEditingDescription ? (
                                 <div className="space-y-2 mt-2">
                                     <Textarea 
                                         value={tempDescription} 
                                         onChange={(e) => setTempDescription(e.target.value)}
-                                        className="bg-black/40 border-white/10 text-white min-h-[80px] text-xs focus:border-amber-500/50"
+                                        className="bg-black/40 border-white/10 text-white min-h-[60px] text-[11px] focus:border-amber-500/50"
                                         placeholder="Write about your design style..."
                                     />
                                     <div className="flex gap-2">
-                                        <Button size="sm" onClick={handleUpdateDescription} className="h-8 text-xs bg-amber-600 hover:bg-amber-500 text-white">
-                                            <Check className="w-3 h-3 mr-1" /> Save
+                                        <Button size="sm" onClick={handleUpdateDescription} className="h-7 text-[10px] bg-amber-600 hover:bg-amber-500 text-white">
+                                            <Check className="w-2.5 h-2.5 mr-1" /> Save
                                         </Button>
-                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-8 text-xs text-white/60">
+                                        <Button size="sm" variant="ghost" onClick={() => setIsEditingDescription(false)} className="h-7 text-[10px] text-white/60">
                                             Cancel
                                         </Button>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-start gap-2">
-                                    <p className="italic font-tagline text-sm leading-snug">
+                                    <p className="italic font-tagline text-xs leading-snug">
                                         "{designer?.description || 'No description yet. Add a few words about your creative style.'}"
                                     </p>
                                     <Button 
                                         size="icon" 
                                         variant="ghost" 
                                         onClick={() => setIsEditingDescription(true)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 text-white/40 hover:text-white"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-5 w-5 text-white/40 hover:text-white"
                                     >
-                                        <Pencil className="w-3 h-3" />
+                                        <Pencil className="w-2.5 h-2.5" />
                                     </Button>
                                 </div>
                             )}
@@ -270,7 +274,7 @@ export function ProfileView({ user }: ProfileViewProps) {
 
                 {/* Designs Navigation */}
                 <Tabs defaultValue="studio" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-12">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
                         <TabsList className="bg-transparent border-0 p-0 h-auto gap-8">
                             {[
                                 { id: 'studio', label: 'Studio' },
@@ -282,7 +286,7 @@ export function ProfileView({ user }: ProfileViewProps) {
                                     key={tab.id}
                                     value={tab.id}
                                     className={cn(
-                                        "relative bg-transparent p-0 pb-2 text-sm font-medium transition-all rounded-none",
+                                        "relative bg-transparent p-0 pb-2 text-[13px] font-medium transition-all rounded-none",
                                         "text-white/40 data-[state=active]:text-white",
                                         "data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-0.5 data-[state=active]:after:bg-amber-500 data-[state=active]:after:shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                                     )}
@@ -325,14 +329,25 @@ export function ProfileView({ user }: ProfileViewProps) {
                                             </Button>
                                         </div>
                                         
-                                        <div className="relative">
-                                            <div className="absolute inset-0 bg-amber-500/20 blur-[40px] rounded-full scale-125 animate-pulse" />
-                                            <div className="relative z-10 p-6 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-inner">
-                                                <div className="relative">
-                                                   <Shirt className="w-24 h-24 text-white/20 stroke-[1.5]" />
-                                                   <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-amber-500/60" />
-                                                </div>
+                                        <div className="relative flex flex-col items-center">
+                                            {/* Glow effect */}
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-amber-500/10 blur-[60px] rounded-full animate-pulse" />
+                                            
+                                            {/* Floating T-Shirt Pedestal Look */}
+                                            <div className="relative w-40 h-40 mb-[-15px] z-10">
+                                                {studioMockup && (
+                                                    <Image 
+                                                        src={studioMockup.imageUrl}
+                                                        alt="Design Studio Mockup"
+                                                        fill
+                                                        className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.9)]"
+                                                    />
+                                                )}
                                             </div>
+                                            
+                                            {/* Pedestal Base */}
+                                            <div className="w-28 h-4 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 rounded-[100%] border-t border-white/20 shadow-2xl relative z-0" />
+                                            <div className="w-20 h-2 bg-black/60 blur-md rounded-full mt-1 opacity-80" />
                                         </div>
                                     </div>
                                 </div>
